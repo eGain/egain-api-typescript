@@ -65,34 +65,30 @@ The following Resources have predefined limits for specific access attributes fo
 <!-- Start SDK Installation [installation] -->
 ## SDK Installation
 
-> [!TIP]
-> To finish publishing your SDK to npm and others you must [run your first generation action](https://www.speakeasy.com/docs/github-setup#step-by-step-guide).
-
-
 The SDK can be installed with either [npm](https://www.npmjs.com/), [pnpm](https://pnpm.io/), [bun](https://bun.sh/) or [yarn](https://classic.yarnpkg.com/en/) package managers.
 
 ### NPM
 
 ```bash
-npm add <UNSET>
+npm add @egain/egain-api-typescript
 ```
 
 ### PNPM
 
 ```bash
-pnpm add <UNSET>
+pnpm add @egain/egain-api-typescript
 ```
 
 ### Bun
 
 ```bash
-bun add <UNSET>
+bun add @egain/egain-api-typescript
 ```
 
 ### Yarn
 
 ```bash
-yarn add <UNSET>
+yarn add @egain/egain-api-typescript
 ```
 
 > [!NOTE]

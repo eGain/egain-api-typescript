@@ -14,7 +14,7 @@ targets:
         sourceRevisionDigest: sha256:133c033d18fd82a2a1a44d1e2a611baf47604264aae91fbec7117b7d0c620430
         sourceBlobDigest: sha256:4eb3821c906e5b3fe2119e3e474294abb92c2671bbe3f34c6575d85d24bf6a2b
         codeSamplesNamespace: knowledge-portal-manager-ap-is-typescript-code-samples
-        codeSamplesRevisionDigest: sha256:904d707507516bf32f212f1efb0e729863982836c02b90e47a207bfd2ffb033b
+        codeSamplesRevisionDigest: sha256:bb4f1d70d9b84f4d75ba96075924b2fbe78365be41bff86a54e390c7820cca96
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -31,6 +31,9 @@ workflow:
         typescript-sdk:
             target: typescript
             source: Knowledge Portal Manager APIs
+            publish:
+                npm:
+                    token: $npm_token
             codeSamples:
                 registry:
                     location: registry.speakeasyapi.dev/egain-corporation/portalmgr/knowledge-portal-manager-ap-is-typescript-code-samples
