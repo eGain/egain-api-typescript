@@ -13,6 +13,9 @@ targets:
     typescript-sdk:
         target: typescript
         source: Knowledge Portal Manager APIs
+        publish:
+            npm:
+                token: $npm_token
         codeSamples:
             registry:
                 location: registry.speakeasyapi.dev/egain-corporation/portalmgr/knowledge-portal-manager-ap-is-typescript-code-samples
