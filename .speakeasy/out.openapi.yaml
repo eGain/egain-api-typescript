@@ -14,6 +14,10 @@ servers:
         API_DOMAIN:
             default: api.egain.cloud
 tags:
+    - name: Answers
+      description: APIs for Answers
+    - name: Retrieve
+      description: APIs for Retrieve
     - name: Content Import
       description: |
         Content import and validation operations for bulk knowledge content management.
@@ -47,10 +51,6 @@ tags:
         - Infrastructure monitoring tools (Nagios, Zabbix, etc.)
         - Application performance monitoring (APM) tools
         - Custom health check scripts
-    - name: Answers
-      description: APIs for Answers
-    - name: Retrieve
-      description: APIs for Retrieve
     - name: Article
       description: Article APIs
     - name: Article Lists
@@ -84,6 +84,88 @@ tags:
     - name: Export
       description: Content Export APIs
 paths:
+    '/{portalID}/retrieve':
+        post:
+            summary: Retrieve Chunks
+            operationId: retrieveChunks
+            tags:
+                - Retrieve
+            description: The Retrieve API enables enterprises to directly access relevant content chunks from their organizational knowledge sources. It is designed for scenarios where developers want granular control over retrieved information, such as powering custom search, analytics, or retrieval-augmented generation (RAG) pipelines. <br><br> In addition to raw chunk retrieval, the API can return **Certified Answers** if it meets the 'Certified Answer' threshold score. Responses include relevance scores, metadata, and references to maintain transparency and flexibility. By leveraging the Retrieve API, organizations can build tailored experiences while retaining confidence in the source material.
+            parameters:
+                - $ref: '#/components/parameters/q'
+                - $ref: '#/components/parameters/portalReadableId'
+                - $ref: '#/components/parameters/userProfileID'
+                - $ref: '#/components/parameters/languageCode'
+                - $ref: '#/components/parameters/filterTags'
+                - $ref: '#/components/parameters/filterTopicIds'
+            requestBody:
+                required: false
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RetrieveRequest'
+            responses:
+                '200':
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RetrieveResponse'
+                '400':
+                    description: Bad request (e.g. missing required fields)
+                '500':
+                    description: Internal server error
+            x-stoplight:
+                id: 5zq0gpmaxmlts
+            x-speakeasy-group: aiservices.retrieve
+            security:
+                - accessToken: []
+            servers:
+                - url: 'https://api.knowledge.ai/core/aiservices/v4'
+                  description: aiservices
+                  variables:
+                    API_DOMAIN:
+                        default: api.egain.cloud
+    '/{portalID}/answers':
+        post:
+            summary: Get the best answer for a user query
+            operationId: getBestAnswerForUserQuery
+            tags:
+                - Answers
+            description: "The **Answers API** allows enterprises to deliver fast, accurate, and contextual responses powered by their organizational knowledge. It supports two complementary approaches:  \n<li> **Certified Answers**: Direct snippets retrieved from enterprise-authored content. </li>  \n<li> **Generative Answers**: Natural language responses synthesized by a large language model (LLM).  </li>\n\nEvery response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments.\n"
+            parameters:
+                - $ref: '#/components/parameters/q'
+                - $ref: '#/components/parameters/portalReadableId'
+                - $ref: '#/components/parameters/userProfileID'
+                - $ref: '#/components/parameters/languageCode'
+                - $ref: '#/components/parameters/filterTags'
+                - $ref: '#/components/parameters/filterTopicIds'
+            requestBody:
+                required: false
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AnswersRequest'
+            responses:
+                '200':
+                    description: Successful response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AnswersResponse'
+                '400':
+                    description: Bad request (e.g. missing required fields)
+                '500':
+                    description: Internal server error
+            security:
+                - accessToken: []
+            x-speakeasy-group: aiservices.answers
+            servers:
+                - url: 'https://api.knowledge.ai/core/aiservices/v4'
+                  description: aiservices
+                  variables:
+                    API_DOMAIN:
+                        default: api.egain.cloud
     /import/content:
         post:
             description: |
@@ -625,86 +707,6 @@ paths:
             servers:
                 - url: https://${API_DOMAIN}/knowledge/contentmgr/v4
                   description: Production Server
-                  variables:
-                    API_DOMAIN:
-                        default: api.egain.cloud
-    /{portalID}/retrieve:
-        post:
-            summary: Retrieve Chunks
-            tags:
-                - Retrieve
-            description: The Retrieve API enables enterprises to directly access relevant content chunks from their organizational knowledge sources. It is designed for scenarios where developers want granular control over retrieved information, such as powering custom search, analytics, or retrieval-augmented generation (RAG) pipelines. <br><br> In addition to raw chunk retrieval, the API can return **Certified Answers** if it meets the 'Certified Answer' threshold score. Responses include relevance scores, metadata, and references to maintain transparency and flexibility. By leveraging the Retrieve API, organizations can build tailored experiences while retaining confidence in the source material.
-            parameters:
-                - $ref: '#/components/parameters/qQuery'
-                - $ref: '#/components/parameters/portalReadableId'
-                - $ref: '#/components/parameters/userProfileID'
-                - $ref: '#/components/parameters/languageCode'
-                - $ref: '#/components/parameters/filterTags'
-                - $ref: '#/components/parameters/filterTopicIds'
-            requestBody:
-                required: false
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/RetrieveRequest'
-            responses:
-                '200':
-                    description: Successful response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/RetrieveResponse'
-                '400':
-                    description: Bad request (e.g. missing required fields)
-                '500':
-                    description: Internal server error
-            x-stoplight:
-                id: 5zq0gpmaxmlts
-            x-speakeasy-group: aiservices.retrieve
-            security:
-                - accessToken: []
-            servers:
-                - url: https://api.knowledge.ai/core/aiservices/v4
-                  description: aiservices
-                  variables:
-                    API_DOMAIN:
-                        default: api.egain.cloud
-    /{portalID}/answers:
-        post:
-            summary: Get the best answer for a user query
-            tags:
-                - Answers
-            description: "The **Answers API** allows enterprises to deliver fast, accurate, and contextual responses powered by their organizational knowledge. It supports two complementary approaches:  \n<li> **Certified Answers**: Direct snippets retrieved from enterprise-authored content. </li>  \n<li> **Generative Answers**: Natural language responses synthesized by a large language model (LLM).  </li>\n\nEvery response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments.\n"
-            parameters:
-                - $ref: '#/components/parameters/qQuery'
-                - $ref: '#/components/parameters/portalReadableId'
-                - $ref: '#/components/parameters/userProfileID'
-                - $ref: '#/components/parameters/languageCode'
-                - $ref: '#/components/parameters/filterTags'
-                - $ref: '#/components/parameters/filterTopicIds'
-            requestBody:
-                required: false
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/AnswersRequest'
-            responses:
-                '200':
-                    description: Successful response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/AnswersResponse'
-                '400':
-                    description: Bad request (e.g. missing required fields)
-                '500':
-                    description: Internal server error
-            security:
-                - accessToken: []
-            x-speakeasy-group: aiservices.answers
-            servers:
-                - url: https://api.knowledge.ai/core/aiservices/v4
-                  description: aiservices
                   variables:
                     API_DOMAIN:
                         default: api.egain.cloud
@@ -3855,7 +3857,1408 @@ components:
             bearerFormat: JWT
             description: "JWT Bearer Token authentication for API access"
             x-speakeasy-name: accessToken
+    parameters:
+        q:
+            name: q
+            description: The search query string. The string must be escaped as required by the URL syntax rules.
+            in: query
+            required: true
+            schema:
+                pattern: ^[\w\W]+$
+                type: string
+                minLength: 1
+                maxLength: 1024
+                example: fair lending
+        pattern:
+            name: pattern
+            in: query
+            schema:
+                type: string
+                example: (?i)\bloans\b
+        portalReadableId:
+            name: portalID
+            in: path
+            required: true
+            schema:
+                type: string
+                minLength: 7
+                maxLength: 20
+                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                example: PROD-1000
+            description: The ID of the portal being accessed.<br><br>A portal ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
+        userProfileID:
+            name: '$filter[userProfileID]'
+            in: query
+            schema:
+                type: string
+                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                minLength: 7
+                maxLength: 20
+                description: The ID of the user profile.
+                example: PROD-3210
+        languageCode:
+            name: $lang
+            in: query
+            description: The language that describes the details of a resource. Resources available in different languages may differ from each other. <br><br> If lang is not passed, then the portal's default language is used.
+            schema:
+                type: string
+                example: en-US
+                enum:
+                    - en-US
+                    - fr-FR
+                    - en-GB
+                    - es-ES
+                    - it-IT
+                    - nl-NL
+                    - da-DA
+                    - sv-SE
+                    - pt-PT
+                    - fi-FI
+                    - no-NB
+                    - no-NN
+                    - ja-JA
+                    - de-DE
+                    - pt-BR
+                    - zh-CN
+                    - zh-TW
+                    - ko-KO
+                    - ru-RU
+                    - el-EL
+                    - tr-TR
+                    - pl-PL
+                    - cs-CS
+                    - sk-SK
+                    - hu-HU
+                    - sr-SR
+                    - ar-SA
+                    - hr-HR
+                    - ro-RO
+                    - th-TH
+                    - xx-XX
+            x-speakeasy-name-override: language
+        filterTopicIds:
+            name: $filter[topicIds]
+            in: query
+            description: An array of topic IDs. It is used to restrict search results to specific topics.
+            schema:
+                type: array
+                items:
+                    type: string
+                    pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                minItems: 1
+                maxItems: 20
+        filterTags:
+            name: $filter[tags]
+            in: query
+            required: false
+            schema:
+                type: object
+                minProperties: 1
+                maxProperties: 20
+                additionalProperties:
+                    type: array
+                    description: Tag Category IDs
+                    maxItems: 20
+                    pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                    items:
+                        type: string
+                        description: Tag IDs
+                        minLength: 7
+                        maxLength: 20
+                        pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+            description: "An object where each key is a **Category Tag ID** (numeric string),  \nand each value is an array of **Tag IDs** for that category.\n"
+            example:
+                PROD-1234:
+                    - PROD-2000
+                    - PROD-2003
+                PROD-2005:
+                    - PROD-2007
+        jobId:
+            name: job_id
+            in: path
+            description: |
+                **Job ID Parameter**
+
+                The unique identifier for the import or validation job. This ID was returned when the job was created via the Import or Validate API.
+
+                **Format:** UUID v4 (e.g., 7A84B875-6F75-4C7B-B137-0632B62DB0BD)
+
+                **Example Usage:**
+                ```bash
+                GET /import/content/7A84B875-6F75-4C7B-B137-0632B62DB0BD/status
+                ```
+            required: true
+            schema:
+                type: string
+                example: 7A84B875-6F75-4C7B-B137-0632B62DB0BD
+                pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+        xEgainActivityId:
+            name: x-egain-activity-id
+            in: header
+            description: A unique numeric interaction identifier from eGain.
+            required: false
+            schema:
+                type: string
+                minLength: 4
+                maxLength: 9
+                pattern: ^[0-9]{4,9}$
+                example: '59237'
+            x-speakeasy-ignore: true
+        xExtIntegrationId:
+            name: x-ext-integration-id
+            in: header
+            description: 'The unique numeric identifier for a tenant, used in self-service functionality as well as third-party integrations.<br><br>*Note: If x-egain-activity-id is not provided, then this must be passed along with x-ext-interaction-id.*'
+            required: false
+            schema:
+                type: string
+                maxLength: 40
+                pattern: ^[\w\W]+$
+            examples:
+                uuid:
+                    value: 3155180e-0c13-43e9-9c38-e9045bcbf176
+                hex:
+                    value: 00Dbn00000IxGnx
+            x-speakeasy-ignore: true
+        xExtInteractionId:
+            name: x-ext-interaction-id
+            in: header
+            description: 'A unique interaction identifier from other CRM applications.<br><br>*Note: If x-egain-activity-id is not provided, then this must be passed along with x-ext-integration-id.*'
+            required: false
+            schema:
+                type: string
+                maxLength: 40
+                pattern: ^[\w\W]+$
+            examples:
+                uuid:
+                    value: 3155180e-0c13-43e9-9c38-e9045bcbf176
+                hex:
+                    value: 00Dbn00000IxGnx
+            x-speakeasy-ignore: true
+        acceptLanguage:
+            name: Accept-Language
+            in: header
+            description: The Language locale accepted by the client (used for locale specific fields in resource representation and in error responses).
+            required: true
+            schema:
+                type: string
+                enum:
+                    - en-US
+                    - es-ES
+                    - fr-FR
+                    - it-IT
+                    - de-DE
+                    - nl-NL
+                    - pt-BR
+                    - pt-PT
+                    - da-DK
+                    - ru-RU
+                    - fr-CA
+                    - zh-CN
+                    - ja-JP
+                    - ko-KR
+                    - sv-SE
+                example: en-US
+        articleReadableId:
+            name: articleID
+            description: The ID of the Article.<br><br>An Article ID is composed of a 2-4 letter prefix followed by a dash and 4-15 digits.
+            in: path
+            required: true
+            schema:
+                type: string
+                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                minLength: 7
+                maxLength: 20
+            example: PROD-2996
+        languageQueryParameter:
+            name: $lang
+            in: query
+            description: The language that describes the details of a resource. Resources available in different languages may differ from each other.<li>If <code>lang</code> is not passed, then the portal's default language is used.</li>
+            required: false
+            schema:
+                type: string
+                enum:
+                    - en-US
+                    - fr-FR
+                    - en-GB
+                    - es-ES
+                    - it-IT
+                    - nl-NL
+                    - da-DA
+                    - sv-SE
+                    - pt-PT
+                    - fi-FI
+                    - no-NB
+                    - no-NN
+                    - ja-JA
+                    - de-DE
+                    - pt-BR
+                    - zh-CN
+                    - zh-TW
+                    - ko-KO
+                    - ru-RU
+                    - el-EL
+                    - tr-TR
+                    - pl-PL
+                    - cs-CS
+                    - sk-SK
+                    - hu-HU
+                    - sr-SR
+                    - ar-SA
+                    - hr-HR
+                    - ro-RO
+                    - th-TH
+                    - xx-XX
+                example: en-US
+            x-speakeasy-name-override: language
+        articleAdditionalAttributes:
+            name: articleAdditionalAttributes
+            in: query
+            required: false
+            schema:
+                type: array
+                items:
+                    type: string
+                    enum:
+                        - articleMacro
+                        - availabilityDate
+                        - availableEditions
+                        - averageRating
+                        - bookmarkStatus
+                        - content
+                        - contentText
+                        - compliance
+                        - timesRated
+                        - createdBy.userName
+                        - modifiedBy.userName
+                        - ownedBy
+                        - ownedBy.userName
+                        - workflow
+                        - all
+            description: "The attributes of an Article to be returned *in addition to* the default list of attributes, listed below. Multiple additional attributes can be specified using a comma-separated list. Passing 'all' will return all attributes.\n\n#### Default Attributes\nThese Article attributes are always returned:\n\n| Name | Description \n| ---- | -----------\n| id | The ID of the Article.\n| name  | The name of the Article.\n| additionalInfo | Additional information provided as Article metadata.\n| articleType | The Article type and its attributes.\n| articleKeywords | A comma-separated list of keywords associated with this Article.\n| articleState | The current state of the Article. States include A (Authoring), S (Staging), and P (Published).\n| articleSummary | A brief summary of the Article, provided as metadata.\n| createdBy | The ID, first name, middle name and last name of the user that created the Article.\n| createdDate | The date that the Article was created.\n| departmentId | ID of the department for which this Article belongs to.\n| description | The Article's description.\n| expirationDate | The date that the Article is set to expire.\n| attachments | The Article's attachments\n| imageURL | The URL of the image that is present in the Article version. It is used as the thumbnail image for the Article.\n| includeInGenAI | Indicates whether this Article is used for eGain's generative AI features.\n| isSubscribed | Indicates whether the Article is subscribed for notifications. \n| languageCode | The language code of the Article language. \n| link | The link object, used to retrieve the details of the Article.\n| modifiedBy | The ID, first name, middle name and last name of the user that last modified the Article.\n| modifiedDate | The date that the Article was last modified on.\n| topicBreadcrumb | Contains a list of topics from the top-level topic to this Article. There may be multiple paths.\n| versionId | The ID of the Article version that is returned.\n"
+            style: form
+            explode: false
+            examples:
+                Single:
+                    value:
+                        - averageRating
+                    description: An additional attribute to be returned.
+                Multiple:
+                    value:
+                        - ownedBy
+                        - ownedBy.userName
+                    description: Additional attributes to be returned.
+                All:
+                    value:
+                        - all
+                    description: All additional attributes to be returned.
+        customAdditionalAttributes:
+            name: $customAdditionalAttributes
+            in: query
+            required: false
+            schema:
+                type: string
+                pattern: ^([a-zA-Z0-9_-]+)(?:,[a-zA-Z0-9_-]+)*$
+                minLength: 1
+                maxLength: 4000
+                description: One or more comma-separated names for custom attributes defined by the user to be returned.
+            examples:
+                Single:
+                    value: country_name
+                    description: A user-defined custom attribute.
+                Multiple:
+                    value: internalScore,performance-rating_dept_923
+                    description: Multiple user-defined custom attributes.
+            x-speakeasy-name-override: customAdditionalAttributes
+        workflowMilestone:
+            name: workflowMilestone
+            in: query
+            description: For agents with the View Author Portal or View Staging Portal actions, this determines which version of the Article is returned.<li>'Authoring' returns the most recent version of an Article checked-in by an author.</li><li>'Staging' returns the updated version currently being processed in a workflow.</li><li>'Publish' returns the most recently published version.</li>
+            schema:
+                type: string
+                enum:
+                    - authoring
+                    - staging
+                    - publish
+                example: publish
+        mandatoryLanguageQueryParameter:
+            name: $lang
+            in: query
+            description: The language used for fetching the details of a resource. Resources available in different languages may differ from each other.
+            required: true
+            schema:
+                type: string
+                enum:
+                    - en-US
+                    - fr-FR
+                    - en-GB
+                    - es-ES
+                    - it-IT
+                    - nl-NL
+                    - da-DA
+                    - sv-SE
+                    - pt-PT
+                    - fi-FI
+                    - no-NB
+                    - no-NN
+                    - ja-JA
+                    - de-DE
+                    - pt-BR
+                    - zh-CN
+                    - zh-TW
+                    - ko-KO
+                    - ru-RU
+                    - el-EL
+                    - tr-TR
+                    - pl-PL
+                    - cs-CS
+                    - sk-SK
+                    - hu-HU
+                    - sr-SR
+                    - ar-SA
+                    - hr-HR
+                    - ro-RO
+                    - th-TH
+                example: en-US
+            x-speakeasy-name-override: language
+        articleId:
+            name: articleID
+            in: path
+            required: true
+            schema:
+                type: string
+                minLength: 7
+                maxLength: 20
+            description: The ID of the Article. Both numeric and alternate ID formats are supported.<br><br>Valid numerical IDs are 15-19 digits long.
+            examples:
+                Readable Id:
+                    value: PROD-2996
+                    description: A readable Article ID.
+                Numeric Id:
+                    value: '202200000002996'
+                    description: A numerical Article ID.
+        publishviewid:
+            name: publishViewId
+            in: path
+            required: true
+            description: Publish View Id of the article on which operation is performed.
+            schema:
+                type: string
+                minLength: 1
+                maxLength: 15
+                example: '959500000204621'
+        accept:
+            name: Accept
+            in: header
+            description: The content type accepted by the client.
+            required: true
+            schema:
+                type: string
+                default: application/json
+                enum:
+                    - application/json
+        searchProfileId:
+            name: searchProfileId
+            in: query
+            description: Search Profile ID
+            schema:
+                type: string
+                minLength: 1
+                maxLength: 15
+                example: '959500000204621'
+        filterTopicIdRequired:
+            name: $filter[topicId]
+            in: query
+            required: true
+            schema:
+                type: string
+                minLength: 7
+                maxLength: 20
+                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+            description: The ID of the topic. It is used to restrict to a specific topic.
+            example: PROD-1065
+        articleResultAdditionalAttributes:
+            name: articleResultAdditionalAttributes
+            in: query
+            required: false
+            schema:
+                type: array
+                items:
+                    type: string
+                    enum:
+                        - averageRating
+                        - customAttributes
+                        - description
+                        - articleSummary
+                        - imageURL
+                        - isSubscribed
+                        - timesRated
+                        - topicBreadcrumb
+                        - ownedBy
+                        - ownedBy.userName
+                        - workflow
+                        - compliance
+                        - personalization
+                        - all
+            description: "The attributes of an Article to be returned *in addition to* the default list of attributes, listed below. Multiple additional attributes can be specified using a comma-separated list. Passing 'all' will return all attributes.\n\n#### Default Attributes\nThese Article attributes are always returned:\n\n| Name | Description \n| ---- | -----------\n| id | The ID of the Article.\n| name  | The name of the Article.\n| articleType | The Article Type and its attributes.\n| createdBy | The ID, first name, middle name and last name of the user that created the Article.\n| createdDate | The date that the Article was created.\n| hasAttachments | True: The Article has one or more attachments.<br>False: The Article does not have any attachments.\n| languageCode | The language code of the Article language. \n| modifiedBy | The ID, first name, middle name and last name of the user that last modified the Article.\n| modifiedDate | The date that the Article was last modified on.\n| link | The link object, used to retrieve the details of the Article.\n| versionId | The ID of the Article version that is returned.\n"
+            style: form
+            explode: false
+            examples:
+                Single:
+                    value:
+                        - averageRating
+                    description: An additional attribute to be returned.
+                Multiple:
+                    value:
+                        - ownedBy
+                        - ownedBy.userName
+                    description: Additional attributes to be returned.
+                All:
+                    value:
+                        - all
+                    description: All additional attributes to be returned.
+        tags:
+            name: $filter[tags]
+            description: A comma separated list of Tag / Tag Group IDs. The query results will be filtered by the tags that are specified.<br><br>Tag IDs and Tag Group IDs can be mixed together.
+            in: query
+            required: false
+            schema:
+                type: string
+                pattern: ^([a-zA-Z0-9]{2,4}-\d{4,15})(,([a-zA-Z0-9]{2,4}-\d{4,15})){0,19}$
+                minLength: 7
+                maxLength: 2048
+                example: PROD-5381
+        pagenum:
+            name: $pagenum
+            in: query
+            description: Pagination parameter that specifies the page number of results to be returned. Used in conjunction with $pagesize.
+            required: false
+            schema:
+                type: integer
+                format: int64
+                minimum: 1
+                maximum: 999
+                default: 1
+            x-speakeasy-name-override: pagenum
+        pagesize:
+            name: $pagesize
+            in: query
+            description: Pagination parameter that specifies the number of results per page. Used in conjunction with $pagenum.
+            required: false
+            schema:
+                type: integer
+                format: int64
+                minimum: 1
+                maximum: 75
+                default: 10
+            x-speakeasy-name-override: pagesize
+        articleSort:
+            name: $sort
+            in: query
+            required: false
+            schema:
+                type: string
+                enum:
+                    - availabilityDate
+                    - popularity
+                    - name
+                example: name
+            description: Articles to be sorted on.
+            x-speakeasy-name-override: sort
+        articleSortOrder:
+            name: $order
+            in: query
+            required: false
+            schema:
+                type: string
+                enum:
+                    - asc
+                    - desc
+                example: asc
+                description: Sort order of articles.
+            x-speakeasy-name-override: order
+        attachmentId:
+            name: attachmentID
+            description: The ID of the attachment.<br><br>An attachment ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
+            in: path
+            required: true
+            schema:
+                type: string
+                minLength: 7
+                maxLength: 20
+                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                example: PROD-1000
+        complianceArticleResultAdditionalAttributes:
+            name: complianceArticleResultAdditionalAttributes
+            in: query
+            required: false
+            schema:
+                type: array
+                items:
+                    type: string
+                    enum:
+                        - averageRating
+                        - articleSummary
+                        - customAttributes
+                        - description
+                        - imageURL
+                        - isSubscribed
+                        - timesRated
+                        - topicBreadcrumb
+                        - ownedBy
+                        - ownedBy.userName
+                        - workflow
+                        - compliance
+                        - personalization
+                        - all
+            description: "The attributes of an Article to be returned *in addition to* the default list of attributes, listed below. Multiple additional attributes can be specified using a comma-separated list. Passing 'all' will return all attributes.\n\n#### Default Attributes\nThese Article attributes are always returned:\n\n| Name | Description \n| ---- | -----------\n| id | The ID of the Article.\n| name  | The name of the Article.\n| updateSummary | Summary of the Article update.\n| articleType | The Article Type and its attributes.\n| createdBy | The ID, first name, middle name and last name of the user that created the Article.\n| createdDate | The date that the Article was created.\n| hasAttachments | True: The Article has one or more attachments.<br>False: The Article does not have any attachments.\n| languageCode | The language code of the Article language. \n| modifiedBy | The ID, first name, middle name and last name of the user that last modified the Article.\n| modifiedDate | The date that the Article was last modified on.\n| link | The link object, used to retrieve the details of the Article.\n| versionId | The ID of the Article version that is returned.\n"
+            style: form
+            explode: false
+            examples:
+                Single:
+                    value:
+                        - averageRating
+                    description: An additional attribute to be returned.
+                Multiple:
+                    value:
+                        - ownedBy
+                        - ownedBy.userName
+                    description: Additional attributes to be returned.
+                All:
+                    value:
+                        - all
+                    description: All additional attributes to be returned.
+        topicReadableId:
+            name: topicID
+            in: path
+            required: true
+            description: The ID of a topic.<br><br>A topic ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
+            schema:
+                type: string
+                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                minLength: 7
+                maxLength: 20
+                example: PROD-1069
+        level:
+            name: level
+            description: Depth of the topic hierarchy to be returned in the response.
+            in: query
+            required: false
+            schema:
+                type: integer
+                format: int64
+                minimum: -1
+                maximum: 20
+                example: 1
+            examples:
+                AllLevels:
+                    value: -1
+                    description: All levels are returned
+                Parent:
+                    value: 0
+                    description: Only parent topic is returned
+                Immediate:
+                    value: 1
+                    description: Parent and immediate children topics are returned
+                Grand Children:
+                    value: 2
+                    description: Immediate children and grand children are returned
+        topicAdditionalAttributes:
+            name: topicAdditionalAttributes
+            in: query
+            required: false
+            schema:
+                type: array
+                items:
+                    type: string
+                    enum:
+                        - description
+                        - createdBy.userName
+                        - createdBy.firstName
+                        - createdBy.lastName
+                        - createdBy.middleName
+                        - modifiedBy.userName
+                        - modifiedBy.firstName
+                        - modifiedBy.lastName
+                        - modifiedBy.middleName
+                        - imageUrl
+                        - textMetaData
+                        - all
+            style: form
+            explode: false
+            description: "The attributes of a topic to be returned *in addition to* the default list of attributes, listed below. Multiple additional attributes can be specified using a comma-separated list. Passing 'all' returns all attributes.\n\n#### Default Attributes\nThese topic attributes are always returned:\n\n| Name | Description \n| ---- | -----------\n| id | The ID of the topic.\n| name  | The name of the topic.\n| articleCountInTopic | Number of articles in this topic.\n| articleCountInTopicTree  | Number of articles in this topic and all sub-topics.\n| createdBy.id | The ID of the user that created the topic. \n| createdDate | The date when the topic was created.\n| departmentId | ID of the department for which this topic belongs to. \n| topicHomeArticleId | The ID of the article used as the home page of this topic.\n| modifiedBy.id | The ID of the user that last modified the topic. \n| modifiedDate | The date when the topic was last modified on.\n| childCount | Total number of children sub-topis below the current topic\n| subTopicIds | Array with the list of sub-topics\n| parentTopicId | ID of the parent topic. -1 if it is the root topic. \n"
+            examples:
+                Single:
+                    value:
+                        - modifiedBy.userName
+                    description: An additional attribute to be returned.
+                Multiple:
+                    value:
+                        - description
+                        - imageUrl
+                    description: Additional attributes to be returned.
+                All:
+                    value:
+                        - all
+                    description: All additional attributes to be returned.
+        pagenumTopics:
+            name: $pagenum
+            in: query
+            description: Pagination parameter that specifies the page number of results to be returned. Used in conjunction with $pagesize.
+            required: false
+            schema:
+                type: integer
+                format: int32
+                minimum: 1
+                maximum: 999
+                default: 1
+            x-speakeasy-name-override: pagenum
+        pagesizeTopics:
+            name: $pagesize
+            in: query
+            description: Pagination parameter that specifies the number of results per page. Used in conjunction with $pagenum.
+            required: false
+            schema:
+                type: integer
+                format: int32
+                minimum: 1
+                maximum: 75
+                default: 10
+            x-speakeasy-name-override: pagesize
+        filterTopicId:
+            name: $filter[topicId]
+            in: query
+            required: false
+            schema:
+                type: string
+                minLength: 7
+                maxLength: 20
+                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+            description: The ID of the topic. It is used to restrict to a specific topic.
+            example: PROD-1067
+        casebaseReleaseId:
+            name: casebaseReleaseID
+            in: path
+            required: true
+            schema:
+                type: string
+                pattern: ^[1-9]\d{14}$
+                example: '202201000000002'
+            description: The numerical ID of the Casebase Release for which details is to be fetched.
+        filterCasebaseRelease:
+            name: filter[casebaseRelease]
+            in: query
+            required: false
+            description: Filter by Casebase Release
+            schema:
+                pattern: ^[1-9]\d{14}$
+                type: string
+                example: '202201000000002'
+        contentType:
+            name: Content-Type
+            in: header
+            description: The media type sent by the client.
+            required: true
+            schema:
+                type: string
+                default: application/json
+                enum:
+                    - application/json
+        ghCustomAdditionalAttributes:
+            name: ghCustomAdditionalAttributes
+            in: query
+            required: false
+            schema:
+                type: string
+                pattern: ^question\.custom\.[^,]+(?:,question\.custom\.[^,]+)*$
+                minLength: 1
+                maxLength: 4000
+                description: "Custom attributes to be fetched. \n\nPossible values are:\n- question.custom.\\<name\\> where \\<name\\> is the internal name of custom attribute of question. 'question' is used as a prefix to distinguish question's custom attribute from other objects custom attributes.\n"
+            examples:
+                Single:
+                    value: question.custom.score
+                    description: A user-defined custom attribute.
+                Multiple:
+                    value: question.custom.score,question.custom.test
+                    description: Multiple user-defined custom attributes.
+        clusterId:
+            name: clusterID
+            in: path
+            required: true
+            description: ID of Cluster.
+            schema:
+                type: string
+                pattern: ^[1-9]\d*$
+                minLength: 10
+                maxLength: 10
+                example: '1000000402'
+        caseId:
+            name: caseID
+            in: path
+            required: true
+            schema:
+                type: string
+                pattern: ^[1-9]\d*$
+                minLength: 10
+                maxLength: 15
+                example: '1000001085'
+            description: The numerical ID of the Case for which details is to be fetched.
+        caseAdditionalAttributes:
+            name: caseAdditionalAttributes
+            in: query
+            required: false
+            schema:
+                type: array
+                items:
+                    type: string
+                    enum:
+                        - questionDetail
+                        - actions
+                        - all
+                    example: all
+            description: Additional case attributes to be fetched.
+            style: form
+            explode: false
+            examples:
+                Single:
+                    value:
+                        - actions
+                    description: An additional attributes to be returned.
+                Multiple:
+                    value:
+                        - questionDetail
+                        - actions
+                    description: Additional attributes to be returned.
+                All:
+                    value:
+                        - all
+                    description: All additional attributes to be returned.
+        casebaseReleaseIdQuery:
+            name: casebaseReleaseID
+            in: query
+            required: true
+            schema:
+                type: string
+                pattern: ^[1-9]\d{14}$
+                example: '202201000000002'
+            description: The numerical ID of the Casebase Release for which details is to be fetched.
+        quickpickReadableId:
+            name: quickpickID
+            in: path
+            required: true
+            schema:
+                type: string
+                pattern: ^[1-9]\d*$
+                minLength: 1
+                maxLength: 19
+                example: '11'
+            description: The ID of the quickpick.
+        bookmarkId:
+            name: bookmarkID
+            description: The ID of the bookmark.
+            in: path
+            required: true
+            schema:
+                type: string
+                pattern: ^[1-9]\d*$
+                minLength: 4
+                maxLength: 19
+                example: '4759'
+        userProfileIdInPath:
+            name: userProfileID
+            in: path
+            description: "The ID of the user profile. \n"
+            required: true
+            schema:
+                type: string
+                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                minLength: 7
+                maxLength: 20
+                description: |
+                    The Readable ID of the user profile.<br>
+                example: PROD-3210
+        sortIdNameDepartment:
+            name: $sort
+            in: query
+            description: 'Objects returned in server response are sorted based on the attribute supplied under $sort. <br>_Default value_: name.'
+            required: false
+            schema:
+                type: string
+                enum:
+                    - id
+                    - name
+                    - departmentName
+            x-speakeasy-name-override: sort
+        order:
+            name: $order
+            in: query
+            description: Common query parameter $order.
+            required: false
+            style: form
+            explode: true
+            schema:
+                type: string
+                enum:
+                    - asc
+                    - desc
+            x-speakeasy-name-override: order
+        pagesizeNewFrameWork:
+            name: $pagesize
+            in: query
+            description: 'Pagination parameter that specifies the number of results per page. Used in conjunction with $pagenum.<br>Valid range of 5-75<br>_Default value_: 25'
+            required: false
+            schema:
+                type: integer
+                format: int64
+                minimum: 1
+                maximum: 75
+                default: 25
+            x-speakeasy-name-override: pagesize
+        filterUserProfileID:
+            name: $filter[userProfileID]
+            in: query
+            description: "The ID of the user profile. \n"
+            required: false
+            schema:
+                type: string
+                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                minLength: 7
+                maxLength: 20
+                description: |
+                    The Readable ID of the user profile.<br>
+                example: PROD-3210
+        filterExcludesTopicIds:
+            name: $filter[excludeTopicIds]
+            in: query
+            description: An array of topic IDs that will be excluded from the search. It includes articles that belong to the topic.
+            schema:
+                type: array
+                items:
+                    type: string
+                    pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                minItems: 1
+                maxItems: 20
+        resourceType:
+            name: resourceType
+            in: query
+            description: Type of resource to be fetched.
+            schema:
+                type: string
+                enum:
+                    - article
+                    - topic
+        articleCustomFields:
+            name: articleCustomAdditionalAttributes
+            in: query
+            description: One or more comma-separated names for article custom attributes defined by the user to be returned.
+            schema:
+                type: string
+                minLength: 1
+                maxLength: 4000
+        topicCustomFields:
+            name: topicCustomAdditionalAttributes
+            in: query
+            description: One or more comma-separated names for topic custom attributes defined by the user to be returned.
+            schema:
+                type: string
+                minLength: 1
+                maxLength: 4000
+        sortIdName:
+            name: $sort
+            in: query
+            description: Objects returned in server response are sorted based on the attribute supplied under $sort.
+            required: false
+            schema:
+                type: string
+                enum:
+                    - id
+                    - name
+            x-speakeasy-name-override: sort
+        suggestionId:
+            name: suggestionID
+            description: The ID of the Suggestion.<br><br>A Suggestion ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
+            in: path
+            required: true
+            schema:
+                type: string
+                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                minLength: 7
+                maxLength: 20
+            example: PROD-11829
+        suggestionAdditionalAttributes:
+            name: suggestionAdditionalAttributes
+            in: query
+            required: false
+            schema:
+                type: array
+                items:
+                    type: string
+                    enum:
+                        - content
+                        - modifiedBy.userName
+                        - all
+            style: form
+            explode: false
+            description: "The attributes of a Suggestion to be returned *in addition to* the default list of attributes, listed below. Multiple additional attributes can be specified using a comma-separated list. Passing 'all' returns all attributes.\n\n#### Default Attributes\nThese Suggestion attributes are always returned:\n\n| Name | Description \n| ---- | -----------\n| id | The ID of the Suggestion.\n| name  | The name of the Suggestion.\n| status | The status of the Suggestion.\n| description | The description of the Suggestion.\n| language | Details about the language of the Suggestion.\n| modifiedBy.id | The ID of the user that last modified the Suggestion. \n| modifiedBy.firstName | The Suggestion's last modified user's first name.\n| modifiedBy.middleName | The Suggestion's last modified user's middle name.\n| modifiedBy.lastName | The Suggestion's last modified user's last name.\n| modifiedDate | The Suggestion's last modified date <u>and</u> information about the user that last modified the Suggestion.\n| link | The link object, used to retrieve the details of the Suggestion.\n| hasComments | The Suggestion has one or more comments\n| hasAttachments | The Suggestion has one or more attachments\n| hasRelatedArticles | The Suggestion has related articles\n"
+            examples:
+                Single:
+                    value:
+                        - content
+                    description: An additional attribute to be returned.
+                Multiple:
+                    value:
+                        - content
+                        - modifiedBy.userName
+                    description: Additional attributes to be returned.
+                All:
+                    value:
+                        - all
+                    description: All additional attributes to be returned.
+        attachmentAdditionalAttributes:
+            name: attachmentAdditionalAttributes
+            in: query
+            required: false
+            schema:
+                type: array
+                items:
+                    type: string
+                    enum:
+                        - contentUrl
+                        - all
+            style: form
+            explode: false
+            description: "The attributes of an attachment to be returned, along with the default attachment details.\n\n| Attribute    | Description                        |\n|--------------|------------------------------------|\n| id         | Unique identifier for the attachment |\n| fileName   | Name of the file                   |\n| contentType| Content type of the file              |\n| size       | Size of the file in bytes          |\n| link       | Link to the attachment             | \n"
+            examples:
+                Single:
+                    value:
+                        - contentUrl
+                    description: An additional attribute to be returned.
+        customerPortalReadableId:
+            name: portalID
+            in: path
+            required: true
+            schema:
+                type: string
+                minLength: 7
+                maxLength: 20
+                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                example: PROD-1002
+            description: The ID of the portal being accessed.<br><br>A portal ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
+        MandatoryEscalationId:
+            name: escalationId
+            in: path
+            description: |
+                The ID (uuid) of the customer escalation.
+            required: true
+            schema:
+                type: string
+                format: uuid
+                pattern: \b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b
+        OptionalTopicId:
+            name: filter[articles-in-topic-tree]
+            description: This parameter will restrict the search scope to the provided topic and it's sub topic.
+            in: query
+            required: false
+            schema:
+                type: string
+                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                minLength: 7
+                maxLength: 20
+                example: PROD-1066
+        OptionalArticleAttributes:
+            name: additionalAttributes
+            in: query
+            required: false
+            schema:
+                type: string
+                enum:
+                    - articleMacro
+                    - availabilityDate
+                    - averageRating
+                    - contentText
+                    - orderNumber
+                    - suggestionType
+                    - timesRated
+                    - availableEditions
+                    - articleTypeAttributes
+                    - milestone
+                    - all
+                description: The fields of the article to be returned.
+                example: articleMacro
+        OptionalMaxResults:
+            name: maxResults
+            in: query
+            description: |
+                The "maxResults" parameter specifies the number of articles that should be included in the response.
+
+                It is only required when the escalation type is chat escalation.If not specified then default value 5 will be considered for chat escalation.
+
+                If the escalation type is email, the maximum results value specified in the portal settings for email escalation will be taken into consideration.
+            required: false
+            schema:
+                type: integer
+                format: int32
+                example: 5
+                minimum: 1
+                maximum: 50
+        signature:
+            name: signature
+            in: query
+            description: Signature data to upload attachment.
+            required: true
+            schema:
+                type: string
+                pattern: ^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$
+                maxLength: 2048
     schemas:
+        AnswersRequest:
+            type: object
+            properties:
+                channel:
+                    type: object
+                    required:
+                        - type
+                    properties:
+                        type:
+                            type: string
+                            enum:
+                                - portal
+                                - custom
+                            description: The channel where the query originated, e.g., directly from the portal or via a custom integration.
+                            default: custom
+                        name:
+                            type: string
+                            minLength: 2
+                            maxLength: 1000
+                            description: A descriptive name for the channel (e.g., "web", "mobile app", "agent console").
+                context:
+                    type: object
+                    description: Additional contextual metadata that enriches the query, providing the LLM with relevant details for tailoring the response.
+                    maxProperties: 3
+                    properties:
+                        userContext:
+                            type: string
+                            description: Information about the end user (e.g., preferences, profile data, or behavioral signals).
+                            maxLength: 350000
+                            minLength: 1
+                        pageContext:
+                            type: string
+                            description: Details about the UI or page where the query was initiated (e.g., page URL, section, or component).
+                            minLength: 1
+                            maxLength: 350000
+                        companyContext:
+                            type: string
+                            description: Information about the organization associated with the user, used for tailoring responses in enterprise environments.
+                            minLength: 1
+                            maxLength: 350000
+                eventId:
+                    type: string
+                    maxLength: 20
+                    description: Unique ID for this specific API call or event.
+                    pattern: ^[0-9]+$
+                sessionId:
+                    type: string
+                    maxLength: 20
+                    description: ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
+                    pattern: ^[0-9]+$
+        RetrieveRequest:
+            type: object
+            properties:
+                channel:
+                    type: object
+                    required:
+                        - type
+                    properties:
+                        type:
+                            type: string
+                            enum:
+                                - portal
+                                - custom
+                            description: The channel where the query originated, e.g., directly from the portal or via a custom integration.
+                            default: custom
+                            example: custom
+                        name:
+                            type: string
+                            minLength: 2
+                            maxLength: 1000
+                            description: A descriptive name for the channel (e.g., "web", "mobile app", "agent console").
+                            example: Eight Bank Website
+                eventId:
+                    type: string
+                    maxLength: 20
+                    description: Unique ID for this specific API call or event.
+                    pattern: ^[0-9]+$
+                sessionId:
+                    type: string
+                    maxLength: 20
+                    description: ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
+                    pattern: ^[0-9]+$
+        SearchResult:
+            type: object
+            required:
+                - id
+                - name
+                - docType
+                - source
+                - snippet
+                - relevanceScore
+            description: Represents a single document or snippet returned by search, along with its metadata and relevance score.
+            properties:
+                id:
+                    type: string
+                    description: The ID of the Article. <br><br> An Article ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
+                    minLength: 7
+                    maxLength: 20
+                    pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                    example: PROD-48192
+                name:
+                    type: string
+                    description: The name of the Article or source content.
+                    minLength: 1
+                    maxLength: 255
+                    pattern: ^[\w\W]+$
+                    example: Lending FAQs
+                docName:
+                    type: string
+                    description: Name of the attachment, if an attachment was used as the source content.
+                    minLength: 1
+                    maxLength: 255
+                    pattern: ^[\w\W]+$
+                docType:
+                    type: string
+                    enum:
+                        - HTML
+                        - Doc
+                        - Pdf
+                    description: Format of the source document (HTML, Doc, or PDF).
+                source:
+                    type: string
+                    enum:
+                        - eGain Article
+                        - eGain Attachment
+                    description: The repository or system where the content originated (e.g., eGain Article, eGain Attachment).
+                snippet:
+                    type: string
+                    description: Retrieved text returned for the query. This may be a **chunk of an article** or the **entire article content** if the content is small enough.
+                    maxLength: 25000
+                    pattern: '^[\w\W]+$'
+                    example: Fair lending is a part of...
+                snippetType:
+                    type: string
+                    enum:
+                        - chunks
+                        - articleContent
+                relevanceScore:
+                    type: number
+                    format: float
+                    description: Generated confidence score (0.0-1.0) for the snippet's relevance to the query.
+                    minimum: 0
+                    maximum: 1
+                link:
+                    type: object
+                    description: Defines the relationship between this resource and another object.
+                    properties:
+                        rel:
+                            type: string
+                            maxLength: 50
+                            pattern: ^[a-zA-Z]+$
+                            description: "Defines the relationship between a linked resource and the current object. <br><br> For example: self, prev, next or an object name such as 'user', 'folder' etc."
+                        href:
+                            type: string
+                            maxLength: 1000
+                            pattern: (\/[^?#]*)
+                            description: The URL that specifies the link's destination.
+        ReferenceResponse:
+            type: object
+            required:
+                - id
+                - name
+                - source
+                - docType
+            description: One document used in generated response
+            properties:
+                id:
+                    type: string
+                    description: The ID of the Article. <br><br> An Article ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
+                    minLength: 7
+                    maxLength: 20
+                    pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+                name:
+                    type: string
+                    description: The name of the Article or source content.
+                    minLength: 1
+                    maxLength: 255
+                    pattern: ^[\w\W]+$
+                docName:
+                    type: string
+                    description: Name of the attachment, if an attachment was used as the source content.
+                    minLength: 1
+                    maxLength: 255
+                    pattern: ^[\w\W]+$
+                docType:
+                    type: string
+                    enum:
+                        - HTML
+                        - Doc
+                        - PDF
+                    description: Format of the source document (HTML, Doc, or PDF).
+                source:
+                    type: string
+                    enum:
+                        - eGain Article
+                        - eGain Attachment
+                    description: Source Type
+                link:
+                    type: object
+                    description: Defines the relationship between this resource and another object.
+                    properties:
+                        rel:
+                            type: string
+                            maxLength: 50
+                            pattern: ^[a-zA-Z]+$
+                            description: "Defines the relationship between a linked resource and the current object. <br><br> For example: self, prev, next or an object name such as 'user', 'folder' etc."
+                        href:
+                            type: string
+                            maxLength: 1000
+                            pattern: (\/[^?#]*)
+                            description: The URL that specifies the link's destination.
+        RetrieveResponse:
+            type: object
+            properties:
+                answer:
+                    type: object
+                    description: If a certified answer is given. The answer object will be present. <br><br> This will be shown only if certified answers are configured and the certified answer meets the configured threshold.
+                    properties:
+                        answerValue:
+                            type: string
+                            description: The certified answer.
+                            maxLength: 5000
+                            pattern: '^[\w\W]+$'
+                            example: Per the Lending FAQ document...
+                        references:
+                            type: array
+                            description: Source used to produce the certified answer.
+                            items:
+                                $ref: '#/components/schemas/ReferenceResponse'
+                            maxItems: 1
+                        answerType:
+                            type: string
+                            enum:
+                                - certified
+                            description: Specifies that the answer produced was a certified answer.
+                            example: certified
+                        relevanceScore:
+                            type: number
+                            format: float
+                            description: Confidence score (0.0-1.0) reflecting how well the answer matches the query.
+                            minimum: 0
+                            maximum: 1
+                            example: 0.99
+                    required:
+                        - answerValue
+                        - references
+                        - answerType
+                        - relevanceScore
+                searchResults:
+                    type: array
+                    description: Top search results with relevance scores and metadata.
+                    items:
+                        $ref: '#/components/schemas/SearchResult'
+                    maxItems: 50
+                channel:
+                    type: object
+                    required:
+                        - type
+                    properties:
+                        type:
+                            type: string
+                            enum:
+                                - portal
+                                - custom
+                            description: 'The channel where the query originated, e.g., directly from the portal or via a custom integration.'
+                            example: custom
+                        name:
+                            type: string
+                            maxLength: 1000
+                            description: The channel name.
+                            pattern: '^[\w\W]+$'
+                            example: Eight Bank Page
+                eventId:
+                    type: string
+                    maxLength: 20
+                    description: Unique ID for this specific API call or event.
+                    pattern: ^[0-9]+$
+                sessionId:
+                    type: string
+                    maxLength: 20
+                    description: ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
+                    pattern: ^[0-9]+$
+        AnswersResponse:
+            type: object
+            properties:
+                answer:
+                    type: object
+                    properties:
+                        answerValue:
+                            type: string
+                            description: The main response text. May be a certified answer or a generative answer produced by the LLM.
+                            maxLength: 1000
+                            pattern: ^[\w\W]+$
+                        references:
+                            type: array
+                            description: Supporting sources that were used to produce the answer.
+                            items:
+                                $ref: '#/components/schemas/ReferenceResponse'
+                            maxItems: 10
+                        answerType:
+                            type: string
+                            enum:
+                                - certified
+                                - generative
+                            description: Indicates whether the answer was extracted directly from documents or generated by the LLM.
+                        relevanceScore:
+                            type: number
+                            format: float
+                            description: Confidence score (0.0-1.0) reflecting how well the answer matches the query.
+                            minimum: 0
+                            maximum: 1
+                    required:
+                        - answerValue
+                        - references
+                        - answerType
+                        - relevanceScore
+                        - channel
+                searchResults:
+                    type: array
+                    description: List of top search results used to support the answer. Includes snippets, metadata, and relevance scores.
+                    items:
+                        $ref: '#/components/schemas/SearchResult'
+                    maxItems: 50
+                channel:
+                    type: object
+                    required:
+                        - type
+                    properties:
+                        type:
+                            type: string
+                            enum:
+                                - portal
+                                - custom
+                            description: The channel where the query originated, e.g., directly from the portal or via a custom integration.
+                        name:
+                            type: string
+                            maxLength: 1000
+                            description: The channel name.
+                            pattern: ^[\w\W]+$
+                sessionId:
+                    type: string
+                    description: ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
+                    maxLength: 20
+                    pattern: ^[0-9]+$
+                eventId:
+                    type: string
+                    description: Unique ID for this specific API call or event.
+                    maxLength: 20
+                    pattern: ^[0-9]+$
         ImportContent:
             type: object
             properties:
@@ -4040,354 +5443,6 @@ components:
                         - path
             required:
                 - dataSource
-        RetrieveRequest:
-            type: object
-            properties:
-                channel:
-                    type: object
-                    required:
-                        - type
-                    properties:
-                        type:
-                            type: string
-                            enum:
-                                - portal
-                                - custom
-                            description: The channel where the query originated, e.g., directly from the portal or via a custom integration.
-                            default: custom
-                            example: custom
-                        name:
-                            type: string
-                            minLength: 2
-                            maxLength: 1000
-                            description: A descriptive name for the channel (e.g., "web", "mobile app", "agent console").
-                            example: Eight Bank Website
-                eventId:
-                    type: string
-                    maxLength: 20
-                    description: Unique ID for this specific API call or event.
-                    pattern: ^[0-9]+$
-                sessionId:
-                    type: string
-                    maxLength: 20
-                    description: ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
-                    pattern: ^[0-9]+$
-        RetrieveResponse:
-            type: object
-            properties:
-                answer:
-                    type: object
-                    description: If a certified answer is given. The answer object will be present. <br><br> This will be shown only if certified answers are configured and the certified answer meets the configured threshold.
-                    properties:
-                        answerValue:
-                            type: string
-                            description: The certified answer.
-                            maxLength: 5000
-                            pattern: ^[\w\W]+$
-                            example: Per the Lending FAQ document...
-                        references:
-                            type: array
-                            description: Source used to produce the certified answer.
-                            items:
-                                $ref: '#/components/schemas/ReferenceResponse'
-                            maxItems: 1
-                        answerType:
-                            type: string
-                            enum:
-                                - certified
-                            description: Specifies that the answer produced was a certified answer.
-                            example: certified
-                        relevanceScore:
-                            type: number
-                            format: float
-                            description: Confidence score (0.0-1.0) reflecting how well the answer matches the query.
-                            minimum: 0
-                            maximum: 1
-                            example: 0.99
-                    required:
-                        - answerValue
-                        - references
-                        - answerType
-                        - relevanceScore
-                searchResults:
-                    type: array
-                    description: Top search results with relevance scores and metadata.
-                    items:
-                        $ref: '#/components/schemas/SearchResult'
-                    maxItems: 50
-                channel:
-                    type: object
-                    required:
-                        - type
-                    properties:
-                        type:
-                            type: string
-                            enum:
-                                - portal
-                                - custom
-                            description: The channel where the query originated, e.g., directly from the portal or via a custom integration.
-                            example: custom
-                        name:
-                            type: string
-                            maxLength: 1000
-                            description: The channel name.
-                            pattern: ^[\w\W]+$
-                            example: Eight Bank Page
-                eventId:
-                    type: string
-                    maxLength: 20
-                    description: Unique ID for this specific API call or event.
-                    pattern: ^[0-9]+$
-                sessionId:
-                    type: string
-                    maxLength: 20
-                    description: ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
-                    pattern: ^[0-9]+$
-        AnswersRequest:
-            type: object
-            properties:
-                channel:
-                    type: object
-                    required:
-                        - type
-                    properties:
-                        type:
-                            type: string
-                            enum:
-                                - portal
-                                - custom
-                            description: The channel where the query originated, e.g., directly from the portal or via a custom integration.
-                            default: custom
-                        name:
-                            type: string
-                            minLength: 2
-                            maxLength: 1000
-                            description: A descriptive name for the channel (e.g., "web", "mobile app", "agent console").
-                context:
-                    type: object
-                    description: Additional contextual metadata that enriches the query, providing the LLM with relevant details for tailoring the response.
-                    maxProperties: 3
-                    properties:
-                        userContext:
-                            type: string
-                            description: Information about the end user (e.g., preferences, profile data, or behavioral signals).
-                            maxLength: 350000
-                            minLength: 1
-                        pageContext:
-                            type: string
-                            description: Details about the UI or page where the query was initiated (e.g., page URL, section, or component).
-                            minLength: 1
-                            maxLength: 350000
-                        companyContext:
-                            type: string
-                            description: Organizational context that helps tailor responses (e.g., company policies, procedures, or domain-specific information).
-                            minLength: 1
-                            maxLength: 350000
-                eventId:
-                    type: string
-                    maxLength: 20
-                    description: Unique ID for this specific API call or event.
-                    pattern: ^[0-9]+$
-                sessionId:
-                    type: string
-                    maxLength: 20
-                    description: ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
-                    pattern: ^[0-9]+$
-        AnswersResponse:
-            type: object
-            properties:
-                answer:
-                    type: object
-                    properties:
-                        answerValue:
-                            type: string
-                            description: The main response text. May be a certified answer or a generative answer produced by the LLM.
-                            maxLength: 1000
-                            pattern: ^[\w\W]+$
-                        references:
-                            type: array
-                            description: Supporting sources that were used to produce the answer.
-                            items:
-                                $ref: '#/components/schemas/ReferenceResponse'
-                            maxItems: 10
-                        answerType:
-                            type: string
-                            enum:
-                                - certified
-                                - generative
-                            description: Indicates whether the answer was extracted directly from documents or generated by the LLM.
-                        relevanceScore:
-                            type: number
-                            format: float
-                            description: Confidence score (0.0-1.0) reflecting how well the answer matches the query.
-                            minimum: 0
-                            maximum: 1
-                    required:
-                        - answerValue
-                        - references
-                        - answerType
-                        - relevanceScore
-                searchResults:
-                    type: array
-                    description: List of top search results used to support the answer. Includes snippets, metadata, and relevance scores.
-                    items:
-                        $ref: '#/components/schemas/SearchResult'
-                    maxItems: 50
-                channel:
-                    type: object
-                    required:
-                        - type
-                    properties:
-                        type:
-                            type: string
-                            enum:
-                                - portal
-                                - custom
-                            description: The channel where the query originated, e.g., directly from the portal or via a custom integration.
-                        name:
-                            type: string
-                            maxLength: 1000
-                            description: The channel name.
-                            pattern: ^[\w\W]+$
-                sessionId:
-                    type: string
-                    description: ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
-                    maxLength: 20
-                    pattern: ^[0-9]+$
-                eventId:
-                    type: string
-                    description: Unique ID for this specific API call or event.
-                    maxLength: 20
-                    pattern: ^[0-9]+$
-        SearchResult:
-            type: object
-            required:
-                - id
-                - name
-                - docType
-                - source
-                - snippet
-                - relevanceScore
-            description: Represents a single document or snippet returned by search, along with its metadata and relevance score.
-            properties:
-                id:
-                    type: string
-                    description: The ID of the Article. <br><br> An Article ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
-                    minLength: 7
-                    maxLength: 20
-                    pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                    example: PROD-48192
-                name:
-                    type: string
-                    description: The name of the Article or source content.
-                    minLength: 1
-                    maxLength: 255
-                    pattern: ^[\w\W]+$
-                    example: Lending FAQs
-                docName:
-                    type: string
-                    description: Name of the attachment, if an attachment was used as the source content.
-                    minLength: 1
-                    maxLength: 255
-                    pattern: ^[\w\W]+$
-                docType:
-                    type: string
-                    enum:
-                        - HTML
-                        - Doc
-                        - Pdf
-                    description: Format of the source document (HTML, Doc, or PDF).
-                source:
-                    type: string
-                    enum:
-                        - eGain Article
-                        - eGain Attachment
-                    description: The repository or system where the content originated (e.g., eGain Article, eGain Attachment).
-                snippet:
-                    type: string
-                    description: Retrieved text returned for the query. This may be a **chunk of an article** or the **entire article content** if the content is small enough.
-                    maxLength: 25000
-                    pattern: ^[\w\W]+$
-                    example: Fair lending is a part of...
-                snippetType:
-                    type: string
-                    enum:
-                        - chunks
-                        - articleContent
-                relevanceScore:
-                    type: number
-                    format: float
-                    description: Generated confidence score (0.0-1.0) for the snippet's relevance to the query.
-                    minimum: 0
-                    maximum: 1
-                link:
-                    type: object
-                    description: Defines the relationship between this resource and another object.
-                    properties:
-                        rel:
-                            type: string
-                            maxLength: 50
-                            pattern: ^[a-zA-Z]+$
-                            description: 'Defines the relationship between a linked resource and the current object. <br><br> For example: self, prev, next or an object name such as ''user'', ''folder'' etc.'
-                        href:
-                            type: string
-                            maxLength: 1000
-                            pattern: (\/[^?#]*)
-                            description: The URL that specifies the link's destination.
-        ReferenceResponse:
-            type: object
-            required:
-                - id
-                - name
-                - source
-                - docType
-            description: One document used in generated response
-            properties:
-                id:
-                    type: string
-                    description: The ID of the Article. <br><br> An Article ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
-                    minLength: 7
-                    maxLength: 20
-                    pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                name:
-                    type: string
-                    description: The name of the Article or source content.
-                    minLength: 1
-                    maxLength: 255
-                    pattern: ^[\w\W]+$
-                docName:
-                    type: string
-                    description: Name of the attachment, if an attachment was used as the source content.
-                    minLength: 1
-                    maxLength: 255
-                    pattern: ^[\w\W]+$
-                docType:
-                    type: string
-                    enum:
-                        - HTML
-                        - Doc
-                        - PDF
-                    description: Format of the source document (HTML, Doc, or PDF).
-                source:
-                    type: string
-                    enum:
-                        - eGain Article
-                        - eGain Attachment
-                    description: Source Type
-                link:
-                    type: object
-                    description: Defines the relationship between this resource and another object.
-                    properties:
-                        rel:
-                            type: string
-                            maxLength: 50
-                            pattern: ^[a-zA-Z]+$
-                            description: 'Defines the relationship between a linked resource and the current object. <br><br> For example: self, prev, next or an object name such as ''user'', ''folder'' etc.'
-                        href:
-                            type: string
-                            maxLength: 1000
-                            pattern: (\/[^?#]*)
-                            description: The URL that specifies the link's destination.
         ArticleType:
             title: ArticleType
             type: object
@@ -9603,85 +10658,6 @@ components:
                     example: Connection timeout after processing 1500 items.
             required:
                 - status
-    examples:
-        LimitExceeded:
-            value:
-                code: 400-10424
-                developerMessage: Limit exceeded. The allowed limit for '{0}' is '{1}'.
-        InvalidValue:
-            value:
-                code: 400-152
-                developerMessage: Invalid value is provided in the request body for the following attribute:'<attribute_name>'.
-        Unauthorized:
-            value:
-                code: 401-101
-                developerMessage: Invalid or expired 'Authorization' header provided. New login is required.
-        Scope_Not_Assigned:
-            description: |
-                User doesn't have the required scope to call this API. Refer to the API documentation regarding user scope assignment for more information.
-            value:
-                code: 403-197
-                developerMessage: Not authorized to perform this action.
-        NotAcceptable:
-            value:
-                code: 406-100
-                developerMessage: The 'Accept-Language' header value is invalid.
-        precondition_failed:
-            value:
-                code: 412-100
-                developerMessage: Pre condition failed
-        InternalServerError:
-            value:
-                code: 500-100
-                developerMessage: System is unable to process this request. Please contact your administrator.
-        UnsupportedParameters:
-            value:
-                code: 400-101
-                developerMessage: 'Unsupported query parameter(s) supplied: ''<query_parameter>''.'
-        MissingParameter:
-            value:
-                code: 400-112
-                developerMessage: 'Required query parameter(s) is missing. The following parameters are required: ''<query_parameter>''.'
-        Forbidden:
-            value:
-                code: 403-178
-                developerMessage: 'User is not allowed to perform the following action: <action_name>.'
-        NotFound:
-            value:
-                code: 404-100
-                developerMessage: 'The following IDs supplied in the URI path were not found: ''<resource_id>''.'
-        Required_Attribute_Missing:
-            description: Required query parameter is missing.
-            value:
-                code: 400-112
-                developerMessage: 'Required query parameter(s) is missing. The following parameters are required: <param name>'
-        Unallowed_Attribute_Value:
-            description: One of the attributes has a value which is not allowed.
-            value:
-                code: 400-196
-                developerMessage: 'Invalid value of attribute <attribute>, expected values are: [<possible_values>].'
-        Invalid_Authorization:
-            description: |
-                Invalid or expired authorization. Generate a new authorization header and try again.
-            value:
-                code: 401-104
-                developerMessage: Invalid or missing 'authorization' header value.
-        Resource_Not_Found:
-            description: Resource not found.
-            value:
-                code: 404-101
-                developerMessage: 'The following IDs provided in the URI path were not found: <id>'
-        Unable_Delete_Approved_Suggestion:
-            description: The resource cannot be deleted.
-            value:
-                code: 400-113
-                developerMessage: The Suggestion you are trying to delete has been approved and cannot be removed.
-        Too_Many_Request:
-            description: |
-                Too many requests. Try again at a later time.
-            value:
-                code: 429-001
-                developerMessage: Too many requests.
     responses:
         BadImportContentRequest:
             description: Bad Request
@@ -13519,1062 +14495,85 @@ components:
                                 altId: f665fb41-6485-43c3-a2c8-c72857c29f74
                                 name: article.png
                                 contentUrl: https://EG5842ain.ezdev.net/knowledge/portalmgr/v4/attachmnet/upload?signature=3552656867434671616F6C51786335674B764E7848586E786B383255555A41574F6B656F542B396258677A334341322F2B32336F434D6D6E47637955714C6A6E4D527476666C534E4C6232520D0A4F6F70637259773043515A6778596949586F3247666B6E624350386336563446624C5446746C546B2F324A734E425939634758507465722B6C584435685747734C4A2B6C626342732F426E640D0A4D7965456452564A6670525069536D2B43423232384A67724F636C4161654F39336F42784942354C6776462F50724D67674A3248527253504C53457551596A7A6D4B347A4F7A63416C7047450D0A39556133495776504A4875336D77757330773D3D
-    parameters:
-        jobId:
-            name: job_id
-            in: path
+    examples:
+        LimitExceeded:
+            value:
+                code: 400-10424
+                developerMessage: Limit exceeded. The allowed limit for '{0}' is '{1}'.
+        InvalidValue:
+            value:
+                code: 400-152
+                developerMessage: Invalid value is provided in the request body for the following attribute:'<attribute_name>'.
+        Unauthorized:
+            value:
+                code: 401-101
+                developerMessage: Invalid or expired 'Authorization' header provided. New login is required.
+        Scope_Not_Assigned:
             description: |
-                **Job ID Parameter**
-
-                The unique identifier for the import or validation job. This ID was returned when the job was created via the Import or Validate API.
-
-                **Format:** UUID v4 (e.g., 7A84B875-6F75-4C7B-B137-0632B62DB0BD)
-
-                **Example Usage:**
-                ```bash
-                GET /import/content/7A84B875-6F75-4C7B-B137-0632B62DB0BD/status
-                ```
-            required: true
-            schema:
-                type: string
-                example: 7A84B875-6F75-4C7B-B137-0632B62DB0BD
-                pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-        qQuery:
-            name: q
-            required: true
-            in: query
-            description: The search query string.
-            schema:
-                type: string
-                example: mortgage rates
-                minLength: 2
-                maxLength: 1000
-        portalReadableId:
-            name: portalID
-            in: path
-            required: true
-            schema:
-                type: string
-                minLength: 7
-                maxLength: 20
-                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                example: PROD-1000
-            description: The ID of the portal being accessed.<br><br>A portal ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
-        userProfileID:
-            name: $filter[userProfileID]
-            in: query
-            schema:
-                type: string
-                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                minLength: 7
-                maxLength: 20
-                description: The ID of the user profile.
-                example: PROD-3210
-        languageCode:
-            name: $lang
-            in: query
-            description: The language that describes the details of a resource. Resources available in different languages may differ from each other. <br><br> If lang is not passed, then the portal's default language is used.
-            schema:
-                type: string
-                example: en-US
-                enum:
-                    - en-US
-                    - fr-FR
-                    - en-GB
-                    - es-ES
-                    - it-IT
-                    - nl-NL
-                    - da-DA
-                    - sv-SE
-                    - pt-PT
-                    - fi-FI
-                    - no-NB
-                    - no-NN
-                    - ja-JA
-                    - de-DE
-                    - pt-BR
-                    - zh-CN
-                    - zh-TW
-                    - ko-KO
-                    - ru-RU
-                    - el-EL
-                    - tr-TR
-                    - pl-PL
-                    - cs-CS
-                    - sk-SK
-                    - hu-HU
-                    - sr-SR
-                    - ar-SA
-                    - hr-HR
-                    - ro-RO
-                    - th-TH
-                    - xx-XX
-            x-speakeasy-name-override: language
-        filterTopicIds:
-            name: $filter[topicIds]
-            in: query
-            description: An array of topic IDs. It is used to restrict search results to specific topics.
-            schema:
-                type: array
-                items:
-                    type: string
-                    pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                minItems: 1
-                maxItems: 20
-        filterTags:
-            name: $filter[tags]
-            in: query
-            required: false
-            schema:
-                type: object
-                minProperties: 1
-                maxProperties: 20
-                additionalProperties:
-                    type: array
-                    description: Tag Category IDs
-                    maxItems: 20
-                    pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                    items:
-                        type: string
-                        description: Tag IDs
-                        minLength: 7
-                        maxLength: 20
-                        pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-            description: "An object where each key is a **Category Tag ID** (numeric string),  \nand each value is an array of **Tag IDs** for that category.\n"
-            example:
-                PROD-1234:
-                    - PROD-2000
-                    - PROD-2003
-                PROD-2005:
-                    - PROD-2007
-        xEgainActivityId:
-            name: x-egain-activity-id
-            in: header
-            description: A unique numeric interaction identifier from eGain.
-            required: false
-            schema:
-                type: string
-                minLength: 4
-                maxLength: 9
-                pattern: ^[0-9]{4,9}$
-                example: '59237'
-            x-speakeasy-ignore: true
-        xExtIntegrationId:
-            name: x-ext-integration-id
-            in: header
-            description: 'The unique numeric identifier for a tenant, used in self-service functionality as well as third-party integrations.<br><br>*Note: If x-egain-activity-id is not provided, then this must be passed along with x-ext-interaction-id.*'
-            required: false
-            schema:
-                type: string
-                maxLength: 40
-                pattern: ^[\w\W]+$
-            examples:
-                uuid:
-                    value: 3155180e-0c13-43e9-9c38-e9045bcbf176
-                hex:
-                    value: 00Dbn00000IxGnx
-            x-speakeasy-ignore: true
-        xExtInteractionId:
-            name: x-ext-interaction-id
-            in: header
-            description: 'A unique interaction identifier from other CRM applications.<br><br>*Note: If x-egain-activity-id is not provided, then this must be passed along with x-ext-integration-id.*'
-            required: false
-            schema:
-                type: string
-                maxLength: 40
-                pattern: ^[\w\W]+$
-            examples:
-                uuid:
-                    value: 3155180e-0c13-43e9-9c38-e9045bcbf176
-                hex:
-                    value: 00Dbn00000IxGnx
-            x-speakeasy-ignore: true
-        acceptLanguage:
-            name: Accept-Language
-            in: header
-            description: The Language locale accepted by the client (used for locale specific fields in resource representation and in error responses).
-            required: true
-            schema:
-                type: string
-                enum:
-                    - en-US
-                    - es-ES
-                    - fr-FR
-                    - it-IT
-                    - de-DE
-                    - nl-NL
-                    - pt-BR
-                    - pt-PT
-                    - da-DK
-                    - ru-RU
-                    - fr-CA
-                    - zh-CN
-                    - ja-JP
-                    - ko-KR
-                    - sv-SE
-                example: en-US
-        articleReadableId:
-            name: articleID
-            description: The ID of the Article.<br><br>An Article ID is composed of a 2-4 letter prefix followed by a dash and 4-15 digits.
-            in: path
-            required: true
-            schema:
-                type: string
-                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                minLength: 7
-                maxLength: 20
-            example: PROD-2996
-        languageQueryParameter:
-            name: $lang
-            in: query
-            description: The language that describes the details of a resource. Resources available in different languages may differ from each other.<li>If <code>lang</code> is not passed, then the portal's default language is used.</li>
-            required: false
-            schema:
-                type: string
-                enum:
-                    - en-US
-                    - fr-FR
-                    - en-GB
-                    - es-ES
-                    - it-IT
-                    - nl-NL
-                    - da-DA
-                    - sv-SE
-                    - pt-PT
-                    - fi-FI
-                    - no-NB
-                    - no-NN
-                    - ja-JA
-                    - de-DE
-                    - pt-BR
-                    - zh-CN
-                    - zh-TW
-                    - ko-KO
-                    - ru-RU
-                    - el-EL
-                    - tr-TR
-                    - pl-PL
-                    - cs-CS
-                    - sk-SK
-                    - hu-HU
-                    - sr-SR
-                    - ar-SA
-                    - hr-HR
-                    - ro-RO
-                    - th-TH
-                    - xx-XX
-                example: en-US
-            x-speakeasy-name-override: language
-        articleAdditionalAttributes:
-            name: articleAdditionalAttributes
-            in: query
-            required: false
-            schema:
-                type: array
-                items:
-                    type: string
-                    enum:
-                        - articleMacro
-                        - availabilityDate
-                        - availableEditions
-                        - averageRating
-                        - bookmarkStatus
-                        - content
-                        - contentText
-                        - compliance
-                        - timesRated
-                        - createdBy.userName
-                        - modifiedBy.userName
-                        - ownedBy
-                        - ownedBy.userName
-                        - workflow
-                        - all
-            description: "The attributes of an Article to be returned *in addition to* the default list of attributes, listed below. Multiple additional attributes can be specified using a comma-separated list. Passing 'all' will return all attributes.\n\n#### Default Attributes\nThese Article attributes are always returned:\n\n| Name | Description \n| ---- | -----------\n| id | The ID of the Article.\n| name  | The name of the Article.\n| additionalInfo | Additional information provided as Article metadata.\n| articleType | The Article type and its attributes.\n| articleKeywords | A comma-separated list of keywords associated with this Article.\n| articleState | The current state of the Article. States include A (Authoring), S (Staging), and P (Published).\n| articleSummary | A brief summary of the Article, provided as metadata.\n| createdBy | The ID, first name, middle name and last name of the user that created the Article.\n| createdDate | The date that the Article was created.\n| departmentId | ID of the department for which this Article belongs to.\n| description | The Article's description.\n| expirationDate | The date that the Article is set to expire.\n| attachments | The Article's attachments\n| imageURL | The URL of the image that is present in the Article version. It is used as the thumbnail image for the Article.\n| includeInGenAI | Indicates whether this Article is used for eGain's generative AI features.\n| isSubscribed | Indicates whether the Article is subscribed for notifications. \n| languageCode | The language code of the Article language. \n| link | The link object, used to retrieve the details of the Article.\n| modifiedBy | The ID, first name, middle name and last name of the user that last modified the Article.\n| modifiedDate | The date that the Article was last modified on.\n| topicBreadcrumb | Contains a list of topics from the top-level topic to this Article. There may be multiple paths.\n| versionId | The ID of the Article version that is returned.\n"
-            style: form
-            explode: false
-            examples:
-                Single:
-                    value:
-                        - averageRating
-                    description: An additional attribute to be returned.
-                Multiple:
-                    value:
-                        - ownedBy
-                        - ownedBy.userName
-                    description: Additional attributes to be returned.
-                All:
-                    value:
-                        - all
-                    description: All additional attributes to be returned.
-        customAdditionalAttributes:
-            name: $customAdditionalAttributes
-            in: query
-            required: false
-            schema:
-                type: string
-                pattern: ^([a-zA-Z0-9_-]+)(?:,[a-zA-Z0-9_-]+)*$
-                minLength: 1
-                maxLength: 4000
-                description: One or more comma-separated names for custom attributes defined by the user to be returned.
-            examples:
-                Single:
-                    value: country_name
-                    description: A user-defined custom attribute.
-                Multiple:
-                    value: internalScore,performance-rating_dept_923
-                    description: Multiple user-defined custom attributes.
-            x-speakeasy-name-override: customAdditionalAttributes
-        workflowMilestone:
-            name: workflowMilestone
-            in: query
-            description: For agents with the View Author Portal or View Staging Portal actions, this determines which version of the Article is returned.<li>'Authoring' returns the most recent version of an Article checked-in by an author.</li><li>'Staging' returns the updated version currently being processed in a workflow.</li><li>'Publish' returns the most recently published version.</li>
-            schema:
-                type: string
-                enum:
-                    - authoring
-                    - staging
-                    - publish
-                example: publish
-        mandatoryLanguageQueryParameter:
-            name: $lang
-            in: query
-            description: The language used for fetching the details of a resource. Resources available in different languages may differ from each other.
-            required: true
-            schema:
-                type: string
-                enum:
-                    - en-US
-                    - fr-FR
-                    - en-GB
-                    - es-ES
-                    - it-IT
-                    - nl-NL
-                    - da-DA
-                    - sv-SE
-                    - pt-PT
-                    - fi-FI
-                    - no-NB
-                    - no-NN
-                    - ja-JA
-                    - de-DE
-                    - pt-BR
-                    - zh-CN
-                    - zh-TW
-                    - ko-KO
-                    - ru-RU
-                    - el-EL
-                    - tr-TR
-                    - pl-PL
-                    - cs-CS
-                    - sk-SK
-                    - hu-HU
-                    - sr-SR
-                    - ar-SA
-                    - hr-HR
-                    - ro-RO
-                    - th-TH
-                example: en-US
-            x-speakeasy-name-override: language
-        articleId:
-            name: articleID
-            in: path
-            required: true
-            schema:
-                type: string
-                minLength: 7
-                maxLength: 20
-            description: The ID of the Article. Both numeric and alternate ID formats are supported.<br><br>Valid numerical IDs are 15-19 digits long.
-            examples:
-                Readable Id:
-                    value: PROD-2996
-                    description: A readable Article ID.
-                Numeric Id:
-                    value: '202200000002996'
-                    description: A numerical Article ID.
-        publishviewid:
-            name: publishViewId
-            in: path
-            required: true
-            description: Publish View Id of the article on which operation is performed.
-            schema:
-                type: string
-                minLength: 1
-                maxLength: 15
-                example: '959500000204621'
-        accept:
-            name: Accept
-            in: header
-            description: The content type accepted by the client.
-            required: true
-            schema:
-                type: string
-                default: application/json
-                enum:
-                    - application/json
-        searchProfileId:
-            name: searchProfileId
-            in: query
-            description: Search Profile ID
-            schema:
-                type: string
-                minLength: 1
-                maxLength: 15
-                example: '959500000204621'
-        filterTopicIdRequired:
-            name: $filter[topicId]
-            in: query
-            required: true
-            schema:
-                type: string
-                minLength: 7
-                maxLength: 20
-                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-            description: The ID of the topic. It is used to restrict to a specific topic.
-            example: PROD-1065
-        articleResultAdditionalAttributes:
-            name: articleResultAdditionalAttributes
-            in: query
-            required: false
-            schema:
-                type: array
-                items:
-                    type: string
-                    enum:
-                        - averageRating
-                        - customAttributes
-                        - description
-                        - articleSummary
-                        - imageURL
-                        - isSubscribed
-                        - timesRated
-                        - topicBreadcrumb
-                        - ownedBy
-                        - ownedBy.userName
-                        - workflow
-                        - compliance
-                        - personalization
-                        - all
-            description: "The attributes of an Article to be returned *in addition to* the default list of attributes, listed below. Multiple additional attributes can be specified using a comma-separated list. Passing 'all' will return all attributes.\n\n#### Default Attributes\nThese Article attributes are always returned:\n\n| Name | Description \n| ---- | -----------\n| id | The ID of the Article.\n| name  | The name of the Article.\n| articleType | The Article Type and its attributes.\n| createdBy | The ID, first name, middle name and last name of the user that created the Article.\n| createdDate | The date that the Article was created.\n| hasAttachments | True: The Article has one or more attachments.<br>False: The Article does not have any attachments.\n| languageCode | The language code of the Article language. \n| modifiedBy | The ID, first name, middle name and last name of the user that last modified the Article.\n| modifiedDate | The date that the Article was last modified on.\n| link | The link object, used to retrieve the details of the Article.\n| versionId | The ID of the Article version that is returned.\n"
-            style: form
-            explode: false
-            examples:
-                Single:
-                    value:
-                        - averageRating
-                    description: An additional attribute to be returned.
-                Multiple:
-                    value:
-                        - ownedBy
-                        - ownedBy.userName
-                    description: Additional attributes to be returned.
-                All:
-                    value:
-                        - all
-                    description: All additional attributes to be returned.
-        tags:
-            name: $filter[tags]
-            description: A comma separated list of Tag / Tag Group IDs. The query results will be filtered by the tags that are specified.<br><br>Tag IDs and Tag Group IDs can be mixed together.
-            in: query
-            required: false
-            schema:
-                type: string
-                pattern: ^([a-zA-Z0-9]{2,4}-\d{4,15})(,([a-zA-Z0-9]{2,4}-\d{4,15})){0,19}$
-                minLength: 7
-                maxLength: 2048
-                example: PROD-5381
-        pagenum:
-            name: $pagenum
-            in: query
-            description: Pagination parameter that specifies the page number of results to be returned. Used in conjunction with $pagesize.
-            required: false
-            schema:
-                type: integer
-                format: int64
-                minimum: 1
-                maximum: 999
-                default: 1
-            x-speakeasy-name-override: pagenum
-        pagesize:
-            name: $pagesize
-            in: query
-            description: Pagination parameter that specifies the number of results per page. Used in conjunction with $pagenum.
-            required: false
-            schema:
-                type: integer
-                format: int64
-                minimum: 1
-                maximum: 75
-                default: 10
-            x-speakeasy-name-override: pagesize
-        articleSort:
-            name: $sort
-            in: query
-            required: false
-            schema:
-                type: string
-                enum:
-                    - availabilityDate
-                    - popularity
-                    - name
-                example: name
-            description: Articles to be sorted on.
-            x-speakeasy-name-override: sort
-        articleSortOrder:
-            name: $order
-            in: query
-            required: false
-            schema:
-                type: string
-                enum:
-                    - asc
-                    - desc
-                example: asc
-                description: Sort order of articles.
-            x-speakeasy-name-override: order
-        attachmentId:
-            name: attachmentID
-            description: The ID of the attachment.<br><br>An attachment ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
-            in: path
-            required: true
-            schema:
-                type: string
-                minLength: 7
-                maxLength: 20
-                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                example: PROD-1000
-        complianceArticleResultAdditionalAttributes:
-            name: complianceArticleResultAdditionalAttributes
-            in: query
-            required: false
-            schema:
-                type: array
-                items:
-                    type: string
-                    enum:
-                        - averageRating
-                        - articleSummary
-                        - customAttributes
-                        - description
-                        - imageURL
-                        - isSubscribed
-                        - timesRated
-                        - topicBreadcrumb
-                        - ownedBy
-                        - ownedBy.userName
-                        - workflow
-                        - compliance
-                        - personalization
-                        - all
-            description: "The attributes of an Article to be returned *in addition to* the default list of attributes, listed below. Multiple additional attributes can be specified using a comma-separated list. Passing 'all' will return all attributes.\n\n#### Default Attributes\nThese Article attributes are always returned:\n\n| Name | Description \n| ---- | -----------\n| id | The ID of the Article.\n| name  | The name of the Article.\n| updateSummary | Summary of the Article update.\n| articleType | The Article Type and its attributes.\n| createdBy | The ID, first name, middle name and last name of the user that created the Article.\n| createdDate | The date that the Article was created.\n| hasAttachments | True: The Article has one or more attachments.<br>False: The Article does not have any attachments.\n| languageCode | The language code of the Article language. \n| modifiedBy | The ID, first name, middle name and last name of the user that last modified the Article.\n| modifiedDate | The date that the Article was last modified on.\n| link | The link object, used to retrieve the details of the Article.\n| versionId | The ID of the Article version that is returned.\n"
-            style: form
-            explode: false
-            examples:
-                Single:
-                    value:
-                        - averageRating
-                    description: An additional attribute to be returned.
-                Multiple:
-                    value:
-                        - ownedBy
-                        - ownedBy.userName
-                    description: Additional attributes to be returned.
-                All:
-                    value:
-                        - all
-                    description: All additional attributes to be returned.
-        topicReadableId:
-            name: topicID
-            in: path
-            required: true
-            description: The ID of a topic.<br><br>A topic ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
-            schema:
-                type: string
-                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                minLength: 7
-                maxLength: 20
-                example: PROD-1069
-        level:
-            name: level
-            description: Depth of the topic hierarchy to be returned in the response.
-            in: query
-            required: false
-            schema:
-                type: integer
-                format: int64
-                minimum: -1
-                maximum: 20
-                example: 1
-            examples:
-                AllLevels:
-                    value: -1
-                    description: All levels are returned
-                Parent:
-                    value: 0
-                    description: Only parent topic is returned
-                Immediate:
-                    value: 1
-                    description: Parent and immediate children topics are returned
-                Grand Children:
-                    value: 2
-                    description: Immediate children and grand children are returned
-        topicAdditionalAttributes:
-            name: topicAdditionalAttributes
-            in: query
-            required: false
-            schema:
-                type: array
-                items:
-                    type: string
-                    enum:
-                        - description
-                        - createdBy.userName
-                        - createdBy.firstName
-                        - createdBy.lastName
-                        - createdBy.middleName
-                        - modifiedBy.userName
-                        - modifiedBy.firstName
-                        - modifiedBy.lastName
-                        - modifiedBy.middleName
-                        - imageUrl
-                        - textMetaData
-                        - all
-            style: form
-            explode: false
-            description: "The attributes of a topic to be returned *in addition to* the default list of attributes, listed below. Multiple additional attributes can be specified using a comma-separated list. Passing 'all' returns all attributes.\n\n#### Default Attributes\nThese topic attributes are always returned:\n\n| Name | Description \n| ---- | -----------\n| id | The ID of the topic.\n| name  | The name of the topic.\n| articleCountInTopic | Number of articles in this topic.\n| articleCountInTopicTree  | Number of articles in this topic and all sub-topics.\n| createdBy.id | The ID of the user that created the topic. \n| createdDate | The date when the topic was created.\n| departmentId | ID of the department for which this topic belongs to. \n| topicHomeArticleId | The ID of the article used as the home page of this topic.\n| modifiedBy.id | The ID of the user that last modified the topic. \n| modifiedDate | The date when the topic was last modified on.\n| childCount | Total number of children sub-topis below the current topic\n| subTopicIds | Array with the list of sub-topics\n| parentTopicId | ID of the parent topic. -1 if it is the root topic. \n"
-            examples:
-                Single:
-                    value:
-                        - modifiedBy.userName
-                    description: An additional attribute to be returned.
-                Multiple:
-                    value:
-                        - description
-                        - imageUrl
-                    description: Additional attributes to be returned.
-                All:
-                    value:
-                        - all
-                    description: All additional attributes to be returned.
-        pagenumTopics:
-            name: $pagenum
-            in: query
-            description: Pagination parameter that specifies the page number of results to be returned. Used in conjunction with $pagesize.
-            required: false
-            schema:
-                type: integer
-                format: int32
-                minimum: 1
-                maximum: 999
-                default: 1
-            x-speakeasy-name-override: pagenum
-        pagesizeTopics:
-            name: $pagesize
-            in: query
-            description: Pagination parameter that specifies the number of results per page. Used in conjunction with $pagenum.
-            required: false
-            schema:
-                type: integer
-                format: int32
-                minimum: 1
-                maximum: 75
-                default: 10
-            x-speakeasy-name-override: pagesize
-        filterTopicId:
-            name: $filter[topicId]
-            in: query
-            required: false
-            schema:
-                type: string
-                minLength: 7
-                maxLength: 20
-                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-            description: The ID of the topic. It is used to restrict to a specific topic.
-            example: PROD-1067
-        casebaseReleaseId:
-            name: casebaseReleaseID
-            in: path
-            required: true
-            schema:
-                type: string
-                pattern: ^[1-9]\d{14}$
-                example: '202201000000002'
-            description: The numerical ID of the Casebase Release for which details is to be fetched.
-        filterCasebaseRelease:
-            name: filter[casebaseRelease]
-            in: query
-            required: false
-            description: Filter by Casebase Release
-            schema:
-                pattern: ^[1-9]\d{14}$
-                type: string
-                example: '202201000000002'
-        contentType:
-            name: Content-Type
-            in: header
-            description: The media type sent by the client.
-            required: true
-            schema:
-                type: string
-                default: application/json
-                enum:
-                    - application/json
-        ghCustomAdditionalAttributes:
-            name: ghCustomAdditionalAttributes
-            in: query
-            required: false
-            schema:
-                type: string
-                pattern: ^question\.custom\.[^,]+(?:,question\.custom\.[^,]+)*$
-                minLength: 1
-                maxLength: 4000
-                description: "Custom attributes to be fetched. \n\nPossible values are:\n- question.custom.\\<name\\> where \\<name\\> is the internal name of custom attribute of question. 'question' is used as a prefix to distinguish question's custom attribute from other objects custom attributes.\n"
-            examples:
-                Single:
-                    value: question.custom.score
-                    description: A user-defined custom attribute.
-                Multiple:
-                    value: question.custom.score,question.custom.test
-                    description: Multiple user-defined custom attributes.
-        clusterId:
-            name: clusterID
-            in: path
-            required: true
-            description: ID of Cluster.
-            schema:
-                type: string
-                pattern: ^[1-9]\d*$
-                minLength: 10
-                maxLength: 10
-                example: '1000000402'
-        caseId:
-            name: caseID
-            in: path
-            required: true
-            schema:
-                type: string
-                pattern: ^[1-9]\d*$
-                minLength: 10
-                maxLength: 15
-                example: '1000001085'
-            description: The numerical ID of the Case for which details is to be fetched.
-        caseAdditionalAttributes:
-            name: caseAdditionalAttributes
-            in: query
-            required: false
-            schema:
-                type: array
-                items:
-                    type: string
-                    enum:
-                        - questionDetail
-                        - actions
-                        - all
-                    example: all
-            description: Additional case attributes to be fetched.
-            style: form
-            explode: false
-            examples:
-                Single:
-                    value:
-                        - actions
-                    description: An additional attributes to be returned.
-                Multiple:
-                    value:
-                        - questionDetail
-                        - actions
-                    description: Additional attributes to be returned.
-                All:
-                    value:
-                        - all
-                    description: All additional attributes to be returned.
-        casebaseReleaseIdQuery:
-            name: casebaseReleaseID
-            in: query
-            required: true
-            schema:
-                type: string
-                pattern: ^[1-9]\d{14}$
-                example: '202201000000002'
-            description: The numerical ID of the Casebase Release for which details is to be fetched.
-        quickpickReadableId:
-            name: quickpickID
-            in: path
-            required: true
-            schema:
-                type: string
-                pattern: ^[1-9]\d*$
-                minLength: 1
-                maxLength: 19
-                example: '11'
-            description: The ID of the quickpick.
-        bookmarkId:
-            name: bookmarkID
-            description: The ID of the bookmark.
-            in: path
-            required: true
-            schema:
-                type: string
-                pattern: ^[1-9]\d*$
-                minLength: 4
-                maxLength: 19
-                example: '4759'
-        userProfileIdInPath:
-            name: userProfileID
-            in: path
-            description: "The ID of the user profile. \n"
-            required: true
-            schema:
-                type: string
-                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                minLength: 7
-                maxLength: 20
-                description: |
-                    The Readable ID of the user profile.<br>
-                example: PROD-3210
-        sortIdNameDepartment:
-            name: $sort
-            in: query
-            description: 'Objects returned in server response are sorted based on the attribute supplied under $sort. <br>_Default value_: name.'
-            required: false
-            schema:
-                type: string
-                enum:
-                    - id
-                    - name
-                    - departmentName
-            x-speakeasy-name-override: sort
-        order:
-            name: $order
-            in: query
-            description: Common query parameter $order.
-            required: false
-            style: form
-            explode: true
-            schema:
-                type: string
-                enum:
-                    - asc
-                    - desc
-            x-speakeasy-name-override: order
-        pagesizeNewFrameWork:
-            name: $pagesize
-            in: query
-            description: 'Pagination parameter that specifies the number of results per page. Used in conjunction with $pagenum.<br>Valid range of 5-75<br>_Default value_: 25'
-            required: false
-            schema:
-                type: integer
-                format: int64
-                minimum: 1
-                maximum: 75
-                default: 25
-            x-speakeasy-name-override: pagesize
-        q:
-            name: q
-            description: The search query string. The string must be escaped as required by the URL syntax rules.
-            in: query
-            required: true
-            schema:
-                pattern: ^[\w\W]+$
-                type: string
-                minLength: 1
-                maxLength: 1024
-                example: fair lending
-        filterUserProfileID:
-            name: $filter[userProfileID]
-            in: query
-            description: "The ID of the user profile. \n"
-            required: false
-            schema:
-                type: string
-                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                minLength: 7
-                maxLength: 20
-                description: |
-                    The Readable ID of the user profile.<br>
-                example: PROD-3210
-        filterExcludesTopicIds:
-            name: $filter[excludeTopicIds]
-            in: query
-            description: An array of topic IDs that will be excluded from the search. It includes articles that belong to the topic.
-            schema:
-                type: array
-                items:
-                    type: string
-                    pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                minItems: 1
-                maxItems: 20
-        resourceType:
-            name: resourceType
-            in: query
-            description: Type of resource to be fetched.
-            schema:
-                type: string
-                enum:
-                    - article
-                    - topic
-        articleCustomFields:
-            name: articleCustomAdditionalAttributes
-            in: query
-            description: One or more comma-separated names for article custom attributes defined by the user to be returned.
-            schema:
-                type: string
-                minLength: 1
-                maxLength: 4000
-        topicCustomFields:
-            name: topicCustomAdditionalAttributes
-            in: query
-            description: One or more comma-separated names for topic custom attributes defined by the user to be returned.
-            schema:
-                type: string
-                minLength: 1
-                maxLength: 4000
-        sortIdName:
-            name: $sort
-            in: query
-            description: Objects returned in server response are sorted based on the attribute supplied under $sort.
-            required: false
-            schema:
-                type: string
-                enum:
-                    - id
-                    - name
-            x-speakeasy-name-override: sort
-        suggestionId:
-            name: suggestionID
-            description: The ID of the Suggestion.<br><br>A Suggestion ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
-            in: path
-            required: true
-            schema:
-                type: string
-                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                minLength: 7
-                maxLength: 20
-            example: PROD-11829
-        suggestionAdditionalAttributes:
-            name: suggestionAdditionalAttributes
-            in: query
-            required: false
-            schema:
-                type: array
-                items:
-                    type: string
-                    enum:
-                        - content
-                        - modifiedBy.userName
-                        - all
-            style: form
-            explode: false
-            description: "The attributes of a Suggestion to be returned *in addition to* the default list of attributes, listed below. Multiple additional attributes can be specified using a comma-separated list. Passing 'all' returns all attributes.\n\n#### Default Attributes\nThese Suggestion attributes are always returned:\n\n| Name | Description \n| ---- | -----------\n| id | The ID of the Suggestion.\n| name  | The name of the Suggestion.\n| status | The status of the Suggestion.\n| description | The description of the Suggestion.\n| language | Details about the language of the Suggestion.\n| modifiedBy.id | The ID of the user that last modified the Suggestion. \n| modifiedBy.firstName | The Suggestion's last modified user's first name.\n| modifiedBy.middleName | The Suggestion's last modified user's middle name.\n| modifiedBy.lastName | The Suggestion's last modified user's last name.\n| modifiedDate | The Suggestion's last modified date <u>and</u> information about the user that last modified the Suggestion.\n| link | The link object, used to retrieve the details of the Suggestion.\n| hasComments | The Suggestion has one or more comments\n| hasAttachments | The Suggestion has one or more attachments\n| hasRelatedArticles | The Suggestion has related articles\n"
-            examples:
-                Single:
-                    value:
-                        - content
-                    description: An additional attribute to be returned.
-                Multiple:
-                    value:
-                        - content
-                        - modifiedBy.userName
-                    description: Additional attributes to be returned.
-                All:
-                    value:
-                        - all
-                    description: All additional attributes to be returned.
-        attachmentAdditionalAttributes:
-            name: attachmentAdditionalAttributes
-            in: query
-            required: false
-            schema:
-                type: array
-                items:
-                    type: string
-                    enum:
-                        - contentUrl
-                        - all
-            style: form
-            explode: false
-            description: "The attributes of an attachment to be returned, along with the default attachment details.\n\n| Attribute    | Description                        |\n|--------------|------------------------------------|\n| id         | Unique identifier for the attachment |\n| fileName   | Name of the file                   |\n| contentType| Content type of the file              |\n| size       | Size of the file in bytes          |\n| link       | Link to the attachment             | \n"
-            examples:
-                Single:
-                    value:
-                        - contentUrl
-                    description: An additional attribute to be returned.
-        customerPortalReadableId:
-            name: portalID
-            in: path
-            required: true
-            schema:
-                type: string
-                minLength: 7
-                maxLength: 20
-                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                example: PROD-1002
-            description: The ID of the portal being accessed.<br><br>A portal ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
-        MandatoryEscalationId:
-            name: escalationId
-            in: path
+                User doesn't have the required scope to call this API. Refer to the API documentation regarding user scope assignment for more information.
+            value:
+                code: 403-197
+                developerMessage: Not authorized to perform this action.
+        NotAcceptable:
+            value:
+                code: 406-100
+                developerMessage: The 'Accept-Language' header value is invalid.
+        precondition_failed:
+            value:
+                code: 412-100
+                developerMessage: Pre condition failed
+        InternalServerError:
+            value:
+                code: 500-100
+                developerMessage: System is unable to process this request. Please contact your administrator.
+        UnsupportedParameters:
+            value:
+                code: 400-101
+                developerMessage: 'Unsupported query parameter(s) supplied: ''<query_parameter>''.'
+        MissingParameter:
+            value:
+                code: 400-112
+                developerMessage: 'Required query parameter(s) is missing. The following parameters are required: ''<query_parameter>''.'
+        Forbidden:
+            value:
+                code: 403-178
+                developerMessage: 'User is not allowed to perform the following action: <action_name>.'
+        NotFound:
+            value:
+                code: 404-100
+                developerMessage: 'The following IDs supplied in the URI path were not found: ''<resource_id>''.'
+        Required_Attribute_Missing:
+            description: Required query parameter is missing.
+            value:
+                code: 400-112
+                developerMessage: 'Required query parameter(s) is missing. The following parameters are required: <param name>'
+        Unallowed_Attribute_Value:
+            description: One of the attributes has a value which is not allowed.
+            value:
+                code: 400-196
+                developerMessage: 'Invalid value of attribute <attribute>, expected values are: [<possible_values>].'
+        Invalid_Authorization:
             description: |
-                The ID (uuid) of the customer escalation.
-            required: true
-            schema:
-                type: string
-                format: uuid
-                pattern: \b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b
-        OptionalTopicId:
-            name: filter[articles-in-topic-tree]
-            description: This parameter will restrict the search scope to the provided topic and it's sub topic.
-            in: query
-            required: false
-            schema:
-                type: string
-                pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-                minLength: 7
-                maxLength: 20
-                example: PROD-1066
-        OptionalArticleAttributes:
-            name: additionalAttributes
-            in: query
-            required: false
-            schema:
-                type: string
-                enum:
-                    - articleMacro
-                    - availabilityDate
-                    - averageRating
-                    - contentText
-                    - orderNumber
-                    - suggestionType
-                    - timesRated
-                    - availableEditions
-                    - articleTypeAttributes
-                    - milestone
-                    - all
-                description: The fields of the article to be returned.
-                example: articleMacro
-        OptionalMaxResults:
-            name: maxResults
-            in: query
+                Invalid or expired authorization. Generate a new authorization header and try again.
+            value:
+                code: 401-104
+                developerMessage: Invalid or missing 'authorization' header value.
+        Resource_Not_Found:
+            description: Resource not found.
+            value:
+                code: 404-101
+                developerMessage: 'The following IDs provided in the URI path were not found: <id>'
+        Unable_Delete_Approved_Suggestion:
+            description: The resource cannot be deleted.
+            value:
+                code: 400-113
+                developerMessage: The Suggestion you are trying to delete has been approved and cannot be removed.
+        Too_Many_Request:
             description: |
-                The "maxResults" parameter specifies the number of articles that should be included in the response.
-
-                It is only required when the escalation type is chat escalation.If not specified then default value 5 will be considered for chat escalation.
-
-                If the escalation type is email, the maximum results value specified in the portal settings for email escalation will be taken into consideration.
-            required: false
-            schema:
-                type: integer
-                format: int32
-                example: 5
-                minimum: 1
-                maximum: 50
-        signature:
-            name: signature
-            in: query
-            description: Signature data to upload attachment.
-            required: true
-            schema:
-                type: string
-                pattern: ^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$
-                maxLength: 2048
+                Too many requests. Try again at a later time.
+            value:
+                code: 429-001
+                developerMessage: Too many requests.
     requestBodies:
         CreateCustomerEscalation:
             required: true
@@ -14622,8 +14621,3 @@ components:
                                     I am experiencing an issue with Product X. Here are the details...
                                 channel: email
                                 url: https://ddeveloperv3api.egain.cloud/system/templates/selfservice/oasis/help/customer/locale/en-us/portal/202200000001002/contactus
-security:
-    - oAuthUser: []
-    - oAuthCustomer: []
-    - oAuthAnonymousCustomer: []
-    - accessToken: []

@@ -1,9 +1,9 @@
-speakeasyVersion: 1.634.0
+speakeasyVersion: 1.634.1
 sources:
     Knowledge Portal Manager APIs:
         sourceNamespace: knowledge-portal-manager-ap-is
-        sourceRevisionDigest: sha256:133c033d18fd82a2a1a44d1e2a611baf47604264aae91fbec7117b7d0c620430
-        sourceBlobDigest: sha256:4eb3821c906e5b3fe2119e3e474294abb92c2671bbe3f34c6575d85d24bf6a2b
+        sourceRevisionDigest: sha256:abb810adc47190c4de07af139944036043d2b709e2ba9cda20aaf8f758169d3e
+        sourceBlobDigest: sha256:8c18dc8981a3f0cd5160850a8462a7c1ca076943c48dafa12fbe18846a21ffba
         tags:
             - latest
             - 4.0.0
@@ -11,18 +11,18 @@ targets:
     typescript-sdk:
         source: Knowledge Portal Manager APIs
         sourceNamespace: knowledge-portal-manager-ap-is
-        sourceRevisionDigest: sha256:133c033d18fd82a2a1a44d1e2a611baf47604264aae91fbec7117b7d0c620430
-        sourceBlobDigest: sha256:4eb3821c906e5b3fe2119e3e474294abb92c2671bbe3f34c6575d85d24bf6a2b
+        sourceRevisionDigest: sha256:abb810adc47190c4de07af139944036043d2b709e2ba9cda20aaf8f758169d3e
+        sourceBlobDigest: sha256:8c18dc8981a3f0cd5160850a8462a7c1ca076943c48dafa12fbe18846a21ffba
         codeSamplesNamespace: knowledge-portal-manager-ap-is-typescript-code-samples
-        codeSamplesRevisionDigest: sha256:bb4f1d70d9b84f4d75ba96075924b2fbe78365be41bff86a54e390c7820cca96
+        codeSamplesRevisionDigest: sha256:3941cf88f50839fb362311215dd8f16e1566a09cea983b60cceadb176340efa1
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
     sources:
         Knowledge Portal Manager APIs:
             inputs:
-                - location: ../speakeasy/contentmgr/v4/api-with-overlay.yaml
                 - location: ../speakeasy/aiservices/v4/api-with-overlay.yaml
+                - location: ../speakeasy/contentmgr/v4/api-with-overlay.yaml
                 - location: ../speakeasy/portalmgr/v4/api-with-overlay.yaml
             output: .speakeasy/out.openapi.yaml
             registry:

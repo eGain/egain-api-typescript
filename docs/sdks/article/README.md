@@ -59,9 +59,7 @@
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -95,9 +93,7 @@ import { portalArticleGetArticleById } from "@egain/egain-api-typescript/funcs/p
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -159,9 +155,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -188,9 +182,7 @@ import { portalArticleGetArticleByIdWithEditions } from "@egain/egain-api-typesc
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -244,9 +236,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -274,9 +264,7 @@ import { portalArticleGetArticleEditionDetails } from "@egain/egain-api-typescri
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -336,9 +324,7 @@ Note:  Either the <code>x-ext-activity-id</code> or<br><code>x-ext-integration-i
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -372,9 +358,7 @@ import { portalArticleAddToReply } from "@egain/egain-api-typescript/funcs/porta
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -440,9 +424,7 @@ Note: Either the <code>x-ext-activity-id</code> or<br><code>x-ext-integration-id
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -476,9 +458,7 @@ import { portalArticleAddAsReference } from "@egain/egain-api-typescript/funcs/p
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -557,9 +537,7 @@ The Get Articles in Topic API allows a user to retrieve the browsable articles i
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -595,9 +573,7 @@ import { portalArticleGetArticlesInTopic } from "@egain/egain-api-typescript/fun
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -660,9 +636,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -688,9 +662,7 @@ import { portalArticleGetArticleAttachmentById } from "@egain/egain-api-typescri
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -743,9 +715,7 @@ The Get Article Attachment API retrieves an attachment associated to an article 
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -773,9 +743,7 @@ import { portalArticleGetAttachmentByIdInPortal } from "@egain/egain-api-typescr
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -848,9 +816,7 @@ The Get Related Articles API retrieves all related articles associated to a give
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -883,9 +849,7 @@ import { portalArticleGetRelatedArticles } from "@egain/egain-api-typescript/fun
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -964,9 +928,7 @@ The Get Announcement Articles API returns a portal's announcement articles. Only
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -998,9 +960,7 @@ import { portalArticleGetAnnouncementArticles } from "@egain/egain-api-typescrip
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1059,9 +1019,7 @@ The Get Article Ratings API returns ratings set for an Article. These ratings he
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1089,9 +1047,7 @@ import { portalArticleGetArticleRatings } from "@egain/egain-api-typescript/func
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1146,9 +1102,7 @@ The Rate an Article API allows a user to set a rating for an article. These rati
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1178,9 +1132,7 @@ import { portalArticleRateArticle } from "@egain/egain-api-typescript/funcs/port
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1242,9 +1194,7 @@ The Get Pending Article Compliances API retrieves all compliance-enabled article
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1274,9 +1224,7 @@ import { portalArticleGetPendingComplianceArticles } from "@egain/egain-api-type
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1341,9 +1289,7 @@ The Get Acknowledged Article Compliances API retrieves all compliance-enabled ar
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1373,9 +1319,7 @@ import { portalArticleGetAcknowledgedComplianceArticles } from "@egain/egain-api
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1440,9 +1384,7 @@ The Comply with an Article API allows the user to comply with an article by pass
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1469,9 +1411,7 @@ import { portalArticleComplyArticle } from "@egain/egain-api-typescript/funcs/po
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1525,9 +1465,7 @@ The My Subscription API allows authenticated users and agents to retrieve the li
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1557,9 +1495,7 @@ import { portalArticleGetMySubscription } from "@egain/egain-api-typescript/func
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1642,9 +1578,7 @@ The Subscribe to an Article API allows eGain users, authenticated customers and 
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1671,9 +1605,7 @@ import { portalArticleSubscribeArticle } from "@egain/egain-api-typescript/funcs
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1727,9 +1659,7 @@ The Unsubscribe to an Article API allows authenticated users and agents to unsub
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1756,9 +1686,7 @@ import { portalArticleUnsubscribeArticle } from "@egain/egain-api-typescript/fun
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1812,9 +1740,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1841,9 +1767,7 @@ import { portalArticleGetArticlePermissionsById } from "@egain/egain-api-typescr
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1897,9 +1821,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1927,9 +1849,7 @@ import { portalArticleGetArticlePersonalization } from "@egain/egain-api-typescr
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {

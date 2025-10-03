@@ -3,8 +3,8 @@ speakeasyVersion: latest
 sources:
     Knowledge Portal Manager APIs:
         inputs:
-            - location: ../speakeasy/contentmgr/v4/api-with-overlay.yaml
             - location: ../speakeasy/aiservices/v4/api-with-overlay.yaml
+            - location: ../speakeasy/contentmgr/v4/api-with-overlay.yaml
             - location: ../speakeasy/portalmgr/v4/api-with-overlay.yaml
         output: .speakeasy/out.openapi.yaml
         registry:

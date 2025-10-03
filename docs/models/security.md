@@ -10,9 +10,6 @@ let value: Security = {};
 
 ## Fields
 
-| Field                    | Type                     | Required                 | Description              |
-| ------------------------ | ------------------------ | ------------------------ | ------------------------ |
-| `oAuthUser`              | *string*                 | :heavy_minus_sign:       | N/A                      |
-| `oAuthCustomer`          | *string*                 | :heavy_minus_sign:       | N/A                      |
-| `oAuthAnonymousCustomer` | *string*                 | :heavy_minus_sign:       | N/A                      |
-| `accessToken`            | *string*                 | :heavy_minus_sign:       | N/A                      |
+| Field              | Type               | Required           | Description        |
+| ------------------ | ------------------ | ------------------ | ------------------ |
+| `accessToken`      | *string*           | :heavy_minus_sign: | N/A                |

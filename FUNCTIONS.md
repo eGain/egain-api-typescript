@@ -20,34 +20,40 @@ specific category of applications.
 
 ```typescript
 import { EgainCore } from "@egain/egain-api-typescript/core.js";
-import { contentImportCreateImport } from "@egain/egain-api-typescript/funcs/contentImportCreateImport.js";
+import { aiservicesRetrieveRetrieveChunks } from "@egain/egain-api-typescript/funcs/aiservicesRetrieveRetrieveChunks.js";
 
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
-  const res = await contentImportCreateImport(egain, {
-    dataSource: {
-      type: "AWS S3 bucket",
-      path: "s3://mybucket/myfolder/",
-      region: "us-east-1",
-      credentials: {},
+  const res = await aiservicesRetrieveRetrieveChunks(egain, {
+    q: "fair lending",
+    portalID: "PROD-1000",
+    dollarFilterUserProfileID: "PROD-3210",
+    language: "en-US",
+    dollarFilterTags: {
+      "PROD-1234": [
+        "PROD-2000",
+        "PROD-2003",
+      ],
+      "PROD-2005": [
+        "PROD-2007",
+      ],
     },
-    operation: "import",
-    scheduleTime: {
-      date: new Date("2024-03-01T10:00:00.000Z"),
+    retrieveRequest: {
+      channel: {
+        name: "Eight Bank Website",
+      },
     },
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("contentImportCreateImport failed:", res.error);
+    console.log("aiservicesRetrieveRetrieveChunks failed:", res.error);
   }
 }
 

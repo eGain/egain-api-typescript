@@ -8,14 +8,14 @@ import { Content } from "./content.js";
 import { Portal } from "./portal.js";
 
 export class Egain extends ClientSDK {
-  private _content?: Content;
-  get content(): Content {
-    return (this._content ??= new Content(this._options));
-  }
-
   private _aiservices?: Aiservices;
   get aiservices(): Aiservices {
     return (this._aiservices ??= new Aiservices(this._options));
+  }
+
+  private _content?: Content;
+  get content(): Content {
+    return (this._content ??= new Content(this._options));
   }
 
   private _portal?: Portal;

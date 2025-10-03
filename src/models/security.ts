@@ -8,9 +8,6 @@ import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 export type Security = {
-  oAuthUser?: string | undefined;
-  oAuthCustomer?: string | undefined;
-  oAuthAnonymousCustomer?: string | undefined;
   accessToken?: string | undefined;
 };
 
@@ -20,17 +17,11 @@ export const Security$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
-  oAuthUser: z.string().optional(),
-  oAuthCustomer: z.string().optional(),
-  oAuthAnonymousCustomer: z.string().optional(),
   accessToken: z.string().optional(),
 });
 
 /** @internal */
 export type Security$Outbound = {
-  oAuthUser?: string | undefined;
-  oAuthCustomer?: string | undefined;
-  oAuthAnonymousCustomer?: string | undefined;
   accessToken?: string | undefined;
 };
 
@@ -40,9 +31,6 @@ export const Security$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   Security
 > = z.object({
-  oAuthUser: z.string().optional(),
-  oAuthCustomer: z.string().optional(),
-  oAuthAnonymousCustomer: z.string().optional(),
   accessToken: z.string().optional(),
 });
 

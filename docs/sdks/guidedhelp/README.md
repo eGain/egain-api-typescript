@@ -32,9 +32,7 @@
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -61,9 +59,7 @@ import { portalGuidedhelpGetAllCasebasesReleases } from "@egain/egain-api-typesc
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -117,9 +113,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -147,9 +141,7 @@ import { portalGuidedhelpGetCasebaseReleaseById } from "@egain/egain-api-typescr
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -204,9 +196,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -234,9 +224,7 @@ import { portalGuidedhelpGetClusterByCasebaseReleaseId } from "@egain/egain-api-
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -291,9 +279,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -320,9 +306,7 @@ import { portalGuidedhelpGetAllProfilesInPortal } from "@egain/egain-api-typescr
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -389,9 +373,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -422,9 +404,7 @@ import { portalGuidedhelpStartGHSearch } from "@egain/egain-api-typescript/funcs
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -486,9 +466,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -546,9 +524,7 @@ import { portalGuidedhelpStepGHSearch } from "@egain/egain-api-typescript/funcs/
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -636,9 +612,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -667,9 +641,7 @@ import { portalGuidedhelpGetAllCases } from "@egain/egain-api-typescript/funcs/p
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -728,9 +700,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -762,9 +732,7 @@ import { portalGuidedhelpGetCaseById } from "@egain/egain-api-typescript/funcs/p
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -826,9 +794,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -860,9 +826,7 @@ import { portalGuidedhelpAcceptGHSolution } from "@egain/egain-api-typescript/fu
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -924,9 +888,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -958,9 +920,7 @@ import { portalGuidedhelpRejectGHSolution } from "@egain/egain-api-typescript/fu
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1029,9 +989,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1064,9 +1022,7 @@ import { portalGuidedhelpCreateQuickpick } from "@egain/egain-api-typescript/fun
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1133,9 +1089,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1163,9 +1117,7 @@ import { portalGuidedhelpGetAllQuickPicks } from "@egain/egain-api-typescript/fu
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1223,9 +1175,7 @@ run();
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -1254,9 +1204,7 @@ import { portalGuidedhelpRestoreQuickpick } from "@egain/egain-api-typescript/fu
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {

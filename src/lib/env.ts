@@ -7,18 +7,12 @@ import { dlv } from "./dlv.js";
 import * as z from "zod";
 
 export interface Env {
-  EGAIN_O_AUTH_USER?: string | undefined;
-  EGAIN_O_AUTH_CUSTOMER?: string | undefined;
-  EGAIN_O_AUTH_ANONYMOUS_CUSTOMER?: string | undefined;
   EGAIN_ACCESS_TOKEN?: string | undefined;
 
   EGAIN_DEBUG?: boolean | undefined;
 }
 
 export const envSchema: z.ZodType<Env, z.ZodTypeDef, unknown> = z.object({
-  EGAIN_O_AUTH_USER: z.string().optional(),
-  EGAIN_O_AUTH_CUSTOMER: z.string().optional(),
-  EGAIN_O_AUTH_ANONYMOUS_CUSTOMER: z.string().optional(),
   EGAIN_ACCESS_TOKEN: z.string().optional(),
 
   EGAIN_DEBUG: z.coerce.boolean().optional(),

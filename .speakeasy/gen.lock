@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 941f5295-94f8-4bce-a1a1-3fcca6bf9341
 management:
-  docChecksum: 2c255ebbc6956ce23c26edf8eb150281
+  docChecksum: 079ceae75cb143f0ae6024b11046937c
   docVersion: 4.0.0
-  speakeasyVersion: 1.634.0
+  speakeasyVersion: 1.634.1
   generationVersion: 2.721.0
-  releaseVersion: 0.2.2
-  configChecksum: ff323db800bc91872ee86bbcd3b23e84
+  releaseVersion: 0.3.2
+  configChecksum: 2412d541cfa65d0050a7fb2cb5ebc5cd
   published: true
 features:
   typescript:
@@ -19,6 +19,7 @@ features:
     envVarSecurityUsage: 0.1.2
     globalSecurity: 2.82.14
     globalSecurityCallbacks: 0.1.0
+    globalSecurityFlattening: 0.1.0
     globalServerURLs: 2.82.5
     groups: 2.81.2
     ignores: 2.81.1
@@ -257,6 +258,7 @@ generatedFiles:
   - docs/models/operations/getarticleratingsrequest.md
   - docs/models/operations/getarticlesintopicrequest.md
   - docs/models/operations/getattachmentbyidinportalrequest.md
+  - docs/models/operations/getbestanswerforuserqueryrequest.md
   - docs/models/operations/getbookmarkrequest.md
   - docs/models/operations/getcasebasereleasebyidrequest.md
   - docs/models/operations/getcasebyidrequest.md
@@ -282,11 +284,10 @@ generatedFiles:
   - docs/models/operations/makesuggestionrequest.md
   - docs/models/operations/modifysuggestionsrequest.md
   - docs/models/operations/patchimportcontentvalidationrequest.md
-  - docs/models/operations/postportalidanswersrequest.md
-  - docs/models/operations/postportalidretrieverequest.md
   - docs/models/operations/ratearticlerequest.md
   - docs/models/operations/rejectghsolutionrequest.md
   - docs/models/operations/restorequickpickrequest.md
+  - docs/models/operations/retrievechunksrequest.md
   - docs/models/operations/searchpriortoescalationrequest.md
   - docs/models/operations/searchsuggestionrequest.md
   - docs/models/operations/selectuserprofilerequest.md
@@ -436,13 +437,13 @@ generatedFiles:
   - eslint.config.mjs
   - examples/.env.template
   - examples/README.md
-  - examples/contentImportCreateImport.example.ts
+  - examples/aiservicesRetrieveRetrieveChunks.example.ts
   - examples/package.json
   - jsr.json
   - package.json
   - src/core.ts
-  - src/funcs/aiservicesAnswersPostPortalIDAnswers.ts
-  - src/funcs/aiservicesRetrievePostPortalIDRetrieve.ts
+  - src/funcs/aiservicesAnswersGetBestAnswerForUserQuery.ts
+  - src/funcs/aiservicesRetrieveRetrieveChunks.ts
   - src/funcs/contentHealthGetHealth.ts
   - src/funcs/contentImportCreateImport.ts
   - src/funcs/contentImportCreateImportValidation.ts
@@ -703,6 +704,7 @@ generatedFiles:
   - src/models/operations/getarticleratings.ts
   - src/models/operations/getarticlesintopic.ts
   - src/models/operations/getattachmentbyidinportal.ts
+  - src/models/operations/getbestanswerforuserquery.ts
   - src/models/operations/getbookmark.ts
   - src/models/operations/getcasebasereleasebyid.ts
   - src/models/operations/getcasebyid.ts
@@ -729,11 +731,10 @@ generatedFiles:
   - src/models/operations/makesuggestion.ts
   - src/models/operations/modifysuggestions.ts
   - src/models/operations/patchimportcontentvalidation.ts
-  - src/models/operations/postportalidanswers.ts
-  - src/models/operations/postportalidretrieve.ts
   - src/models/operations/ratearticle.ts
   - src/models/operations/rejectghsolution.ts
   - src/models/operations/restorequickpick.ts
+  - src/models/operations/retrievechunks.ts
   - src/models/operations/searchpriortoescalation.ts
   - src/models/operations/searchsuggestion.ts
   - src/models/operations/selectuserprofile.ts
@@ -7430,7 +7431,7 @@ examples:
         path:
           portalID: "PROD-1000"
         query:
-          q: "mortgage rates"
+          q: "fair lending"
           $filter[userProfileID]: "PROD-3210"
           $lang: "en-US"
           $filter[topicIds]: ["PROD-2000"]
@@ -7446,7 +7447,7 @@ examples:
         path:
           portalID: "PROD-1000"
         query:
-          q: "mortgage rates"
+          q: "fair lending"
           $filter[userProfileID]: "PROD-3210"
           $lang: "en-US"
           $filter[topicIds]: ["PROD-2000"]
@@ -7454,4 +7455,32 @@ examples:
       responses:
         "200":
           application/json: {"searchResults": [{"id": "PROD-48192", "name": "Lending FAQs", "docType": "HTML", "source": "eGain Attachment", "snippet": "Fair lending is a part of...", "relevanceScore": 4589.15}]}
+  retrieveChunks:
+    speakeasy-default-retrieve-chunks:
+      parameters:
+        path:
+          portalID: "PROD-1000"
+        query:
+          q: "fair lending"
+          $filter[userProfileID]: "PROD-3210"
+          $lang: "en-US"
+          $filter[tags]: {"PROD-1234": ["PROD-2000", "PROD-2003"], "PROD-2005": ["PROD-2007"]}
+      requestBody:
+        application/json: {"channel": {"type": "custom", "name": "Eight Bank Website"}}
+      responses:
+        "200":
+          application/json: {"answer": {"answerValue": "Per the Lending FAQ document...", "references": [{"id": "<id>", "name": "<value>", "docType": "HTML", "source": "eGain Article"}], "answerType": "certified", "relevanceScore": 0.99}, "searchResults": [{"id": "PROD-48192", "name": "Lending FAQs", "docType": "Pdf", "source": "eGain Article", "snippet": "Fair lending is a part of...", "relevanceScore": 4661.16}], "channel": {"type": "custom", "name": "Eight Bank Page"}}
+  getBestAnswerForUserQuery:
+    speakeasy-default-get-best-answer-for-user-query:
+      parameters:
+        path:
+          portalID: "PROD-1000"
+        query:
+          q: "fair lending"
+          $filter[userProfileID]: "PROD-3210"
+          $lang: "en-US"
+          $filter[tags]: {"PROD-1234": ["PROD-2000", "PROD-2003"], "PROD-2005": ["PROD-2007"]}
+      responses:
+        "200":
+          application/json: {"searchResults": [{"id": "PROD-48192", "name": "Lending FAQs", "docType": "Pdf", "source": "eGain Attachment", "snippet": "Fair lending is a part of...", "relevanceScore": 4445.8}]}
 examplesVersion: 1.0.2

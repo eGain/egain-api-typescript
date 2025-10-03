@@ -44,7 +44,7 @@ export type Context = {
    */
   pageContext?: string | undefined;
   /**
-   * Organizational context that helps tailor responses (e.g., company policies, procedures, or domain-specific information).
+   * Information about the organization associated with the user, used for tailoring responses in enterprise environments.
    */
   companyContext?: string | undefined;
 };

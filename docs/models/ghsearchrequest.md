@@ -10,11 +10,7 @@ let value: GHSearchRequest = {
   questions: [
     {
       id: "1000003852",
-      answers: [
-        {
-          id: "1000000004",
-        },
-      ],
+      answers: [],
     },
   ],
   ghsArticleId: "100000000001035",

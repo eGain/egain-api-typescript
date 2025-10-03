@@ -23,9 +23,7 @@
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -58,9 +56,7 @@ import { portalFederatedsearcheventCreateFederatedSearchResultEvent } from "@ega
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {

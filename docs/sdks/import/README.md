@@ -49,9 +49,7 @@ This API initiates a bulk content import operation from Amazon S3 buckets. It cr
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -85,9 +83,7 @@ import { contentImportCreateImport } from "@egain/egain-api-typescript/funcs/con
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -178,9 +174,7 @@ Log files contain detailed information about:
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -205,9 +199,7 @@ import { contentImportGetImportContent } from "@egain/egain-api-typescript/funcs
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -299,9 +291,7 @@ This API enables users to validate content structure, format, and compliance bef
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -329,9 +319,7 @@ import { contentImportCreateImportValidation } from "@egain/egain-api-typescript
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -427,9 +415,7 @@ This API allows users to cancel import or validation operations that are current
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -454,9 +440,7 @@ import { contentImportPatchImportContentValidation } from "@egain/egain-api-type
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
 const egain = new EgainCore({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {

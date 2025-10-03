@@ -11,8 +11,7 @@ Developer-friendly & type-safe Typescript SDK specifically catered to leverage *
 
 
 <br /><br />
-> [!IMPORTANT]
-> This SDK is not yet ready for production use. To complete setup please follow the steps outlined in your [workspace](https://app.speakeasy.com/org/egain-corporation/portalmgr). Delete this section before > publishing to a package manager.
+
 
 <!-- Start Summary [summary] -->
 ## Summary
@@ -110,22 +109,28 @@ For supported JavaScript runtimes, please consult [RUNTIMES.md](RUNTIMES.md).
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
-  const result = await egain.content.import.createImport({
-    dataSource: {
-      type: "AWS S3 bucket",
-      path: "s3://mybucket/myfolder/",
-      region: "us-east-1",
-      credentials: {},
+  const result = await egain.aiservices.retrieve.retrieveChunks({
+    q: "fair lending",
+    portalID: "PROD-1000",
+    dollarFilterUserProfileID: "PROD-3210",
+    language: "en-US",
+    dollarFilterTags: {
+      "PROD-1234": [
+        "PROD-2000",
+        "PROD-2003",
+      ],
+      "PROD-2005": [
+        "PROD-2007",
+      ],
     },
-    operation: "import",
-    scheduleTime: {
-      date: new Date("2024-03-01T10:00:00.000Z"),
+    retrieveRequest: {
+      channel: {
+        name: "Eight Bank Website",
+      },
     },
   });
 
@@ -142,36 +147,39 @@ run();
 
 ### Per-Client Security Schemes
 
-This SDK supports the following security schemes globally:
+This SDK supports the following security scheme globally:
 
-| Name                     | Type   | Scheme      | Environment Variable              |
-| ------------------------ | ------ | ----------- | --------------------------------- |
-| `oAuthUser`              | apiKey | API key     | `EGAIN_O_AUTH_USER`               |
-| `oAuthCustomer`          | apiKey | API key     | `EGAIN_O_AUTH_CUSTOMER`           |
-| `oAuthAnonymousCustomer` | apiKey | API key     | `EGAIN_O_AUTH_ANONYMOUS_CUSTOMER` |
-| `accessToken`            | http   | HTTP Bearer | `EGAIN_ACCESS_TOKEN`              |
+| Name          | Type | Scheme      | Environment Variable |
+| ------------- | ---- | ----------- | -------------------- |
+| `accessToken` | http | HTTP Bearer | `EGAIN_ACCESS_TOKEN` |
 
-You can set the security parameters through the `security` optional parameter when initializing the SDK client instance. The selected scheme will be used by default to authenticate with the API for all operations that support it. For example:
+To authenticate with the API the `accessToken` parameter must be set when initializing the SDK client instance. For example:
 ```typescript
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
-  const result = await egain.content.import.createImport({
-    dataSource: {
-      type: "AWS S3 bucket",
-      path: "s3://mybucket/myfolder/",
-      region: "us-east-1",
-      credentials: {},
+  const result = await egain.aiservices.retrieve.retrieveChunks({
+    q: "fair lending",
+    portalID: "PROD-1000",
+    dollarFilterUserProfileID: "PROD-3210",
+    language: "en-US",
+    dollarFilterTags: {
+      "PROD-1234": [
+        "PROD-2000",
+        "PROD-2003",
+      ],
+      "PROD-2005": [
+        "PROD-2007",
+      ],
     },
-    operation: "import",
-    scheduleTime: {
-      date: new Date("2024-03-01T10:00:00.000Z"),
+    retrieveRequest: {
+      channel: {
+        name: "Eight Bank Website",
+      },
     },
   });
 
@@ -194,11 +202,11 @@ run();
 
 #### [aiservices.answers](docs/sdks/answers/README.md)
 
-* [postPortalIDAnswers](docs/sdks/answers/README.md#postportalidanswers) - Get the best answer for a user query
+* [getBestAnswerForUserQuery](docs/sdks/answers/README.md#getbestanswerforuserquery) - Get the best answer for a user query
 
 #### [aiservices.retrieve](docs/sdks/retrieve/README.md)
 
-* [postPortalIDRetrieve](docs/sdks/retrieve/README.md#postportalidretrieve) - Retrieve Chunks
+* [retrieveChunks](docs/sdks/retrieve/README.md#retrievechunks) - Retrieve Chunks
 
 ### [content](docs/sdks/content/README.md)
 
@@ -359,8 +367,8 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 
 <summary>Available standalone functions</summary>
 
-- [`aiservicesAnswersPostPortalIDAnswers`](docs/sdks/answers/README.md#postportalidanswers) - Get the best answer for a user query
-- [`aiservicesRetrievePostPortalIDRetrieve`](docs/sdks/retrieve/README.md#postportalidretrieve) - Retrieve Chunks
+- [`aiservicesAnswersGetBestAnswerForUserQuery`](docs/sdks/answers/README.md#getbestanswerforuserquery) - Get the best answer for a user query
+- [`aiservicesRetrieveRetrieveChunks`](docs/sdks/retrieve/README.md#retrievechunks) - Retrieve Chunks
 - [`contentHealthGetHealth`](docs/sdks/health/README.md#gethealth) - Check service health status
 - [`contentImportCreateImport`](docs/sdks/import/README.md#createimport) - Import content from external sources
 - [`contentImportCreateImportValidation`](docs/sdks/import/README.md#createimportvalidation) - Validate content structure and format before import
@@ -461,9 +469,7 @@ import { Egain } from "@egain/egain-api-typescript";
 import { openAsBlob } from "node:fs";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -489,22 +495,28 @@ To change the default retry strategy for a single API call, simply provide a ret
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
-  const result = await egain.content.import.createImport({
-    dataSource: {
-      type: "AWS S3 bucket",
-      path: "s3://mybucket/myfolder/",
-      region: "us-east-1",
-      credentials: {},
+  const result = await egain.aiservices.retrieve.retrieveChunks({
+    q: "fair lending",
+    portalID: "PROD-1000",
+    dollarFilterUserProfileID: "PROD-3210",
+    language: "en-US",
+    dollarFilterTags: {
+      "PROD-1234": [
+        "PROD-2000",
+        "PROD-2003",
+      ],
+      "PROD-2005": [
+        "PROD-2007",
+      ],
     },
-    operation: "import",
-    scheduleTime: {
-      date: new Date("2024-03-01T10:00:00.000Z"),
+    retrieveRequest: {
+      channel: {
+        name: "Eight Bank Website",
+      },
     },
   }, {
     retries: {
@@ -541,22 +553,28 @@ const egain = new Egain({
     },
     retryConnectionErrors: false,
   },
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
-  const result = await egain.content.import.createImport({
-    dataSource: {
-      type: "AWS S3 bucket",
-      path: "s3://mybucket/myfolder/",
-      region: "us-east-1",
-      credentials: {},
+  const result = await egain.aiservices.retrieve.retrieveChunks({
+    q: "fair lending",
+    portalID: "PROD-1000",
+    dollarFilterUserProfileID: "PROD-3210",
+    language: "en-US",
+    dollarFilterTags: {
+      "PROD-1234": [
+        "PROD-2000",
+        "PROD-2003",
+      ],
+      "PROD-2005": [
+        "PROD-2007",
+      ],
     },
-    operation: "import",
-    scheduleTime: {
-      date: new Date("2024-03-01T10:00:00.000Z"),
+    retrieveRequest: {
+      channel: {
+        name: "Eight Bank Website",
+      },
     },
   });
 
@@ -588,9 +606,7 @@ import { Egain } from "@egain/egain-api-typescript";
 import * as errors from "@egain/egain-api-typescript/models/errors";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -677,22 +693,28 @@ import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
   apiDomain: "<value>",
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
-  const result = await egain.content.import.createImport({
-    dataSource: {
-      type: "AWS S3 bucket",
-      path: "s3://mybucket/myfolder/",
-      region: "us-east-1",
-      credentials: {},
+  const result = await egain.aiservices.retrieve.retrieveChunks({
+    q: "fair lending",
+    portalID: "PROD-1000",
+    dollarFilterUserProfileID: "PROD-3210",
+    language: "en-US",
+    dollarFilterTags: {
+      "PROD-1234": [
+        "PROD-2000",
+        "PROD-2003",
+      ],
+      "PROD-2005": [
+        "PROD-2007",
+      ],
     },
-    operation: "import",
-    scheduleTime: {
-      date: new Date("2024-03-01T10:00:00.000Z"),
+    retrieveRequest: {
+      channel: {
+        name: "Eight Bank Website",
+      },
     },
   });
 
@@ -711,22 +733,28 @@ import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
   serverURL: "https://$api.egain.cloud/knowledge/portalmgr/v4",
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
-  const result = await egain.content.import.createImport({
-    dataSource: {
-      type: "AWS S3 bucket",
-      path: "s3://mybucket/myfolder/",
-      region: "us-east-1",
-      credentials: {},
+  const result = await egain.aiservices.retrieve.retrieveChunks({
+    q: "fair lending",
+    portalID: "PROD-1000",
+    dollarFilterUserProfileID: "PROD-3210",
+    language: "en-US",
+    dollarFilterTags: {
+      "PROD-1234": [
+        "PROD-2000",
+        "PROD-2003",
+      ],
+      "PROD-2005": [
+        "PROD-2007",
+      ],
     },
-    operation: "import",
-    scheduleTime: {
-      date: new Date("2024-03-01T10:00:00.000Z"),
+    retrieveRequest: {
+      channel: {
+        name: "Eight Bank Website",
+      },
     },
   });
 
@@ -744,25 +772,31 @@ The server URL can also be overridden on a per-operation basis, provided a serve
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  security: {
-    oAuthUser: process.env["EGAIN_O_AUTH_USER"] ?? "",
-  },
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
-  const result = await egain.content.import.createImport({
-    dataSource: {
-      type: "AWS S3 bucket",
-      path: "s3://mybucket/myfolder/",
-      region: "us-east-1",
-      credentials: {},
+  const result = await egain.aiservices.retrieve.retrieveChunks({
+    q: "fair lending",
+    portalID: "PROD-1000",
+    dollarFilterUserProfileID: "PROD-3210",
+    language: "en-US",
+    dollarFilterTags: {
+      "PROD-1234": [
+        "PROD-2000",
+        "PROD-2003",
+      ],
+      "PROD-2005": [
+        "PROD-2007",
+      ],
     },
-    operation: "import",
-    scheduleTime: {
-      date: new Date("2024-03-01T10:00:00.000Z"),
+    retrieveRequest: {
+      channel: {
+        name: "Eight Bank Website",
+      },
     },
   }, {
-    serverURL: "https://$api.egain.cloud/knowledge/contentmgr/v4",
+    serverURL: "https://api.knowledge.ai/core/aiservices/v4",
   });
 
   console.log(result);

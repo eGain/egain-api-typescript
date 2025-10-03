@@ -9,16 +9,16 @@ import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import * as models from "../index.js";
 
-export const PostPortalIDRetrieveServerList = [
+export const GetBestAnswerForUserQueryServerList = [
   /**
    * aiservices
    */
   "https://api.knowledge.ai/core/aiservices/v4",
 ] as const;
 
-export type PostPortalIDRetrieveRequest = {
+export type GetBestAnswerForUserQueryRequest = {
   /**
-   * The search query string.
+   * The search query string. The string must be escaped as required by the URL syntax rules.
    */
   q: string;
   /**
@@ -41,12 +41,12 @@ export type PostPortalIDRetrieveRequest = {
    * An array of topic IDs. It is used to restrict search results to specific topics.
    */
   dollarFilterTopicIds?: Array<string> | undefined;
-  retrieveRequest?: models.RetrieveRequest | undefined;
+  answersRequest?: models.AnswersRequest | undefined;
 };
 
 /** @internal */
-export const PostPortalIDRetrieveRequest$inboundSchema: z.ZodType<
-  PostPortalIDRetrieveRequest,
+export const GetBestAnswerForUserQueryRequest$inboundSchema: z.ZodType<
+  GetBestAnswerForUserQueryRequest,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -56,32 +56,32 @@ export const PostPortalIDRetrieveRequest$inboundSchema: z.ZodType<
   language: models.LanguageCodeParameter$inboundSchema.optional(),
   "$filter[tags]": z.record(z.array(z.string())).optional(),
   "$filter[topicIds]": z.array(z.string()).optional(),
-  RetrieveRequest: models.RetrieveRequest$inboundSchema.optional(),
+  AnswersRequest: models.AnswersRequest$inboundSchema.optional(),
 }).transform((v) => {
   return remap$(v, {
     "$filter[userProfileID]": "dollarFilterUserProfileID",
     "$filter[tags]": "dollarFilterTags",
     "$filter[topicIds]": "dollarFilterTopicIds",
-    "RetrieveRequest": "retrieveRequest",
+    "AnswersRequest": "answersRequest",
   });
 });
 
 /** @internal */
-export type PostPortalIDRetrieveRequest$Outbound = {
+export type GetBestAnswerForUserQueryRequest$Outbound = {
   q: string;
   portalID: string;
   "$filter[userProfileID]"?: string | undefined;
   language?: string | undefined;
   "$filter[tags]"?: { [k: string]: Array<string> } | undefined;
   "$filter[topicIds]"?: Array<string> | undefined;
-  RetrieveRequest?: models.RetrieveRequest$Outbound | undefined;
+  AnswersRequest?: models.AnswersRequest$Outbound | undefined;
 };
 
 /** @internal */
-export const PostPortalIDRetrieveRequest$outboundSchema: z.ZodType<
-  PostPortalIDRetrieveRequest$Outbound,
+export const GetBestAnswerForUserQueryRequest$outboundSchema: z.ZodType<
+  GetBestAnswerForUserQueryRequest$Outbound,
   z.ZodTypeDef,
-  PostPortalIDRetrieveRequest
+  GetBestAnswerForUserQueryRequest
 > = z.object({
   q: z.string(),
   portalID: z.string(),
@@ -89,13 +89,13 @@ export const PostPortalIDRetrieveRequest$outboundSchema: z.ZodType<
   language: models.LanguageCodeParameter$outboundSchema.optional(),
   dollarFilterTags: z.record(z.array(z.string())).optional(),
   dollarFilterTopicIds: z.array(z.string()).optional(),
-  retrieveRequest: models.RetrieveRequest$outboundSchema.optional(),
+  answersRequest: models.AnswersRequest$outboundSchema.optional(),
 }).transform((v) => {
   return remap$(v, {
     dollarFilterUserProfileID: "$filter[userProfileID]",
     dollarFilterTags: "$filter[tags]",
     dollarFilterTopicIds: "$filter[topicIds]",
-    retrieveRequest: "RetrieveRequest",
+    answersRequest: "AnswersRequest",
   });
 });
 
@@ -103,31 +103,31 @@ export const PostPortalIDRetrieveRequest$outboundSchema: z.ZodType<
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace PostPortalIDRetrieveRequest$ {
-  /** @deprecated use `PostPortalIDRetrieveRequest$inboundSchema` instead. */
-  export const inboundSchema = PostPortalIDRetrieveRequest$inboundSchema;
-  /** @deprecated use `PostPortalIDRetrieveRequest$outboundSchema` instead. */
-  export const outboundSchema = PostPortalIDRetrieveRequest$outboundSchema;
-  /** @deprecated use `PostPortalIDRetrieveRequest$Outbound` instead. */
-  export type Outbound = PostPortalIDRetrieveRequest$Outbound;
+export namespace GetBestAnswerForUserQueryRequest$ {
+  /** @deprecated use `GetBestAnswerForUserQueryRequest$inboundSchema` instead. */
+  export const inboundSchema = GetBestAnswerForUserQueryRequest$inboundSchema;
+  /** @deprecated use `GetBestAnswerForUserQueryRequest$outboundSchema` instead. */
+  export const outboundSchema = GetBestAnswerForUserQueryRequest$outboundSchema;
+  /** @deprecated use `GetBestAnswerForUserQueryRequest$Outbound` instead. */
+  export type Outbound = GetBestAnswerForUserQueryRequest$Outbound;
 }
 
-export function postPortalIDRetrieveRequestToJSON(
-  postPortalIDRetrieveRequest: PostPortalIDRetrieveRequest,
+export function getBestAnswerForUserQueryRequestToJSON(
+  getBestAnswerForUserQueryRequest: GetBestAnswerForUserQueryRequest,
 ): string {
   return JSON.stringify(
-    PostPortalIDRetrieveRequest$outboundSchema.parse(
-      postPortalIDRetrieveRequest,
+    GetBestAnswerForUserQueryRequest$outboundSchema.parse(
+      getBestAnswerForUserQueryRequest,
     ),
   );
 }
 
-export function postPortalIDRetrieveRequestFromJSON(
+export function getBestAnswerForUserQueryRequestFromJSON(
   jsonString: string,
-): SafeParseResult<PostPortalIDRetrieveRequest, SDKValidationError> {
+): SafeParseResult<GetBestAnswerForUserQueryRequest, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => PostPortalIDRetrieveRequest$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'PostPortalIDRetrieveRequest' from JSON`,
+    (x) => GetBestAnswerForUserQueryRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'GetBestAnswerForUserQueryRequest' from JSON`,
   );
 }

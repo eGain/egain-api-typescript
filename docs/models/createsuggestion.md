@@ -14,7 +14,7 @@ let value: CreateSuggestion = {
     id: "PROD-9821",
   },
   language: {
-    code: "pt-BR",
+    code: "pt-PT",
   },
 };
 ```
