@@ -1,0 +1,21 @@
+workflowVersion: 1.0.0
+speakeasyVersion: latest
+sources:
+    Knowledge Portal Manager APIs:
+        inputs:
+            - location: ../speakeasy/contentmgr/v4/api-with-overlay.yaml
+            - location: ../speakeasy/aiservices/v4/api-with-overlay.yaml
+            - location: ../speakeasy/portalmgr/v4/api-with-overlay.yaml
+        output: .speakeasy/out.openapi.yaml
+        registry:
+            location: registry.speakeasyapi.dev/egain-corporation/portalmgr/knowledge-portal-manager-ap-is
+targets:
+    typescript-sdk:
+        target: typescript
+        source: Knowledge Portal Manager APIs
+        codeSamples:
+            registry:
+                location: registry.speakeasyapi.dev/egain-corporation/portalmgr/knowledge-portal-manager-ap-is-typescript-code-samples
+            labelOverride:
+                fixedValue: Typescript (SDK)
+            blocking: false

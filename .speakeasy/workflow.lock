@@ -1,0 +1,39 @@
+speakeasyVersion: 1.634.0
+sources:
+    Knowledge Portal Manager APIs:
+        sourceNamespace: knowledge-portal-manager-ap-is
+        sourceRevisionDigest: sha256:133c033d18fd82a2a1a44d1e2a611baf47604264aae91fbec7117b7d0c620430
+        sourceBlobDigest: sha256:4eb3821c906e5b3fe2119e3e474294abb92c2671bbe3f34c6575d85d24bf6a2b
+        tags:
+            - latest
+            - 4.0.0
+targets:
+    typescript-sdk:
+        source: Knowledge Portal Manager APIs
+        sourceNamespace: knowledge-portal-manager-ap-is
+        sourceRevisionDigest: sha256:133c033d18fd82a2a1a44d1e2a611baf47604264aae91fbec7117b7d0c620430
+        sourceBlobDigest: sha256:4eb3821c906e5b3fe2119e3e474294abb92c2671bbe3f34c6575d85d24bf6a2b
+        codeSamplesNamespace: knowledge-portal-manager-ap-is-typescript-code-samples
+        codeSamplesRevisionDigest: sha256:904d707507516bf32f212f1efb0e729863982836c02b90e47a207bfd2ffb033b
+workflow:
+    workflowVersion: 1.0.0
+    speakeasyVersion: latest
+    sources:
+        Knowledge Portal Manager APIs:
+            inputs:
+                - location: ../speakeasy/contentmgr/v4/api-with-overlay.yaml
+                - location: ../speakeasy/aiservices/v4/api-with-overlay.yaml
+                - location: ../speakeasy/portalmgr/v4/api-with-overlay.yaml
+            output: .speakeasy/out.openapi.yaml
+            registry:
+                location: registry.speakeasyapi.dev/egain-corporation/portalmgr/knowledge-portal-manager-ap-is
+    targets:
+        typescript-sdk:
+            target: typescript
+            source: Knowledge Portal Manager APIs
+            codeSamples:
+                registry:
+                    location: registry.speakeasyapi.dev/egain-corporation/portalmgr/knowledge-portal-manager-ap-is-typescript-code-samples
+                labelOverride:
+                    fixedValue: Typescript (SDK)
+                blocking: false

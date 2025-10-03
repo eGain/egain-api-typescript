@@ -1,0 +1,17 @@
+# AnswersRequestType
+
+The channel where the query originated, e.g., directly from the portal or via a custom integration.
+
+## Example Usage
+
+```typescript
+import { AnswersRequestType } from "@egain/egain-api-typescript/models";
+
+let value: AnswersRequestType = "custom";
+```
+
+## Values
+
+```typescript
+"portal" | "custom"
+```

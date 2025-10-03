@@ -1,0 +1,17 @@
+# SchemasLink
+
+## Example Usage
+
+```typescript
+import { SchemasLink } from "@egain/egain-api-typescript/models";
+
+let value: SchemasLink = {};
+```
+
+## Fields
+
+| Field                                                                                                                                                             | Type                                                                                                                                                              | Required                                                                                                                                                          | Description                                                                                                                                                       |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rel`                                                                                                                                                             | *string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                | Defines the relationship between a linked resource and the current document.<br><br>For example: self, prev, next or an object name such as 'user', 'folder' etc. |
+| `href`                                                                                                                                                            | *string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                | The URL that specifies the link's destination.                                                                                                                    |
+| `default`                                                                                                                                                         | *boolean*                                                                                                                                                         | :heavy_minus_sign:                                                                                                                                                | Determines if this is a default link.                                                                                                                             |

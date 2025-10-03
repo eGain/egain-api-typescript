@@ -1,0 +1,29 @@
+# CaseListResult
+
+## Example Usage
+
+```typescript
+import { CaseListResult } from "@egain/egain-api-typescript/models";
+
+let value: CaseListResult = {
+  id: "100000000001035",
+  releaseId: "100000000001035",
+  clusterId: "100000000001035",
+};
+```
+
+## Fields
+
+| Field                                                                            | Type                                                                             | Required                                                                         | Description                                                                      | Example                                                                          |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `id`                                                                             | *string*                                                                         | :heavy_minus_sign:                                                               | The numerical ID of the case.                                                    | 100000000001035                                                                  |
+| `shortName`                                                                      | *string*                                                                         | :heavy_minus_sign:                                                               | short name of the case.                                                          |                                                                                  |
+| `title`                                                                          | *string*                                                                         | :heavy_minus_sign:                                                               | title of the case                                                                |                                                                                  |
+| `profileId`                                                                      | *string*                                                                         | :heavy_minus_sign:                                                               | The ID of the guided help profile.<br><br/>1 will always be the **system profile**.<br/> |                                                                                  |
+| `releaseId`                                                                      | *string*                                                                         | :heavy_minus_sign:                                                               | The numerical ID of the Casebase Release in which case in created                | 100000000001035                                                                  |
+| `clusterId`                                                                      | *string*                                                                         | :heavy_minus_sign:                                                               | ID of the cluster in which case is created                                       | 100000000001035                                                                  |
+| `createdDate`                                                                    | *string*                                                                         | :heavy_minus_sign:                                                               | The date on which the Case was created.                                          |                                                                                  |
+| `createdBy`                                                                      | [models.CreatedBy](../models/createdby.md)                                       | :heavy_minus_sign:                                                               | N/A                                                                              |                                                                                  |
+| `modifiedBy`                                                                     | [models.ModifiedBy](../models/modifiedby.md)                                     | :heavy_minus_sign:                                                               | N/A                                                                              |                                                                                  |
+| `modifiedDate`                                                                   | *string*                                                                         | :heavy_minus_sign:                                                               | The date on which the Case was last modified.                                    |                                                                                  |
+| `link`                                                                           | [models.Link](../models/link.md)                                                 | :heavy_minus_sign:                                                               | Defines the relationship between this resource and another object.               |                                                                                  |

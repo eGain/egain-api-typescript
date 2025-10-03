@@ -1,0 +1,17 @@
+# UploadAttachmentRequest
+
+## Example Usage
+
+```typescript
+import { UploadAttachmentRequest } from "@egain/egain-api-typescript/models/operations";
+
+// No examples available for this model
+```
+
+## Fields
+
+| Field                                                                                                                           | Type                                                                                                                            | Required                                                                                                                        | Description                                                                                                                     | Example                                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `acceptLanguage`                                                                                                                | [models.AcceptLanguage](../../models/acceptlanguage.md)                                                                         | :heavy_check_mark:                                                                                                              | The Language locale accepted by the client (used for locale specific fields in resource representation and in error responses). | en-US                                                                                                                           |
+| `signature`                                                                                                                     | *string*                                                                                                                        | :heavy_check_mark:                                                                                                              | Signature data to upload attachment.                                                                                            |                                                                                                                                 |
+| `requestBody`                                                                                                                   | *ReadableStream<Uint8Array>*                                                                                                    | :heavy_check_mark:                                                                                                              | N/A                                                                                                                             |                                                                                                                                 |
