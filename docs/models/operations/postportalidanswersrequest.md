@@ -1,11 +1,11 @@
-# GetBestAnswerForUserQueryRequest
+# PostPortalIDAnswersRequest
 
 ## Example Usage
 
 ```typescript
-import { GetBestAnswerForUserQueryRequest } from "@egain/egain-api-typescript/models/operations";
+import { PostPortalIDAnswersRequest } from "@egain/egain-api-typescript/models/operations";
 
-let value: GetBestAnswerForUserQueryRequest = {
+let value: PostPortalIDAnswersRequest = {
   q: "fair lending",
   portalID: "PROD-1000",
   dollarFilterUserProfileID: "PROD-3210",

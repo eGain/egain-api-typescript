@@ -22,23 +22,27 @@ import { ResponseValidationError } from "../models/errors/responsevalidationerro
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import * as models from "../models/index.js";
 import * as operations from "../models/operations/index.js";
-import { RetrieveChunksServerList } from "../models/operations/retrievechunks.js";
+import { PostPortalIDAnswersServerList } from "../models/operations/postportalidanswers.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Retrieve Chunks
+ * Get the best answer for a user query
  *
  * @remarks
- * The Retrieve API enables enterprises to directly access relevant content chunks from their organizational knowledge sources. It is designed for scenarios where developers want granular control over retrieved information, such as powering custom search, analytics, or retrieval-augmented generation (RAG) pipelines. <br><br> In addition to raw chunk retrieval, the API can return **Certified Answers** if it meets the 'Certified Answer' threshold score. Responses include relevance scores, metadata, and references to maintain transparency and flexibility. By leveraging the Retrieve API, organizations can build tailored experiences while retaining confidence in the source material.
+ * The **Answers API** allows enterprises to deliver fast, accurate, and contextual responses powered by their organizational knowledge. It supports two complementary approaches:
+ * <li> **Certified Answers**: Direct snippets retrieved from enterprise-authored content. </li>
+ * <li> **Generative Answers**: Natural language responses synthesized by a large language model (LLM).  </li>
+ *
+ * Every response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments.
  */
-export function aiservicesRetrieveRetrieveChunks(
+export function aiservicesAnswersPostPortalIDAnswers(
   client: EgainCore,
-  request: operations.RetrieveChunksRequest,
+  request: operations.PostPortalIDAnswersRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.RetrieveResponse,
+    models.AnswersResponse,
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -58,12 +62,12 @@ export function aiservicesRetrieveRetrieveChunks(
 
 async function $do(
   client: EgainCore,
-  request: operations.RetrieveChunksRequest,
+  request: operations.PostPortalIDAnswersRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      models.RetrieveResponse,
+      models.AnswersResponse,
       | EgainError
       | ResponseValidationError
       | ConnectionError
@@ -78,17 +82,20 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => operations.RetrieveChunksRequest$outboundSchema.parse(value),
+    (value) =>
+      operations.PostPortalIDAnswersRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload.RetrieveRequest, { explode: true });
+  const body = encodeJSON("body", payload.AnswersRequest, { explode: true });
 
   const baseURL = options?.serverURL
-    || pathToFunc(RetrieveChunksServerList[0], { charEncoding: "percent" })({
+    || pathToFunc(PostPortalIDAnswersServerList[0], {
+      charEncoding: "percent",
+    })({
       API_DOMAIN: "api.egain.cloud",
     });
 
@@ -99,7 +106,7 @@ async function $do(
     }),
   };
 
-  const path = pathToFunc("/{portalID}/retrieve")(pathParams);
+  const path = pathToFunc("/{portalID}/answers")(pathParams);
 
   const query = encodeFormQuery({
     "$filter[tags]": payload["$filter[tags]"],
@@ -121,7 +128,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: baseURL ?? "",
-    operationID: "retrieveChunks",
+    operationID: "post_/{portalID}/answers",
     oAuth2Scopes: [],
 
     resolvedSecurity: requestSecurity,
@@ -161,7 +168,7 @@ async function $do(
   const response = doResult.value;
 
   const [result] = await M.match<
-    models.RetrieveResponse,
+    models.AnswersResponse,
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -171,7 +178,7 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, models.RetrieveResponse$inboundSchema),
+    M.json(200, models.AnswersResponse$inboundSchema),
     M.fail([400, "4XX"]),
     M.fail([500, "5XX"]),
   )(response, req);

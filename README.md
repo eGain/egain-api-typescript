@@ -113,7 +113,7 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.aiservices.retrieve.retrieveChunks({
+  const result = await egain.aiservices.retrieve.postPortalIDRetrieve({
     q: "fair lending",
     portalID: "PROD-1000",
     dollarFilterUserProfileID: "PROD-3210",
@@ -127,6 +127,9 @@ async function run() {
         "PROD-2007",
       ],
     },
+    dollarFilterTopicIds: [
+      "PROD-2000",
+    ],
     retrieveRequest: {
       channel: {
         name: "Eight Bank Website",
@@ -162,7 +165,7 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.aiservices.retrieve.retrieveChunks({
+  const result = await egain.aiservices.retrieve.postPortalIDRetrieve({
     q: "fair lending",
     portalID: "PROD-1000",
     dollarFilterUserProfileID: "PROD-3210",
@@ -176,6 +179,9 @@ async function run() {
         "PROD-2007",
       ],
     },
+    dollarFilterTopicIds: [
+      "PROD-2000",
+    ],
     retrieveRequest: {
       channel: {
         name: "Eight Bank Website",
@@ -202,11 +208,11 @@ run();
 
 #### [aiservices.answers](docs/sdks/answers/README.md)
 
-* [getBestAnswerForUserQuery](docs/sdks/answers/README.md#getbestanswerforuserquery) - Get the best answer for a user query
+* [postPortalIDAnswers](docs/sdks/answers/README.md#postportalidanswers) - Get the best answer for a user query
 
 #### [aiservices.retrieve](docs/sdks/retrieve/README.md)
 
-* [retrieveChunks](docs/sdks/retrieve/README.md#retrievechunks) - Retrieve Chunks
+* [postPortalIDRetrieve](docs/sdks/retrieve/README.md#postportalidretrieve) - Retrieve Chunks
 
 ### [content](docs/sdks/content/README.md)
 
@@ -367,8 +373,8 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 
 <summary>Available standalone functions</summary>
 
-- [`aiservicesAnswersGetBestAnswerForUserQuery`](docs/sdks/answers/README.md#getbestanswerforuserquery) - Get the best answer for a user query
-- [`aiservicesRetrieveRetrieveChunks`](docs/sdks/retrieve/README.md#retrievechunks) - Retrieve Chunks
+- [`aiservicesAnswersPostPortalIDAnswers`](docs/sdks/answers/README.md#postportalidanswers) - Get the best answer for a user query
+- [`aiservicesRetrievePostPortalIDRetrieve`](docs/sdks/retrieve/README.md#postportalidretrieve) - Retrieve Chunks
 - [`contentHealthGetHealth`](docs/sdks/health/README.md#gethealth) - Check service health status
 - [`contentImportCreateImport`](docs/sdks/import/README.md#createimport) - Import content from external sources
 - [`contentImportCreateImportValidation`](docs/sdks/import/README.md#createimportvalidation) - Validate content structure and format before import
@@ -499,7 +505,7 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.aiservices.retrieve.retrieveChunks({
+  const result = await egain.aiservices.retrieve.postPortalIDRetrieve({
     q: "fair lending",
     portalID: "PROD-1000",
     dollarFilterUserProfileID: "PROD-3210",
@@ -513,6 +519,9 @@ async function run() {
         "PROD-2007",
       ],
     },
+    dollarFilterTopicIds: [
+      "PROD-2000",
+    ],
     retrieveRequest: {
       channel: {
         name: "Eight Bank Website",
@@ -557,7 +566,7 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.aiservices.retrieve.retrieveChunks({
+  const result = await egain.aiservices.retrieve.postPortalIDRetrieve({
     q: "fair lending",
     portalID: "PROD-1000",
     dollarFilterUserProfileID: "PROD-3210",
@@ -571,6 +580,9 @@ async function run() {
         "PROD-2007",
       ],
     },
+    dollarFilterTopicIds: [
+      "PROD-2000",
+    ],
     retrieveRequest: {
       channel: {
         name: "Eight Bank Website",
@@ -697,7 +709,7 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.aiservices.retrieve.retrieveChunks({
+  const result = await egain.aiservices.retrieve.postPortalIDRetrieve({
     q: "fair lending",
     portalID: "PROD-1000",
     dollarFilterUserProfileID: "PROD-3210",
@@ -711,6 +723,9 @@ async function run() {
         "PROD-2007",
       ],
     },
+    dollarFilterTopicIds: [
+      "PROD-2000",
+    ],
     retrieveRequest: {
       channel: {
         name: "Eight Bank Website",
@@ -737,7 +752,7 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.aiservices.retrieve.retrieveChunks({
+  const result = await egain.aiservices.retrieve.postPortalIDRetrieve({
     q: "fair lending",
     portalID: "PROD-1000",
     dollarFilterUserProfileID: "PROD-3210",
@@ -751,6 +766,9 @@ async function run() {
         "PROD-2007",
       ],
     },
+    dollarFilterTopicIds: [
+      "PROD-2000",
+    ],
     retrieveRequest: {
       channel: {
         name: "Eight Bank Website",
@@ -776,7 +794,7 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.aiservices.retrieve.retrieveChunks({
+  const result = await egain.aiservices.retrieve.postPortalIDRetrieve({
     q: "fair lending",
     portalID: "PROD-1000",
     dollarFilterUserProfileID: "PROD-3210",
@@ -790,13 +808,16 @@ async function run() {
         "PROD-2007",
       ],
     },
+    dollarFilterTopicIds: [
+      "PROD-2000",
+    ],
     retrieveRequest: {
       channel: {
         name: "Eight Bank Website",
       },
     },
   }, {
-    serverURL: "https://api.knowledge.ai/core/aiservices/v4",
+    serverURL: "https://$api.egain.cloud/core/aiservices/v4",
   });
 
   console.log(result);

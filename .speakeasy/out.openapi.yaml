@@ -87,7 +87,6 @@ paths:
     '/{portalID}/retrieve':
         post:
             summary: Retrieve Chunks
-            operationId: retrieveChunks
             tags:
                 - Retrieve
             description: The Retrieve API enables enterprises to directly access relevant content chunks from their organizational knowledge sources. It is designed for scenarios where developers want granular control over retrieved information, such as powering custom search, analytics, or retrieval-augmented generation (RAG) pipelines. <br><br> In addition to raw chunk retrieval, the API can return **Certified Answers** if it meets the 'Certified Answer' threshold score. Responses include relevance scores, metadata, and references to maintain transparency and flexibility. By leveraging the Retrieve API, organizations can build tailored experiences while retaining confidence in the source material.
@@ -121,7 +120,7 @@ paths:
             security:
                 - accessToken: []
             servers:
-                - url: 'https://api.knowledge.ai/core/aiservices/v4'
+                - url: 'https://${API_DOMAIN}/core/aiservices/v4'
                   description: aiservices
                   variables:
                     API_DOMAIN:
@@ -129,7 +128,6 @@ paths:
     '/{portalID}/answers':
         post:
             summary: Get the best answer for a user query
-            operationId: getBestAnswerForUserQuery
             tags:
                 - Answers
             description: "The **Answers API** allows enterprises to deliver fast, accurate, and contextual responses powered by their organizational knowledge. It supports two complementary approaches:  \n<li> **Certified Answers**: Direct snippets retrieved from enterprise-authored content. </li>  \n<li> **Generative Answers**: Natural language responses synthesized by a large language model (LLM).  </li>\n\nEvery response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments.\n"
@@ -161,7 +159,7 @@ paths:
                 - accessToken: []
             x-speakeasy-group: aiservices.answers
             servers:
-                - url: 'https://api.knowledge.ai/core/aiservices/v4'
+                - url: 'https://${API_DOMAIN}/core/aiservices/v4'
                   description: aiservices
                   variables:
                     API_DOMAIN:

@@ -21,28 +21,24 @@ import {
 import { ResponseValidationError } from "../models/errors/responsevalidationerror.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import * as models from "../models/index.js";
-import { GetBestAnswerForUserQueryServerList } from "../models/operations/getbestanswerforuserquery.js";
 import * as operations from "../models/operations/index.js";
+import { PostPortalIDRetrieveServerList } from "../models/operations/postportalidretrieve.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Get the best answer for a user query
+ * Retrieve Chunks
  *
  * @remarks
- * The **Answers API** allows enterprises to deliver fast, accurate, and contextual responses powered by their organizational knowledge. It supports two complementary approaches:
- * <li> **Certified Answers**: Direct snippets retrieved from enterprise-authored content. </li>
- * <li> **Generative Answers**: Natural language responses synthesized by a large language model (LLM).  </li>
- *
- * Every response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments.
+ * The Retrieve API enables enterprises to directly access relevant content chunks from their organizational knowledge sources. It is designed for scenarios where developers want granular control over retrieved information, such as powering custom search, analytics, or retrieval-augmented generation (RAG) pipelines. <br><br> In addition to raw chunk retrieval, the API can return **Certified Answers** if it meets the 'Certified Answer' threshold score. Responses include relevance scores, metadata, and references to maintain transparency and flexibility. By leveraging the Retrieve API, organizations can build tailored experiences while retaining confidence in the source material.
  */
-export function aiservicesAnswersGetBestAnswerForUserQuery(
+export function aiservicesRetrievePostPortalIDRetrieve(
   client: EgainCore,
-  request: operations.GetBestAnswerForUserQueryRequest,
+  request: operations.PostPortalIDRetrieveRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.AnswersResponse,
+    models.RetrieveResponse,
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -62,12 +58,12 @@ export function aiservicesAnswersGetBestAnswerForUserQuery(
 
 async function $do(
   client: EgainCore,
-  request: operations.GetBestAnswerForUserQueryRequest,
+  request: operations.PostPortalIDRetrieveRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      models.AnswersResponse,
+      models.RetrieveResponse,
       | EgainError
       | ResponseValidationError
       | ConnectionError
@@ -83,17 +79,17 @@ async function $do(
   const parsed = safeParse(
     request,
     (value) =>
-      operations.GetBestAnswerForUserQueryRequest$outboundSchema.parse(value),
+      operations.PostPortalIDRetrieveRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload.AnswersRequest, { explode: true });
+  const body = encodeJSON("body", payload.RetrieveRequest, { explode: true });
 
   const baseURL = options?.serverURL
-    || pathToFunc(GetBestAnswerForUserQueryServerList[0], {
+    || pathToFunc(PostPortalIDRetrieveServerList[0], {
       charEncoding: "percent",
     })({
       API_DOMAIN: "api.egain.cloud",
@@ -106,7 +102,7 @@ async function $do(
     }),
   };
 
-  const path = pathToFunc("/{portalID}/answers")(pathParams);
+  const path = pathToFunc("/{portalID}/retrieve")(pathParams);
 
   const query = encodeFormQuery({
     "$filter[tags]": payload["$filter[tags]"],
@@ -128,7 +124,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: baseURL ?? "",
-    operationID: "getBestAnswerForUserQuery",
+    operationID: "post_/{portalID}/retrieve",
     oAuth2Scopes: [],
 
     resolvedSecurity: requestSecurity,
@@ -168,7 +164,7 @@ async function $do(
   const response = doResult.value;
 
   const [result] = await M.match<
-    models.AnswersResponse,
+    models.RetrieveResponse,
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -178,7 +174,7 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, models.AnswersResponse$inboundSchema),
+    M.json(200, models.RetrieveResponse$inboundSchema),
     M.fail([400, "4XX"]),
     M.fail([500, "5XX"]),
   )(response, req);

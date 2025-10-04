@@ -9,14 +9,14 @@ import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import * as models from "../index.js";
 
-export const GetBestAnswerForUserQueryServerList = [
+export const PostPortalIDAnswersServerList = [
   /**
    * aiservices
    */
-  "https://api.knowledge.ai/core/aiservices/v4",
+  "https://${API_DOMAIN}/core/aiservices/v4",
 ] as const;
 
-export type GetBestAnswerForUserQueryRequest = {
+export type PostPortalIDAnswersRequest = {
   /**
    * The search query string. The string must be escaped as required by the URL syntax rules.
    */
@@ -45,8 +45,8 @@ export type GetBestAnswerForUserQueryRequest = {
 };
 
 /** @internal */
-export const GetBestAnswerForUserQueryRequest$inboundSchema: z.ZodType<
-  GetBestAnswerForUserQueryRequest,
+export const PostPortalIDAnswersRequest$inboundSchema: z.ZodType<
+  PostPortalIDAnswersRequest,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -67,7 +67,7 @@ export const GetBestAnswerForUserQueryRequest$inboundSchema: z.ZodType<
 });
 
 /** @internal */
-export type GetBestAnswerForUserQueryRequest$Outbound = {
+export type PostPortalIDAnswersRequest$Outbound = {
   q: string;
   portalID: string;
   "$filter[userProfileID]"?: string | undefined;
@@ -78,10 +78,10 @@ export type GetBestAnswerForUserQueryRequest$Outbound = {
 };
 
 /** @internal */
-export const GetBestAnswerForUserQueryRequest$outboundSchema: z.ZodType<
-  GetBestAnswerForUserQueryRequest$Outbound,
+export const PostPortalIDAnswersRequest$outboundSchema: z.ZodType<
+  PostPortalIDAnswersRequest$Outbound,
   z.ZodTypeDef,
-  GetBestAnswerForUserQueryRequest
+  PostPortalIDAnswersRequest
 > = z.object({
   q: z.string(),
   portalID: z.string(),
@@ -103,31 +103,29 @@ export const GetBestAnswerForUserQueryRequest$outboundSchema: z.ZodType<
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace GetBestAnswerForUserQueryRequest$ {
-  /** @deprecated use `GetBestAnswerForUserQueryRequest$inboundSchema` instead. */
-  export const inboundSchema = GetBestAnswerForUserQueryRequest$inboundSchema;
-  /** @deprecated use `GetBestAnswerForUserQueryRequest$outboundSchema` instead. */
-  export const outboundSchema = GetBestAnswerForUserQueryRequest$outboundSchema;
-  /** @deprecated use `GetBestAnswerForUserQueryRequest$Outbound` instead. */
-  export type Outbound = GetBestAnswerForUserQueryRequest$Outbound;
+export namespace PostPortalIDAnswersRequest$ {
+  /** @deprecated use `PostPortalIDAnswersRequest$inboundSchema` instead. */
+  export const inboundSchema = PostPortalIDAnswersRequest$inboundSchema;
+  /** @deprecated use `PostPortalIDAnswersRequest$outboundSchema` instead. */
+  export const outboundSchema = PostPortalIDAnswersRequest$outboundSchema;
+  /** @deprecated use `PostPortalIDAnswersRequest$Outbound` instead. */
+  export type Outbound = PostPortalIDAnswersRequest$Outbound;
 }
 
-export function getBestAnswerForUserQueryRequestToJSON(
-  getBestAnswerForUserQueryRequest: GetBestAnswerForUserQueryRequest,
+export function postPortalIDAnswersRequestToJSON(
+  postPortalIDAnswersRequest: PostPortalIDAnswersRequest,
 ): string {
   return JSON.stringify(
-    GetBestAnswerForUserQueryRequest$outboundSchema.parse(
-      getBestAnswerForUserQueryRequest,
-    ),
+    PostPortalIDAnswersRequest$outboundSchema.parse(postPortalIDAnswersRequest),
   );
 }
 
-export function getBestAnswerForUserQueryRequestFromJSON(
+export function postPortalIDAnswersRequestFromJSON(
   jsonString: string,
-): SafeParseResult<GetBestAnswerForUserQueryRequest, SDKValidationError> {
+): SafeParseResult<PostPortalIDAnswersRequest, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => GetBestAnswerForUserQueryRequest$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'GetBestAnswerForUserQueryRequest' from JSON`,
+    (x) => PostPortalIDAnswersRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostPortalIDAnswersRequest' from JSON`,
   );
 }

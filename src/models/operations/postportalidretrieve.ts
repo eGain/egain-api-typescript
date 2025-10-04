@@ -9,14 +9,14 @@ import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import * as models from "../index.js";
 
-export const RetrieveChunksServerList = [
+export const PostPortalIDRetrieveServerList = [
   /**
    * aiservices
    */
-  "https://api.knowledge.ai/core/aiservices/v4",
+  "https://${API_DOMAIN}/core/aiservices/v4",
 ] as const;
 
-export type RetrieveChunksRequest = {
+export type PostPortalIDRetrieveRequest = {
   /**
    * The search query string. The string must be escaped as required by the URL syntax rules.
    */
@@ -45,8 +45,8 @@ export type RetrieveChunksRequest = {
 };
 
 /** @internal */
-export const RetrieveChunksRequest$inboundSchema: z.ZodType<
-  RetrieveChunksRequest,
+export const PostPortalIDRetrieveRequest$inboundSchema: z.ZodType<
+  PostPortalIDRetrieveRequest,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -67,7 +67,7 @@ export const RetrieveChunksRequest$inboundSchema: z.ZodType<
 });
 
 /** @internal */
-export type RetrieveChunksRequest$Outbound = {
+export type PostPortalIDRetrieveRequest$Outbound = {
   q: string;
   portalID: string;
   "$filter[userProfileID]"?: string | undefined;
@@ -78,10 +78,10 @@ export type RetrieveChunksRequest$Outbound = {
 };
 
 /** @internal */
-export const RetrieveChunksRequest$outboundSchema: z.ZodType<
-  RetrieveChunksRequest$Outbound,
+export const PostPortalIDRetrieveRequest$outboundSchema: z.ZodType<
+  PostPortalIDRetrieveRequest$Outbound,
   z.ZodTypeDef,
-  RetrieveChunksRequest
+  PostPortalIDRetrieveRequest
 > = z.object({
   q: z.string(),
   portalID: z.string(),
@@ -103,29 +103,31 @@ export const RetrieveChunksRequest$outboundSchema: z.ZodType<
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace RetrieveChunksRequest$ {
-  /** @deprecated use `RetrieveChunksRequest$inboundSchema` instead. */
-  export const inboundSchema = RetrieveChunksRequest$inboundSchema;
-  /** @deprecated use `RetrieveChunksRequest$outboundSchema` instead. */
-  export const outboundSchema = RetrieveChunksRequest$outboundSchema;
-  /** @deprecated use `RetrieveChunksRequest$Outbound` instead. */
-  export type Outbound = RetrieveChunksRequest$Outbound;
+export namespace PostPortalIDRetrieveRequest$ {
+  /** @deprecated use `PostPortalIDRetrieveRequest$inboundSchema` instead. */
+  export const inboundSchema = PostPortalIDRetrieveRequest$inboundSchema;
+  /** @deprecated use `PostPortalIDRetrieveRequest$outboundSchema` instead. */
+  export const outboundSchema = PostPortalIDRetrieveRequest$outboundSchema;
+  /** @deprecated use `PostPortalIDRetrieveRequest$Outbound` instead. */
+  export type Outbound = PostPortalIDRetrieveRequest$Outbound;
 }
 
-export function retrieveChunksRequestToJSON(
-  retrieveChunksRequest: RetrieveChunksRequest,
+export function postPortalIDRetrieveRequestToJSON(
+  postPortalIDRetrieveRequest: PostPortalIDRetrieveRequest,
 ): string {
   return JSON.stringify(
-    RetrieveChunksRequest$outboundSchema.parse(retrieveChunksRequest),
+    PostPortalIDRetrieveRequest$outboundSchema.parse(
+      postPortalIDRetrieveRequest,
+    ),
   );
 }
 
-export function retrieveChunksRequestFromJSON(
+export function postPortalIDRetrieveRequestFromJSON(
   jsonString: string,
-): SafeParseResult<RetrieveChunksRequest, SDKValidationError> {
+): SafeParseResult<PostPortalIDRetrieveRequest, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => RetrieveChunksRequest$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'RetrieveChunksRequest' from JSON`,
+    (x) => PostPortalIDRetrieveRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PostPortalIDRetrieveRequest' from JSON`,
   );
 }

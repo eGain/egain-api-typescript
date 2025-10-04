@@ -1,11 +1,11 @@
-# RetrieveChunksRequest
+# PostPortalIDRetrieveRequest
 
 ## Example Usage
 
 ```typescript
-import { RetrieveChunksRequest } from "@egain/egain-api-typescript/models/operations";
+import { PostPortalIDRetrieveRequest } from "@egain/egain-api-typescript/models/operations";
 
-let value: RetrieveChunksRequest = {
+let value: PostPortalIDRetrieveRequest = {
   q: "fair lending",
   portalID: "PROD-1000",
   dollarFilterUserProfileID: "PROD-3210",
