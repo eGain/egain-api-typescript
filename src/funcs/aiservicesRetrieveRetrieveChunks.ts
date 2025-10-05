@@ -22,7 +22,7 @@ import { ResponseValidationError } from "../models/errors/responsevalidationerro
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import * as models from "../models/index.js";
 import * as operations from "../models/operations/index.js";
-import { PostPortalIDRetrieveServerList } from "../models/operations/postportalidretrieve.js";
+import { RetrieveChunksServerList } from "../models/operations/retrievechunks.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * @remarks
  * The Retrieve API enables enterprises to directly access relevant content chunks from their organizational knowledge sources. It is designed for scenarios where developers want granular control over retrieved information, such as powering custom search, analytics, or retrieval-augmented generation (RAG) pipelines. <br><br> In addition to raw chunk retrieval, the API can return **Certified Answers** if it meets the 'Certified Answer' threshold score. Responses include relevance scores, metadata, and references to maintain transparency and flexibility. By leveraging the Retrieve API, organizations can build tailored experiences while retaining confidence in the source material.
  */
-export function aiservicesRetrievePostPortalIDRetrieve(
+export function aiservicesRetrieveRetrieveChunks(
   client: EgainCore,
-  request: operations.PostPortalIDRetrieveRequest,
+  request: operations.RetrieveChunksRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
@@ -58,7 +58,7 @@ export function aiservicesRetrievePostPortalIDRetrieve(
 
 async function $do(
   client: EgainCore,
-  request: operations.PostPortalIDRetrieveRequest,
+  request: operations.RetrieveChunksRequest,
   options?: RequestOptions,
 ): Promise<
   [
@@ -78,8 +78,7 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) =>
-      operations.PostPortalIDRetrieveRequest$outboundSchema.parse(value),
+    (value) => operations.RetrieveChunksRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -89,9 +88,7 @@ async function $do(
   const body = encodeJSON("body", payload.RetrieveRequest, { explode: true });
 
   const baseURL = options?.serverURL
-    || pathToFunc(PostPortalIDRetrieveServerList[0], {
-      charEncoding: "percent",
-    })({
+    || pathToFunc(RetrieveChunksServerList[0], { charEncoding: "percent" })({
       API_DOMAIN: "api.egain.cloud",
     });
 
@@ -124,7 +121,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: baseURL ?? "",
-    operationID: "post_/{portalID}/retrieve",
+    operationID: "retrieveChunks",
     oAuth2Scopes: [],
 
     resolvedSecurity: requestSecurity,

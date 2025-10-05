@@ -21,8 +21,8 @@ import {
 import { ResponseValidationError } from "../models/errors/responsevalidationerror.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import * as models from "../models/index.js";
+import { GetBestAnswerServerList } from "../models/operations/getbestanswer.js";
 import * as operations from "../models/operations/index.js";
-import { PostPortalIDAnswersServerList } from "../models/operations/postportalidanswers.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
@@ -36,9 +36,9 @@ import { Result } from "../types/fp.js";
  *
  * Every response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments.
  */
-export function aiservicesAnswersPostPortalIDAnswers(
+export function aiservicesAnswersGetBestAnswer(
   client: EgainCore,
-  request: operations.PostPortalIDAnswersRequest,
+  request: operations.GetBestAnswerRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
@@ -62,7 +62,7 @@ export function aiservicesAnswersPostPortalIDAnswers(
 
 async function $do(
   client: EgainCore,
-  request: operations.PostPortalIDAnswersRequest,
+  request: operations.GetBestAnswerRequest,
   options?: RequestOptions,
 ): Promise<
   [
@@ -82,8 +82,7 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) =>
-      operations.PostPortalIDAnswersRequest$outboundSchema.parse(value),
+    (value) => operations.GetBestAnswerRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -93,9 +92,7 @@ async function $do(
   const body = encodeJSON("body", payload.AnswersRequest, { explode: true });
 
   const baseURL = options?.serverURL
-    || pathToFunc(PostPortalIDAnswersServerList[0], {
-      charEncoding: "percent",
-    })({
+    || pathToFunc(GetBestAnswerServerList[0], { charEncoding: "percent" })({
       API_DOMAIN: "api.egain.cloud",
     });
 
@@ -128,7 +125,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: baseURL ?? "",
-    operationID: "post_/{portalID}/answers",
+    operationID: "getBestAnswer",
     oAuth2Scopes: [],
 
     resolvedSecurity: requestSecurity,

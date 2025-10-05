@@ -8,7 +8,7 @@ dotenv.config();
  * Example usage of the @egain/egain-api-typescript SDK
  *
  * To run this example from the examples directory:
- * npm run build && npx tsx aiservicesRetrievePostPortalIDRetrieve.example.ts
+ * npm run build && npx tsx aiservicesRetrieveRetrieveChunks.example.ts
  */
 
 import { Egain } from "@egain/egain-api-typescript";
@@ -18,7 +18,7 @@ const egain = new Egain({
 });
 
 async function main() {
-  const result = await egain.aiservices.retrieve.postPortalIDRetrieve({
+  const result = await egain.aiservices.retrieve.retrieveChunks({
     q: "fair lending",
     portalID: "PROD-1000",
     dollarFilterUserProfileID: "PROD-3210",
@@ -32,9 +32,6 @@ async function main() {
         "PROD-2007",
       ],
     },
-    dollarFilterTopicIds: [
-      "PROD-2000",
-    ],
     retrieveRequest: {
       channel: {
         name: "Eight Bank Website",

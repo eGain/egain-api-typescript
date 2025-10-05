@@ -7,7 +7,7 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.aiservices.retrieve.postPortalIDRetrieve({
+  const result = await egain.aiservices.retrieve.retrieveChunks({
     q: "fair lending",
     portalID: "PROD-1000",
     dollarFilterUserProfileID: "PROD-3210",
@@ -21,9 +21,6 @@ async function run() {
         "PROD-2007",
       ],
     },
-    dollarFilterTopicIds: [
-      "PROD-2000",
-    ],
     retrieveRequest: {
       channel: {
         name: "Eight Bank Website",

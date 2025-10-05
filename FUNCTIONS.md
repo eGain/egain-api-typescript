@@ -20,7 +20,7 @@ specific category of applications.
 
 ```typescript
 import { EgainCore } from "@egain/egain-api-typescript/core.js";
-import { aiservicesRetrievePostPortalIDRetrieve } from "@egain/egain-api-typescript/funcs/aiservicesRetrievePostPortalIDRetrieve.js";
+import { aiservicesRetrieveRetrieveChunks } from "@egain/egain-api-typescript/funcs/aiservicesRetrieveRetrieveChunks.js";
 
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -29,7 +29,7 @@ const egain = new EgainCore({
 });
 
 async function run() {
-  const res = await aiservicesRetrievePostPortalIDRetrieve(egain, {
+  const res = await aiservicesRetrieveRetrieveChunks(egain, {
     q: "fair lending",
     portalID: "PROD-1000",
     dollarFilterUserProfileID: "PROD-3210",
@@ -43,9 +43,6 @@ async function run() {
         "PROD-2007",
       ],
     },
-    dollarFilterTopicIds: [
-      "PROD-2000",
-    ],
     retrieveRequest: {
       channel: {
         name: "Eight Bank Website",
@@ -56,7 +53,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("aiservicesRetrievePostPortalIDRetrieve failed:", res.error);
+    console.log("aiservicesRetrieveRetrieveChunks failed:", res.error);
   }
 }
 
