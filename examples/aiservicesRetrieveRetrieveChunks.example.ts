@@ -21,9 +21,9 @@ async function main() {
   const result = await egain.aiservices.retrieve.retrieveChunks({
     q: "fair lending",
     portalID: "PROD-1000",
-    dollarFilterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-3210",
     language: "en-US",
-    dollarFilterTags: {
+    filterTags: {
       "PROD-1234": [
         "PROD-2000",
         "PROD-2003",

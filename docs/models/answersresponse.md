@@ -6,6 +6,12 @@
 import { AnswersResponse } from "@egain/egain-api-typescript/models";
 
 let value: AnswersResponse = {
+  answer: {
+    answerValue: "<value>",
+    references: [],
+    answerType: "certified",
+    relevanceScore: 635.2,
+  },
   searchResults: [
     {
       id: "PROD-48192",
@@ -14,6 +20,13 @@ let value: AnswersResponse = {
       source: "eGain Attachment",
       snippet: "Fair lending is a part of...",
       relevanceScore: 2545.64,
+      topicBreadCrumb: {
+        topicSummary: [
+          {
+            id: "PROD-1921",
+          },
+        ],
+      },
     },
   ],
 };

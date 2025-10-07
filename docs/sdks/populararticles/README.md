@@ -42,9 +42,9 @@ async function run() {
   const result = await egain.portal.populararticles.getpopulararticles({
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
-    dollarFilterTopicId: "PROD-1067",
+    filterTopicId: "PROD-1067",
     language: "en-US",
-    dollarFilterTags: "PROD-5381",
+    filterTags: "PROD-5381",
     articleResultAdditionalAttributes: [
       "averageRating",
     ],
@@ -74,9 +74,9 @@ async function run() {
   const res = await portalPopulararticlesGetpopulararticles(egain, {
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
-    dollarFilterTopicId: "PROD-1067",
+    filterTopicId: "PROD-1067",
     language: "en-US",
-    dollarFilterTags: "PROD-5381",
+    filterTags: "PROD-5381",
     articleResultAdditionalAttributes: [
       "averageRating",
     ],

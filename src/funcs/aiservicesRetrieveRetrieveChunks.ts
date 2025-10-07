@@ -102,9 +102,9 @@ async function $do(
   const path = pathToFunc("/{portalID}/retrieve")(pathParams);
 
   const query = encodeFormQuery({
-    "$filter[tags]": payload["$filter[tags]"],
-    "$filter[topicIds]": payload["$filter[topicIds]"],
-    "$filter[userProfileID]": payload["$filter[userProfileID]"],
+    "$filter[tags]": payload.filterTags,
+    "$filter[topicIds]": payload.filterTopicIds,
+    "$filter[userProfileID]": payload.filterUserProfileID,
     "$lang": payload.language,
     "q": payload.q,
   });

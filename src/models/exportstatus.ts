@@ -19,7 +19,7 @@ export type ExportStatusStatus = ClosedEnum<typeof ExportStatusStatus>;
 /**
  * Details about the job's progress.
  */
-export type Progress = {
+export type ExportStatusProgress = {
   /**
    * The number of items processed so far.
    */
@@ -37,7 +37,7 @@ export type Progress = {
 /**
  * Breakdown of completed job results.
  */
-export type Results = {
+export type ExportStatusResults = {
   /**
    * The count of successfully processed items.
    */
@@ -57,7 +57,7 @@ export type ExportStatus = {
   /**
    * Details about the job's progress.
    */
-  progress?: Progress | undefined;
+  progress?: ExportStatusProgress | undefined;
   /**
    * The timestamp when the job started.
    */
@@ -67,13 +67,17 @@ export type ExportStatus = {
    */
   estimatedCompletion?: Date | undefined;
   /**
+   * The timestamp when the job completed.
+   */
+  completionTime?: Date | undefined;
+  /**
    * The timestamp when the job failed.
    */
   failureTime?: Date | undefined;
   /**
    * Breakdown of completed job results.
    */
-  results?: Results | undefined;
+  results?: ExportStatusResults | undefined;
   /**
    * A description of the job failure reason.
    */
@@ -102,8 +106,8 @@ export namespace ExportStatusStatus$ {
 }
 
 /** @internal */
-export const Progress$inboundSchema: z.ZodType<
-  Progress,
+export const ExportStatusProgress$inboundSchema: z.ZodType<
+  ExportStatusProgress,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -113,17 +117,17 @@ export const Progress$inboundSchema: z.ZodType<
 });
 
 /** @internal */
-export type Progress$Outbound = {
+export type ExportStatusProgress$Outbound = {
   processed?: number | undefined;
   total?: number | undefined;
   percentage?: number | undefined;
 };
 
 /** @internal */
-export const Progress$outboundSchema: z.ZodType<
-  Progress$Outbound,
+export const ExportStatusProgress$outboundSchema: z.ZodType<
+  ExportStatusProgress$Outbound,
   z.ZodTypeDef,
-  Progress
+  ExportStatusProgress
 > = z.object({
   processed: z.number().int().optional(),
   total: z.number().int().optional(),
@@ -134,49 +138,56 @@ export const Progress$outboundSchema: z.ZodType<
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace Progress$ {
-  /** @deprecated use `Progress$inboundSchema` instead. */
-  export const inboundSchema = Progress$inboundSchema;
-  /** @deprecated use `Progress$outboundSchema` instead. */
-  export const outboundSchema = Progress$outboundSchema;
-  /** @deprecated use `Progress$Outbound` instead. */
-  export type Outbound = Progress$Outbound;
+export namespace ExportStatusProgress$ {
+  /** @deprecated use `ExportStatusProgress$inboundSchema` instead. */
+  export const inboundSchema = ExportStatusProgress$inboundSchema;
+  /** @deprecated use `ExportStatusProgress$outboundSchema` instead. */
+  export const outboundSchema = ExportStatusProgress$outboundSchema;
+  /** @deprecated use `ExportStatusProgress$Outbound` instead. */
+  export type Outbound = ExportStatusProgress$Outbound;
 }
 
-export function progressToJSON(progress: Progress): string {
-  return JSON.stringify(Progress$outboundSchema.parse(progress));
+export function exportStatusProgressToJSON(
+  exportStatusProgress: ExportStatusProgress,
+): string {
+  return JSON.stringify(
+    ExportStatusProgress$outboundSchema.parse(exportStatusProgress),
+  );
 }
 
-export function progressFromJSON(
+export function exportStatusProgressFromJSON(
   jsonString: string,
-): SafeParseResult<Progress, SDKValidationError> {
+): SafeParseResult<ExportStatusProgress, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => Progress$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'Progress' from JSON`,
+    (x) => ExportStatusProgress$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ExportStatusProgress' from JSON`,
   );
 }
 
 /** @internal */
-export const Results$inboundSchema: z.ZodType<Results, z.ZodTypeDef, unknown> =
-  z.object({
-    successful: z.number().int().optional(),
-    warnings: z.number().int().optional(),
-    errors: z.number().int().optional(),
-  });
+export const ExportStatusResults$inboundSchema: z.ZodType<
+  ExportStatusResults,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  successful: z.number().int().optional(),
+  warnings: z.number().int().optional(),
+  errors: z.number().int().optional(),
+});
 
 /** @internal */
-export type Results$Outbound = {
+export type ExportStatusResults$Outbound = {
   successful?: number | undefined;
   warnings?: number | undefined;
   errors?: number | undefined;
 };
 
 /** @internal */
-export const Results$outboundSchema: z.ZodType<
-  Results$Outbound,
+export const ExportStatusResults$outboundSchema: z.ZodType<
+  ExportStatusResults$Outbound,
   z.ZodTypeDef,
-  Results
+  ExportStatusResults
 > = z.object({
   successful: z.number().int().optional(),
   warnings: z.number().int().optional(),
@@ -187,26 +198,30 @@ export const Results$outboundSchema: z.ZodType<
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace Results$ {
-  /** @deprecated use `Results$inboundSchema` instead. */
-  export const inboundSchema = Results$inboundSchema;
-  /** @deprecated use `Results$outboundSchema` instead. */
-  export const outboundSchema = Results$outboundSchema;
-  /** @deprecated use `Results$Outbound` instead. */
-  export type Outbound = Results$Outbound;
+export namespace ExportStatusResults$ {
+  /** @deprecated use `ExportStatusResults$inboundSchema` instead. */
+  export const inboundSchema = ExportStatusResults$inboundSchema;
+  /** @deprecated use `ExportStatusResults$outboundSchema` instead. */
+  export const outboundSchema = ExportStatusResults$outboundSchema;
+  /** @deprecated use `ExportStatusResults$Outbound` instead. */
+  export type Outbound = ExportStatusResults$Outbound;
 }
 
-export function resultsToJSON(results: Results): string {
-  return JSON.stringify(Results$outboundSchema.parse(results));
+export function exportStatusResultsToJSON(
+  exportStatusResults: ExportStatusResults,
+): string {
+  return JSON.stringify(
+    ExportStatusResults$outboundSchema.parse(exportStatusResults),
+  );
 }
 
-export function resultsFromJSON(
+export function exportStatusResultsFromJSON(
   jsonString: string,
-): SafeParseResult<Results, SDKValidationError> {
+): SafeParseResult<ExportStatusResults, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => Results$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'Results' from JSON`,
+    (x) => ExportStatusResults$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ExportStatusResults' from JSON`,
   );
 }
 
@@ -217,26 +232,30 @@ export const ExportStatus$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   status: ExportStatusStatus$inboundSchema,
-  progress: z.lazy(() => Progress$inboundSchema).optional(),
+  progress: z.lazy(() => ExportStatusProgress$inboundSchema).optional(),
   startTime: z.string().datetime({ offset: true }).transform(v => new Date(v))
     .optional(),
   estimatedCompletion: z.string().datetime({ offset: true }).transform(v =>
     new Date(v)
   ).optional(),
+  completionTime: z.string().datetime({ offset: true }).transform(v =>
+    new Date(v)
+  ).optional(),
   failureTime: z.string().datetime({ offset: true }).transform(v => new Date(v))
     .optional(),
-  results: z.lazy(() => Results$inboundSchema).optional(),
+  results: z.lazy(() => ExportStatusResults$inboundSchema).optional(),
   error: z.string().optional(),
 });
 
 /** @internal */
 export type ExportStatus$Outbound = {
   status: string;
-  progress?: Progress$Outbound | undefined;
+  progress?: ExportStatusProgress$Outbound | undefined;
   startTime?: string | undefined;
   estimatedCompletion?: string | undefined;
+  completionTime?: string | undefined;
   failureTime?: string | undefined;
-  results?: Results$Outbound | undefined;
+  results?: ExportStatusResults$Outbound | undefined;
   error?: string | undefined;
 };
 
@@ -247,11 +266,12 @@ export const ExportStatus$outboundSchema: z.ZodType<
   ExportStatus
 > = z.object({
   status: ExportStatusStatus$outboundSchema,
-  progress: z.lazy(() => Progress$outboundSchema).optional(),
+  progress: z.lazy(() => ExportStatusProgress$outboundSchema).optional(),
   startTime: z.date().transform(v => v.toISOString()).optional(),
   estimatedCompletion: z.date().transform(v => v.toISOString()).optional(),
+  completionTime: z.date().transform(v => v.toISOString()).optional(),
   failureTime: z.date().transform(v => v.toISOString()).optional(),
-  results: z.lazy(() => Results$outboundSchema).optional(),
+  results: z.lazy(() => ExportStatusResults$outboundSchema).optional(),
   error: z.string().optional(),
 });
 

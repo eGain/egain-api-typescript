@@ -25,9 +25,9 @@ async function run() {
   const result = await egain.portal.search.aiSearch({
     q: "fair lending",
     portalID: "PROD-1000",
-    dollarFilterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-3210",
     language: "en-US",
-    dollarFilterTags: {
+    filterTags: {
       "PROD-1234": [
         "PROD-2000",
         "PROD-2003",
@@ -36,7 +36,7 @@ async function run() {
         "PROD-2007",
       ],
     },
-    dollarFilterTopicIds: [
+    filterTopicIds: [
       "PROD-2000",
     ],
   });
@@ -65,9 +65,9 @@ async function run() {
   const res = await portalSearchAiSearch(egain, {
     q: "fair lending",
     portalID: "PROD-1000",
-    dollarFilterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-3210",
     language: "en-US",
-    dollarFilterTags: {
+    filterTags: {
       "PROD-1234": [
         "PROD-2000",
         "PROD-2003",
@@ -76,7 +76,7 @@ async function run() {
         "PROD-2007",
       ],
     },
-    dollarFilterTopicIds: [
+    filterTopicIds: [
       "PROD-2000",
     ],
   });

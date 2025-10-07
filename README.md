@@ -16,7 +16,8 @@ Developer-friendly & type-safe Typescript SDK specifically catered to leverage *
 <!-- Start Summary [summary] -->
 ## Summary
 
-Knowledge Portal Manager APIs: ### License
+Knowledge Portal Manager APIs: 
+### License
   The following licenses are required to use the Knowledge Access APIs:
   * If the user is an agent, then the *Knowledge + AI* license is required.
   * If the user is a customer, the *Self-Service* and *Advanced Self-Service* licenses must be available.
@@ -37,6 +38,11 @@ The following Resources have predefined limits for specific access attributes fo
 |  |Number of articles to display in announcements | 25
 |  |Maximum related articles in portal setting | 100
 |  |Usage links and link groups setup for a portal | 25
+    
+      
+
+
+For more information about the API: [Full SDK Documentation](https://github.com/eGain/egain-api-typescript)
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
@@ -116,9 +122,9 @@ async function run() {
   const result = await egain.aiservices.retrieve.retrieveChunks({
     q: "fair lending",
     portalID: "PROD-1000",
-    dollarFilterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-3210",
     language: "en-US",
-    dollarFilterTags: {
+    filterTags: {
       "PROD-1234": [
         "PROD-2000",
         "PROD-2003",
@@ -165,9 +171,9 @@ async function run() {
   const result = await egain.aiservices.retrieve.retrieveChunks({
     q: "fair lending",
     portalID: "PROD-1000",
-    dollarFilterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-3210",
     language: "en-US",
-    dollarFilterTags: {
+    filterTags: {
       "PROD-1234": [
         "PROD-2000",
         "PROD-2003",
@@ -502,9 +508,9 @@ async function run() {
   const result = await egain.aiservices.retrieve.retrieveChunks({
     q: "fair lending",
     portalID: "PROD-1000",
-    dollarFilterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-3210",
     language: "en-US",
-    dollarFilterTags: {
+    filterTags: {
       "PROD-1234": [
         "PROD-2000",
         "PROD-2003",
@@ -560,9 +566,9 @@ async function run() {
   const result = await egain.aiservices.retrieve.retrieveChunks({
     q: "fair lending",
     portalID: "PROD-1000",
-    dollarFilterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-3210",
     language: "en-US",
-    dollarFilterTags: {
+    filterTags: {
       "PROD-1234": [
         "PROD-2000",
         "PROD-2003",
@@ -700,9 +706,9 @@ async function run() {
   const result = await egain.aiservices.retrieve.retrieveChunks({
     q: "fair lending",
     portalID: "PROD-1000",
-    dollarFilterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-3210",
     language: "en-US",
-    dollarFilterTags: {
+    filterTags: {
       "PROD-1234": [
         "PROD-2000",
         "PROD-2003",
@@ -740,9 +746,9 @@ async function run() {
   const result = await egain.aiservices.retrieve.retrieveChunks({
     q: "fair lending",
     portalID: "PROD-1000",
-    dollarFilterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-3210",
     language: "en-US",
-    dollarFilterTags: {
+    filterTags: {
       "PROD-1234": [
         "PROD-2000",
         "PROD-2003",
@@ -779,9 +785,9 @@ async function run() {
   const result = await egain.aiservices.retrieve.retrieveChunks({
     q: "fair lending",
     portalID: "PROD-1000",
-    dollarFilterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-3210",
     language: "en-US",
-    dollarFilterTags: {
+    filterTags: {
       "PROD-1234": [
         "PROD-2000",
         "PROD-2003",

@@ -23,6 +23,10 @@ let value: AISearchResponse = {
             ],
           },
         ],
+        articleTypeAttributes: {
+          typeName: "General",
+          articleTypeId: 243500000023393,
+        },
         relevanceScore: 3941.01,
       },
     ],

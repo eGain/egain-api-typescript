@@ -27,4 +27,7 @@ The following Resources have predefined limits for specific access attributes fo
       
 
 
+Full SDK Documentation
+<https://github.com/eGain/egain-api-typescript>
+
 ### Available Operations

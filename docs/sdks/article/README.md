@@ -545,11 +545,11 @@ async function run() {
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
     searchProfileId: "959500000204621",
-    dollarFilterTopicId: "PROD-1065",
+    filterTopicId: "PROD-1065",
     articleResultAdditionalAttributes: [
       "averageRating",
     ],
-    dollarFilterTags: "PROD-5381",
+    filterTags: "PROD-5381",
     workflowMilestone: "publish",
     language: "en-US",
     sort: "name",
@@ -581,11 +581,11 @@ async function run() {
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
     searchProfileId: "959500000204621",
-    dollarFilterTopicId: "PROD-1065",
+    filterTopicId: "PROD-1065",
     articleResultAdditionalAttributes: [
       "averageRating",
     ],
-    dollarFilterTags: "PROD-5381",
+    filterTags: "PROD-5381",
     workflowMilestone: "publish",
     language: "en-US",
     sort: "name",
@@ -824,7 +824,7 @@ async function run() {
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
     articleID: "PROD-2996",
-    dollarFilterTags: "PROD-5381",
+    filterTags: "PROD-5381",
     articleResultAdditionalAttributes: [
       "averageRating",
     ],
@@ -857,7 +857,7 @@ async function run() {
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
     articleID: "PROD-2996",
-    dollarFilterTags: "PROD-5381",
+    filterTags: "PROD-5381",
     articleResultAdditionalAttributes: [
       "averageRating",
     ],
@@ -935,7 +935,7 @@ async function run() {
   const result = await egain.portal.article.getAnnouncementArticles({
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
-    dollarFilterTags: "PROD-5381",
+    filterTags: "PROD-5381",
     articleResultAdditionalAttributes: [
       "averageRating",
     ],
@@ -967,7 +967,7 @@ async function run() {
   const res = await portalArticleGetAnnouncementArticles(egain, {
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
-    dollarFilterTags: "PROD-5381",
+    filterTags: "PROD-5381",
     articleResultAdditionalAttributes: [
       "averageRating",
     ],

@@ -94,32 +94,17 @@ export type OpensearchHighlightingRaw = {
 };
 
 /**
- * Indicates the article category name.
- */
-export const ArticleAISearchResultTypeName = {
-  General: "General",
-  GuidedHelp: "Guided Help",
-  DataLink: "Data Link",
-  TopicHome: "Topic Home",
-  Suggestion: "Suggestion",
-  VirtaulAssistantAction: "Virtaul Assistant Action",
-  RichMessage: "Rich Message",
-} as const;
-/**
- * Indicates the article category name.
- */
-export type ArticleAISearchResultTypeName = ClosedEnum<
-  typeof ArticleAISearchResultTypeName
->;
-
-/**
- * The type of the Article.
+ * The type of the Article and its attributes.
  */
 export type ArticleTypeAttributes = {
   /**
    * Indicates the article category name.
    */
-  typeName?: ArticleAISearchResultTypeName | undefined;
+  typeName?: string | undefined;
+  /**
+   * The ID of the Article Type.
+   */
+  articleTypeId?: any | undefined;
 };
 
 /**
@@ -214,7 +199,7 @@ export type ArticleAISearchResult = {
   tagCategories?: Array<SchemasTags> | undefined;
   keywords?: string | undefined;
   /**
-   * The type of the Article.
+   * The type of the Article and its attributes.
    */
   articleTypeAttributes?: ArticleTypeAttributes | undefined;
   /**
@@ -410,38 +395,19 @@ export function opensearchHighlightingRawFromJSON(
 }
 
 /** @internal */
-export const ArticleAISearchResultTypeName$inboundSchema: z.ZodNativeEnum<
-  typeof ArticleAISearchResultTypeName
-> = z.nativeEnum(ArticleAISearchResultTypeName);
-
-/** @internal */
-export const ArticleAISearchResultTypeName$outboundSchema: z.ZodNativeEnum<
-  typeof ArticleAISearchResultTypeName
-> = ArticleAISearchResultTypeName$inboundSchema;
-
-/**
- * @internal
- * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
- */
-export namespace ArticleAISearchResultTypeName$ {
-  /** @deprecated use `ArticleAISearchResultTypeName$inboundSchema` instead. */
-  export const inboundSchema = ArticleAISearchResultTypeName$inboundSchema;
-  /** @deprecated use `ArticleAISearchResultTypeName$outboundSchema` instead. */
-  export const outboundSchema = ArticleAISearchResultTypeName$outboundSchema;
-}
-
-/** @internal */
 export const ArticleTypeAttributes$inboundSchema: z.ZodType<
   ArticleTypeAttributes,
   z.ZodTypeDef,
   unknown
 > = z.object({
-  typeName: ArticleAISearchResultTypeName$inboundSchema.optional(),
+  typeName: z.string().optional(),
+  articleTypeId: z.any().optional(),
 });
 
 /** @internal */
 export type ArticleTypeAttributes$Outbound = {
   typeName?: string | undefined;
+  articleTypeId?: any | undefined;
 };
 
 /** @internal */
@@ -450,7 +416,8 @@ export const ArticleTypeAttributes$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   ArticleTypeAttributes
 > = z.object({
-  typeName: ArticleAISearchResultTypeName$outboundSchema.optional(),
+  typeName: z.string().optional(),
+  articleTypeId: z.any().optional(),
 });
 
 /**

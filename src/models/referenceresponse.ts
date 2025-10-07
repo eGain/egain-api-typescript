@@ -7,6 +7,12 @@ import { safeParse } from "../lib/schemas.js";
 import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
+import {
+  TopicBreadcrumb,
+  TopicBreadcrumb$inboundSchema,
+  TopicBreadcrumb$Outbound,
+  TopicBreadcrumb$outboundSchema,
+} from "./topicbreadcrumb.js";
 
 /**
  * Format of the source document (HTML, Doc, or PDF).
@@ -38,20 +44,6 @@ export type ReferenceResponseSource = ClosedEnum<
 >;
 
 /**
- * Defines the relationship between this resource and another object.
- */
-export type ReferenceResponseLink = {
-  /**
-   * Defines the relationship between a linked resource and the current object. <br><br> For example: self, prev, next or an object name such as 'user', 'folder' etc.
-   */
-  rel?: string | undefined;
-  /**
-   * The URL that specifies the link's destination.
-   */
-  href?: string | undefined;
-};
-
-/**
  * One document used in generated response
  */
 export type ReferenceResponse = {
@@ -76,9 +68,9 @@ export type ReferenceResponse = {
    */
   source: ReferenceResponseSource;
   /**
-   * Defines the relationship between this resource and another object.
+   * This schema contains one or more TopicSummary instances.
    */
-  link?: ReferenceResponseLink | undefined;
+  topicBreadCrumb?: TopicBreadcrumb | undefined;
 };
 
 /** @internal */
@@ -124,63 +116,6 @@ export namespace ReferenceResponseSource$ {
 }
 
 /** @internal */
-export const ReferenceResponseLink$inboundSchema: z.ZodType<
-  ReferenceResponseLink,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  rel: z.string().optional(),
-  href: z.string().optional(),
-});
-
-/** @internal */
-export type ReferenceResponseLink$Outbound = {
-  rel?: string | undefined;
-  href?: string | undefined;
-};
-
-/** @internal */
-export const ReferenceResponseLink$outboundSchema: z.ZodType<
-  ReferenceResponseLink$Outbound,
-  z.ZodTypeDef,
-  ReferenceResponseLink
-> = z.object({
-  rel: z.string().optional(),
-  href: z.string().optional(),
-});
-
-/**
- * @internal
- * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
- */
-export namespace ReferenceResponseLink$ {
-  /** @deprecated use `ReferenceResponseLink$inboundSchema` instead. */
-  export const inboundSchema = ReferenceResponseLink$inboundSchema;
-  /** @deprecated use `ReferenceResponseLink$outboundSchema` instead. */
-  export const outboundSchema = ReferenceResponseLink$outboundSchema;
-  /** @deprecated use `ReferenceResponseLink$Outbound` instead. */
-  export type Outbound = ReferenceResponseLink$Outbound;
-}
-
-export function referenceResponseLinkToJSON(
-  referenceResponseLink: ReferenceResponseLink,
-): string {
-  return JSON.stringify(
-    ReferenceResponseLink$outboundSchema.parse(referenceResponseLink),
-  );
-}
-
-export function referenceResponseLinkFromJSON(
-  jsonString: string,
-): SafeParseResult<ReferenceResponseLink, SDKValidationError> {
-  return safeParse(
-    jsonString,
-    (x) => ReferenceResponseLink$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'ReferenceResponseLink' from JSON`,
-  );
-}
-
-/** @internal */
 export const ReferenceResponse$inboundSchema: z.ZodType<
   ReferenceResponse,
   z.ZodTypeDef,
@@ -191,7 +126,7 @@ export const ReferenceResponse$inboundSchema: z.ZodType<
   docName: z.string().optional(),
   docType: ReferenceResponseDocType$inboundSchema,
   source: ReferenceResponseSource$inboundSchema,
-  link: z.lazy(() => ReferenceResponseLink$inboundSchema).optional(),
+  topicBreadCrumb: TopicBreadcrumb$inboundSchema.optional(),
 });
 
 /** @internal */
@@ -201,7 +136,7 @@ export type ReferenceResponse$Outbound = {
   docName?: string | undefined;
   docType: string;
   source: string;
-  link?: ReferenceResponseLink$Outbound | undefined;
+  topicBreadCrumb?: TopicBreadcrumb$Outbound | undefined;
 };
 
 /** @internal */
@@ -215,7 +150,7 @@ export const ReferenceResponse$outboundSchema: z.ZodType<
   docName: z.string().optional(),
   docType: ReferenceResponseDocType$outboundSchema,
   source: ReferenceResponseSource$outboundSchema,
-  link: z.lazy(() => ReferenceResponseLink$outboundSchema).optional(),
+  topicBreadCrumb: TopicBreadcrumb$outboundSchema.optional(),
 });
 
 /**

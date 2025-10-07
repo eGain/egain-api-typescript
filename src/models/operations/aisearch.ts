@@ -3,7 +3,6 @@
  */
 
 import * as z from "zod";
-import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
@@ -23,7 +22,7 @@ export type AiSearchRequest = {
    *
    * @remarks
    */
-  dollarFilterUserProfileID?: string | undefined;
+  filterUserProfileID?: string | undefined;
   /**
    * The language that describes the details of a resource. Resources available in different languages may differ from each other. <br><br> If lang is not passed, then the portal's default language is used.
    */
@@ -34,27 +33,15 @@ export type AiSearchRequest = {
    * @remarks
    * and each value is an array of **Tag IDs** for that category.
    */
-  dollarFilterTags?: { [k: string]: Array<string> } | undefined;
+  filterTags?: { [k: string]: Array<string> } | undefined;
   /**
    * An array of topic IDs. It is used to restrict search results to specific topics.
    */
-  dollarFilterTopicIds?: Array<string> | undefined;
-  /**
-   * An array of topic IDs that will be excluded from the search. It includes articles that belong to the topic.
-   */
-  dollarFilterExcludeTopicIds?: Array<string> | undefined;
-  /**
-   * Type of resource to be fetched.
-   */
-  resourceType?: models.ResourceTypeParameter | undefined;
+  filterTopicIds?: Array<string> | undefined;
   /**
    * One or more comma-separated names for article custom attributes defined by the user to be returned.
    */
   articleCustomAdditionalAttributes?: string | undefined;
-  /**
-   * One or more comma-separated names for topic custom attributes defined by the user to be returned.
-   */
-  topicCustomAdditionalAttributes?: string | undefined;
   /**
    * Pagination parameter that specifies the page number of results to be returned. Used in conjunction with $pagesize.
    */
@@ -73,37 +60,24 @@ export const AiSearchRequest$inboundSchema: z.ZodType<
 > = z.object({
   q: z.string(),
   portalID: z.string(),
-  "$filter[userProfileID]": z.string().optional(),
+  filterUserProfileID: z.string().optional(),
   language: models.LanguageCodeParameter$inboundSchema.optional(),
-  "$filter[tags]": z.record(z.array(z.string())).optional(),
-  "$filter[topicIds]": z.array(z.string()).optional(),
-  "$filter[excludeTopicIds]": z.array(z.string()).optional(),
-  resourceType: models.ResourceTypeParameter$inboundSchema.optional(),
+  filterTags: z.record(z.array(z.string())).optional(),
+  filterTopicIds: z.array(z.string()).optional(),
   articleCustomAdditionalAttributes: z.string().optional(),
-  topicCustomAdditionalAttributes: z.string().optional(),
   pagenum: z.number().int().default(1),
   pagesize: z.number().int().default(10),
-}).transform((v) => {
-  return remap$(v, {
-    "$filter[userProfileID]": "dollarFilterUserProfileID",
-    "$filter[tags]": "dollarFilterTags",
-    "$filter[topicIds]": "dollarFilterTopicIds",
-    "$filter[excludeTopicIds]": "dollarFilterExcludeTopicIds",
-  });
 });
 
 /** @internal */
 export type AiSearchRequest$Outbound = {
   q: string;
   portalID: string;
-  "$filter[userProfileID]"?: string | undefined;
+  filterUserProfileID?: string | undefined;
   language?: string | undefined;
-  "$filter[tags]"?: { [k: string]: Array<string> } | undefined;
-  "$filter[topicIds]"?: Array<string> | undefined;
-  "$filter[excludeTopicIds]"?: Array<string> | undefined;
-  resourceType?: string | undefined;
+  filterTags?: { [k: string]: Array<string> } | undefined;
+  filterTopicIds?: Array<string> | undefined;
   articleCustomAdditionalAttributes?: string | undefined;
-  topicCustomAdditionalAttributes?: string | undefined;
   pagenum: number;
   pagesize: number;
 };
@@ -116,23 +90,13 @@ export const AiSearchRequest$outboundSchema: z.ZodType<
 > = z.object({
   q: z.string(),
   portalID: z.string(),
-  dollarFilterUserProfileID: z.string().optional(),
+  filterUserProfileID: z.string().optional(),
   language: models.LanguageCodeParameter$outboundSchema.optional(),
-  dollarFilterTags: z.record(z.array(z.string())).optional(),
-  dollarFilterTopicIds: z.array(z.string()).optional(),
-  dollarFilterExcludeTopicIds: z.array(z.string()).optional(),
-  resourceType: models.ResourceTypeParameter$outboundSchema.optional(),
+  filterTags: z.record(z.array(z.string())).optional(),
+  filterTopicIds: z.array(z.string()).optional(),
   articleCustomAdditionalAttributes: z.string().optional(),
-  topicCustomAdditionalAttributes: z.string().optional(),
   pagenum: z.number().int().default(1),
   pagesize: z.number().int().default(10),
-}).transform((v) => {
-  return remap$(v, {
-    dollarFilterUserProfileID: "$filter[userProfileID]",
-    dollarFilterTags: "$filter[tags]",
-    dollarFilterTopicIds: "$filter[topicIds]",
-    dollarFilterExcludeTopicIds: "$filter[excludeTopicIds]",
-  });
 });
 
 /**

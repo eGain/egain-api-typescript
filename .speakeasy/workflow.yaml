@@ -6,6 +6,8 @@ sources:
             - location: ../speakeasy/aiservices/v4/api-with-overlay.yaml
             - location: ../speakeasy/contentmgr/v4/api-with-overlay.yaml
             - location: ../speakeasy/portalmgr/v4/api-with-overlay.yaml
+        overlays:
+            - location: ../speakeasy/languageoverlays/typescript.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/egain-corporation/portalmgr/knowledge-portal-manager-ap-is

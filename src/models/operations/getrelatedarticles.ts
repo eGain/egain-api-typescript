@@ -25,7 +25,7 @@ export type GetRelatedArticlesRequest = {
   /**
    * A comma separated list of Tag / Tag Group IDs. The query results will be filtered by the tags that are specified.<br><br>Tag IDs and Tag Group IDs can be mixed together.
    */
-  dollarFilterTags?: string | undefined;
+  filterTags?: string | undefined;
   /**
    * The attributes of an Article to be returned *in addition to* the default list of attributes, listed below. Multiple additional attributes can be specified using a comma-separated list. Passing 'all' will return all attributes.
    *
@@ -78,7 +78,7 @@ export const GetRelatedArticlesRequest$inboundSchema: z.ZodType<
   "Accept-Language": models.AcceptLanguage$inboundSchema,
   portalID: z.string(),
   articleID: z.string(),
-  "$filter[tags]": z.string().optional(),
+  filterTags: z.string().optional(),
   articleResultAdditionalAttributes: z.array(
     models.ArticleResultAdditionalAttributes$inboundSchema,
   ).optional(),
@@ -89,7 +89,6 @@ export const GetRelatedArticlesRequest$inboundSchema: z.ZodType<
 }).transform((v) => {
   return remap$(v, {
     "Accept-Language": "acceptLanguage",
-    "$filter[tags]": "dollarFilterTags",
   });
 });
 
@@ -98,7 +97,7 @@ export type GetRelatedArticlesRequest$Outbound = {
   "Accept-Language": string;
   portalID: string;
   articleID: string;
-  "$filter[tags]"?: string | undefined;
+  filterTags?: string | undefined;
   articleResultAdditionalAttributes?: Array<string> | undefined;
   workflowMilestone?: string | undefined;
   language?: string | undefined;
@@ -115,7 +114,7 @@ export const GetRelatedArticlesRequest$outboundSchema: z.ZodType<
   acceptLanguage: models.AcceptLanguage$outboundSchema,
   portalID: z.string(),
   articleID: z.string(),
-  dollarFilterTags: z.string().optional(),
+  filterTags: z.string().optional(),
   articleResultAdditionalAttributes: z.array(
     models.ArticleResultAdditionalAttributes$outboundSchema,
   ).optional(),
@@ -126,7 +125,6 @@ export const GetRelatedArticlesRequest$outboundSchema: z.ZodType<
 }).transform((v) => {
   return remap$(v, {
     acceptLanguage: "Accept-Language",
-    dollarFilterTags: "$filter[tags]",
   });
 });
 

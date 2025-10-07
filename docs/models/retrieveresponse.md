@@ -14,6 +14,13 @@ let value: RetrieveResponse = {
         name: "<value>",
         docType: "Doc",
         source: "eGain Attachment",
+        topicBreadCrumb: {
+          topicSummary: [
+            {
+              id: "PROD-1921",
+            },
+          ],
+        },
       },
     ],
     answerType: "certified",
@@ -27,6 +34,13 @@ let value: RetrieveResponse = {
       source: "eGain Attachment",
       snippet: "Fair lending is a part of...",
       relevanceScore: 2545.64,
+      topicBreadCrumb: {
+        topicSummary: [
+          {
+            id: "PROD-1921",
+          },
+        ],
+      },
     },
   ],
   channel: {

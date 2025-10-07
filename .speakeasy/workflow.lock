@@ -1,9 +1,9 @@
-speakeasyVersion: 1.634.2
+speakeasyVersion: 1.635.1
 sources:
     Knowledge Portal Manager APIs:
         sourceNamespace: knowledge-portal-manager-ap-is
-        sourceRevisionDigest: sha256:5dd444e80ae2906cb26df3a6a32fd11b009b427fa57c4d8b420749906117a112
-        sourceBlobDigest: sha256:541ebb2cd12b97688753682ee0f9027fc095742e9bf3c15d20acb00f7cefbad2
+        sourceRevisionDigest: sha256:37b68f1ac49557f5379bfadd2605dfc0d6ded58f4a246eaca0f6c9f4572ffdc9
+        sourceBlobDigest: sha256:d3043f0b279cdffd6458b18f27860891e5ab96a12cf9cdafb4f65dd3ac5d5e79
         tags:
             - latest
             - 4.0.0
@@ -11,10 +11,10 @@ targets:
     typescript-sdk:
         source: Knowledge Portal Manager APIs
         sourceNamespace: knowledge-portal-manager-ap-is
-        sourceRevisionDigest: sha256:5dd444e80ae2906cb26df3a6a32fd11b009b427fa57c4d8b420749906117a112
-        sourceBlobDigest: sha256:541ebb2cd12b97688753682ee0f9027fc095742e9bf3c15d20acb00f7cefbad2
+        sourceRevisionDigest: sha256:37b68f1ac49557f5379bfadd2605dfc0d6ded58f4a246eaca0f6c9f4572ffdc9
+        sourceBlobDigest: sha256:d3043f0b279cdffd6458b18f27860891e5ab96a12cf9cdafb4f65dd3ac5d5e79
         codeSamplesNamespace: knowledge-portal-manager-ap-is-typescript-code-samples
-        codeSamplesRevisionDigest: sha256:8aa2a7d92418d92951fdf5a99b72d965936ccf4717cb04363dd4521dc8847768
+        codeSamplesRevisionDigest: sha256:23b5379bbc900acb49b54bcfbdb8f2bcceca21861358958fa25aad5b116cf5e6
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -24,6 +24,8 @@ workflow:
                 - location: ../speakeasy/aiservices/v4/api-with-overlay.yaml
                 - location: ../speakeasy/contentmgr/v4/api-with-overlay.yaml
                 - location: ../speakeasy/portalmgr/v4/api-with-overlay.yaml
+            overlays:
+                - location: ../speakeasy/languageoverlays/typescript.yaml
             output: .speakeasy/out.openapi.yaml
             registry:
                 location: registry.speakeasyapi.dev/egain-corporation/portalmgr/knowledge-portal-manager-ap-is

@@ -3,6 +3,7 @@
  */
 
 import * as z from "zod";
+import * as operations from "../operations/index.js";
 import { EgainError } from "./egainerror.js";
 
 /**
@@ -27,37 +28,53 @@ export type ServiceUnavailableErrorData = {
    *
    * @remarks
    *
-   * The overall health status of the service. When unhealthy:
-   * - Service may not process requests correctly
-   * - Performance may be significantly degraded
-   * - Some features may be unavailable
-   * - Immediate attention is required
+   * The overall health status of the service. Possible values:
+   * - **healthy**: Service is operating normally
+   * - **degraded**: Service is functional but with performance issues
+   * - **unhealthy**: Service is experiencing critical issues
+   * - **maintenance**: Service is under planned maintenance
    */
-  status?: string | undefined;
+  status?: operations.ServiceUnavailableStatus | undefined;
   /**
    * **Health Check Timestamp**
    *
    * @remarks
    *
-   * The exact date and time when this health check was performed. This helps with:
-   * - Incident timeline analysis
-   * - Problem duration tracking
-   * - Recovery time measurement
-   * - Historical incident analysis
+   * The exact date and time when this health check was performed. This is useful for:
+   * - Tracking health check frequency
+   * - Correlating with other system events
+   * - Monitoring health check response times
+   * - Historical health trend analysis
    */
-  timestamp?: Date | undefined;
+  timestamp?: any | undefined;
   /**
    * **API Version**
    *
    * @remarks
    *
-   * The current version of the Import Content API. This information is useful for:
-   * - Support team identification
-   * - Known issue correlation
-   * - Version-specific troubleshooting
-   * - Upgrade planning
+   * The current version of the Import Content API. This helps with:
+   * - Version compatibility checking
+   * - Feature availability verification
+   * - Upgrade planning and coordination
+   * - Support and troubleshooting
    */
   version?: string | undefined;
+  /**
+   * **Issues**:
+   *
+   * @remarks
+   *
+   * List of detected health problems
+   */
+  issues?: Array<string> | undefined;
+  /**
+   * **Comonents**:
+   *
+   * @remarks
+   *
+   * Health status of import service componenets
+   */
+  components?: operations.Components | undefined;
 };
 
 /**
@@ -82,37 +99,53 @@ export class ServiceUnavailableError extends EgainError {
    *
    * @remarks
    *
-   * The overall health status of the service. When unhealthy:
-   * - Service may not process requests correctly
-   * - Performance may be significantly degraded
-   * - Some features may be unavailable
-   * - Immediate attention is required
+   * The overall health status of the service. Possible values:
+   * - **healthy**: Service is operating normally
+   * - **degraded**: Service is functional but with performance issues
+   * - **unhealthy**: Service is experiencing critical issues
+   * - **maintenance**: Service is under planned maintenance
    */
-  status?: string | undefined;
+  status?: operations.ServiceUnavailableStatus | undefined;
   /**
    * **Health Check Timestamp**
    *
    * @remarks
    *
-   * The exact date and time when this health check was performed. This helps with:
-   * - Incident timeline analysis
-   * - Problem duration tracking
-   * - Recovery time measurement
-   * - Historical incident analysis
+   * The exact date and time when this health check was performed. This is useful for:
+   * - Tracking health check frequency
+   * - Correlating with other system events
+   * - Monitoring health check response times
+   * - Historical health trend analysis
    */
-  timestamp?: Date | undefined;
+  timestamp?: any | undefined;
   /**
    * **API Version**
    *
    * @remarks
    *
-   * The current version of the Import Content API. This information is useful for:
-   * - Support team identification
-   * - Known issue correlation
-   * - Version-specific troubleshooting
-   * - Upgrade planning
+   * The current version of the Import Content API. This helps with:
+   * - Version compatibility checking
+   * - Feature availability verification
+   * - Upgrade planning and coordination
+   * - Support and troubleshooting
    */
   version?: string | undefined;
+  /**
+   * **Issues**:
+   *
+   * @remarks
+   *
+   * List of detected health problems
+   */
+  issues?: Array<string> | undefined;
+  /**
+   * **Comonents**:
+   *
+   * @remarks
+   *
+   * Health status of import service componenets
+   */
+  components?: operations.Components | undefined;
 
   /** The original data that was passed to this error instance. */
   data$: ServiceUnavailableErrorData;
@@ -129,6 +162,8 @@ export class ServiceUnavailableError extends EgainError {
     if (err.status != null) this.status = err.status;
     if (err.timestamp != null) this.timestamp = err.timestamp;
     if (err.version != null) this.version = err.version;
+    if (err.issues != null) this.issues = err.issues;
+    if (err.components != null) this.components = err.components;
 
     this.name = "ServiceUnavailableError";
   }
@@ -140,10 +175,11 @@ export const ServiceUnavailableError$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
-  status: z.string().optional(),
-  timestamp: z.string().datetime({ offset: true }).transform(v => new Date(v))
-    .optional(),
+  status: operations.ServiceUnavailableStatus$inboundSchema.optional(),
+  timestamp: z.any().optional(),
   version: z.string().optional(),
+  issues: z.array(z.string()).optional(),
+  components: z.lazy(() => operations.Components$inboundSchema).optional(),
   request$: z.instanceof(Request),
   response$: z.instanceof(Response),
   body$: z.string(),
@@ -159,8 +195,10 @@ export const ServiceUnavailableError$inboundSchema: z.ZodType<
 /** @internal */
 export type ServiceUnavailableError$Outbound = {
   status?: string | undefined;
-  timestamp?: string | undefined;
+  timestamp?: any | undefined;
   version?: string | undefined;
+  issues?: Array<string> | undefined;
+  components?: operations.Components$Outbound | undefined;
 };
 
 /** @internal */
@@ -171,9 +209,11 @@ export const ServiceUnavailableError$outboundSchema: z.ZodType<
 > = z.instanceof(ServiceUnavailableError)
   .transform(v => v.data$)
   .pipe(z.object({
-    status: z.string().optional(),
-    timestamp: z.date().transform(v => v.toISOString()).optional(),
+    status: operations.ServiceUnavailableStatus$outboundSchema.optional(),
+    timestamp: z.any().optional(),
     version: z.string().optional(),
+    issues: z.array(z.string()).optional(),
+    components: z.lazy(() => operations.Components$outboundSchema).optional(),
   }));
 
 /**

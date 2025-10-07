@@ -96,18 +96,15 @@ async function $do(
   const path = pathToFunc("/{portalID}/search")(pathParams);
 
   const query = encodeFormQuery({
-    "$filter[excludeTopicIds]": payload["$filter[excludeTopicIds]"],
-    "$filter[tags]": payload["$filter[tags]"],
-    "$filter[topicIds]": payload["$filter[topicIds]"],
-    "$filter[userProfileID]": payload["$filter[userProfileID]"],
+    "$filter[tags]": payload.filterTags,
+    "$filter[topicIds]": payload.filterTopicIds,
+    "$filter[userProfileID]": payload.filterUserProfileID,
     "$lang": payload.language,
     "$pagenum": payload.pagenum,
     "$pagesize": payload.pagesize,
     "articleCustomAdditionalAttributes":
       payload.articleCustomAdditionalAttributes,
     "q": payload.q,
-    "resourceType": payload.resourceType,
-    "topicCustomAdditionalAttributes": payload.topicCustomAdditionalAttributes,
   });
 
   const headers = new Headers(compactMap({

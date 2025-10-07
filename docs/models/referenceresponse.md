@@ -12,6 +12,13 @@ let value: ReferenceResponse = {
   name: "<value>",
   docType: "Doc",
   source: "eGain Article",
+  topicBreadCrumb: {
+    topicSummary: [
+      {
+        id: "PROD-1921",
+      },
+    ],
+  },
 };
 ```
 
@@ -24,4 +31,4 @@ let value: ReferenceResponse = {
 | `docName`                                                                                                             | *string*                                                                                                              | :heavy_minus_sign:                                                                                                    | Name of the attachment, if an attachment was used as the source content.                                              |
 | `docType`                                                                                                             | [models.ReferenceResponseDocType](../models/referenceresponsedoctype.md)                                              | :heavy_check_mark:                                                                                                    | Format of the source document (HTML, Doc, or PDF).                                                                    |
 | `source`                                                                                                              | [models.ReferenceResponseSource](../models/referenceresponsesource.md)                                                | :heavy_check_mark:                                                                                                    | Source Type                                                                                                           |
-| `link`                                                                                                                | [models.ReferenceResponseLink](../models/referenceresponselink.md)                                                    | :heavy_minus_sign:                                                                                                    | Defines the relationship between this resource and another object.                                                    |
+| `topicBreadCrumb`                                                                                                     | [models.TopicBreadcrumb](../models/topicbreadcrumb.md)                                                                | :heavy_minus_sign:                                                                                                    | This schema contains one or more TopicSummary instances.                                                              |

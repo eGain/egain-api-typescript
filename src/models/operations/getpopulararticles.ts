@@ -21,7 +21,7 @@ export type GetpopulararticlesRequest = {
   /**
    * The ID of the topic. It is used to restrict to a specific topic.
    */
-  dollarFilterTopicId?: string | undefined;
+  filterTopicId?: string | undefined;
   /**
    * The language that describes the details of a resource. Resources available in different languages may differ from each other.<li>If <code>lang</code> is not passed, then the portal's default language is used.</li>
    */
@@ -29,7 +29,7 @@ export type GetpopulararticlesRequest = {
   /**
    * A comma separated list of Tag / Tag Group IDs. The query results will be filtered by the tags that are specified.<br><br>Tag IDs and Tag Group IDs can be mixed together.
    */
-  dollarFilterTags?: string | undefined;
+  filterTags?: string | undefined;
   /**
    * Pagination parameter that specifies the page number of results to be returned. Used in conjunction with $pagesize.
    */
@@ -73,9 +73,9 @@ export const GetpopulararticlesRequest$inboundSchema: z.ZodType<
 > = z.object({
   "Accept-Language": models.AcceptLanguage$inboundSchema,
   portalID: z.string(),
-  "$filter[topicId]": z.string().optional(),
+  filterTopicId: z.string().optional(),
   language: models.LanguageQueryParameter$inboundSchema.optional(),
-  "$filter[tags]": z.string().optional(),
+  filterTags: z.string().optional(),
   pagenum: z.number().int().default(1),
   pagesize: z.number().int().default(10),
   articleResultAdditionalAttributes: z.array(
@@ -84,8 +84,6 @@ export const GetpopulararticlesRequest$inboundSchema: z.ZodType<
 }).transform((v) => {
   return remap$(v, {
     "Accept-Language": "acceptLanguage",
-    "$filter[topicId]": "dollarFilterTopicId",
-    "$filter[tags]": "dollarFilterTags",
   });
 });
 
@@ -93,9 +91,9 @@ export const GetpopulararticlesRequest$inboundSchema: z.ZodType<
 export type GetpopulararticlesRequest$Outbound = {
   "Accept-Language": string;
   portalID: string;
-  "$filter[topicId]"?: string | undefined;
+  filterTopicId?: string | undefined;
   language?: string | undefined;
-  "$filter[tags]"?: string | undefined;
+  filterTags?: string | undefined;
   pagenum: number;
   pagesize: number;
   articleResultAdditionalAttributes?: Array<string> | undefined;
@@ -109,9 +107,9 @@ export const GetpopulararticlesRequest$outboundSchema: z.ZodType<
 > = z.object({
   acceptLanguage: models.AcceptLanguage$outboundSchema,
   portalID: z.string(),
-  dollarFilterTopicId: z.string().optional(),
+  filterTopicId: z.string().optional(),
   language: models.LanguageQueryParameter$outboundSchema.optional(),
-  dollarFilterTags: z.string().optional(),
+  filterTags: z.string().optional(),
   pagenum: z.number().int().default(1),
   pagesize: z.number().int().default(10),
   articleResultAdditionalAttributes: z.array(
@@ -120,8 +118,6 @@ export const GetpopulararticlesRequest$outboundSchema: z.ZodType<
 }).transform((v) => {
   return remap$(v, {
     acceptLanguage: "Accept-Language",
-    dollarFilterTopicId: "$filter[topicId]",
-    dollarFilterTags: "$filter[tags]",
   });
 });
 

@@ -1,5 +1,7 @@
 # ImportStatusStatus
 
+Status of the job.
+
 ## Example Usage
 
 ```typescript

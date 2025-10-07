@@ -11,7 +11,7 @@ import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 /**
  * Indicates the article category name.
  */
-export const ArticleTypeTypeName = {
+export const TypeName = {
   General: "General",
   GuidedHelp: "Guided Help",
   DataLink: "Data Link",
@@ -23,7 +23,7 @@ export const ArticleTypeTypeName = {
 /**
  * Indicates the article category name.
  */
-export type ArticleTypeTypeName = ClosedEnum<typeof ArticleTypeTypeName>;
+export type TypeName = ClosedEnum<typeof TypeName>;
 
 /**
  * The type of the Article and its attributes.
@@ -36,7 +36,7 @@ export type ArticleType = {
   /**
    * Indicates the article category name.
    */
-  typeName?: ArticleTypeTypeName | undefined;
+  typeName?: TypeName | undefined;
   /**
    * Indicates whether to use Structured Authoring for the Article Type.
    */
@@ -48,24 +48,22 @@ export type ArticleType = {
 };
 
 /** @internal */
-export const ArticleTypeTypeName$inboundSchema: z.ZodNativeEnum<
-  typeof ArticleTypeTypeName
-> = z.nativeEnum(ArticleTypeTypeName);
+export const TypeName$inboundSchema: z.ZodNativeEnum<typeof TypeName> = z
+  .nativeEnum(TypeName);
 
 /** @internal */
-export const ArticleTypeTypeName$outboundSchema: z.ZodNativeEnum<
-  typeof ArticleTypeTypeName
-> = ArticleTypeTypeName$inboundSchema;
+export const TypeName$outboundSchema: z.ZodNativeEnum<typeof TypeName> =
+  TypeName$inboundSchema;
 
 /**
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace ArticleTypeTypeName$ {
-  /** @deprecated use `ArticleTypeTypeName$inboundSchema` instead. */
-  export const inboundSchema = ArticleTypeTypeName$inboundSchema;
-  /** @deprecated use `ArticleTypeTypeName$outboundSchema` instead. */
-  export const outboundSchema = ArticleTypeTypeName$outboundSchema;
+export namespace TypeName$ {
+  /** @deprecated use `TypeName$inboundSchema` instead. */
+  export const inboundSchema = TypeName$inboundSchema;
+  /** @deprecated use `TypeName$outboundSchema` instead. */
+  export const outboundSchema = TypeName$outboundSchema;
 }
 
 /** @internal */
@@ -75,7 +73,7 @@ export const ArticleType$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   articleCategoryId: z.number().int().optional(),
-  typeName: ArticleTypeTypeName$inboundSchema.optional(),
+  typeName: TypeName$inboundSchema.optional(),
   useStructuredAuthoring: z.boolean().optional(),
   articleTypeId: z.string().optional(),
 });
@@ -95,7 +93,7 @@ export const ArticleType$outboundSchema: z.ZodType<
   ArticleType
 > = z.object({
   articleCategoryId: z.number().int().optional(),
-  typeName: ArticleTypeTypeName$outboundSchema.optional(),
+  typeName: TypeName$outboundSchema.optional(),
   useStructuredAuthoring: z.boolean().optional(),
   articleTypeId: z.string().optional(),
 });

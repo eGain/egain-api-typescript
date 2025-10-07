@@ -19,12 +19,6 @@ import {
   PaginationInfo$Outbound,
   PaginationInfo$outboundSchema,
 } from "./paginationinfo.js";
-import {
-  TopicAISearchResult,
-  TopicAISearchResult$inboundSchema,
-  TopicAISearchResult$Outbound,
-  TopicAISearchResult$outboundSchema,
-} from "./topicaisearchresult.js";
 
 /**
  * The channel where the query originated, e.g., directly from the portal or via a custom integration.
@@ -54,7 +48,6 @@ export type AISearchResponseChannel = {
  */
 export type SearchResults = {
   article?: Array<ArticleAISearchResult> | undefined;
-  topic?: Array<TopicAISearchResult> | undefined;
 };
 
 export type AISearchResponse = {
@@ -151,13 +144,11 @@ export const SearchResults$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   article: z.array(ArticleAISearchResult$inboundSchema).optional(),
-  topic: z.array(TopicAISearchResult$inboundSchema).optional(),
 });
 
 /** @internal */
 export type SearchResults$Outbound = {
   article?: Array<ArticleAISearchResult$Outbound> | undefined;
-  topic?: Array<TopicAISearchResult$Outbound> | undefined;
 };
 
 /** @internal */
@@ -167,7 +158,6 @@ export const SearchResults$outboundSchema: z.ZodType<
   SearchResults
 > = z.object({
   article: z.array(ArticleAISearchResult$outboundSchema).optional(),
-  topic: z.array(TopicAISearchResult$outboundSchema).optional(),
 });
 
 /**

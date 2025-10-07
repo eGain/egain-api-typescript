@@ -1,13 +1,13 @@
-# Progress
+# ExportStatusProgress
 
 Details about the job's progress.
 
 ## Example Usage
 
 ```typescript
-import { Progress } from "@egain/egain-api-typescript/models";
+import { ExportStatusProgress } from "@egain/egain-api-typescript/models";
 
-let value: Progress = {
+let value: ExportStatusProgress = {
   processed: 1500,
   total: 4500,
   percentage: 30,

@@ -116,7 +116,7 @@ async function run() {
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
     listID: "PROD-12345",
-    dollarFilterTopicId: "PROD-1067",
+    filterTopicId: "PROD-1067",
     articleResultAdditionalAttributes: [
       "averageRating",
     ],
@@ -148,7 +148,7 @@ async function run() {
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
     listID: "PROD-12345",
-    dollarFilterTopicId: "PROD-1067",
+    filterTopicId: "PROD-1067",
     articleResultAdditionalAttributes: [
       "averageRating",
     ],

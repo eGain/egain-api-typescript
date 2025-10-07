@@ -7,6 +7,12 @@ import { safeParse } from "../lib/schemas.js";
 import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
+import {
+  TopicBreadcrumb,
+  TopicBreadcrumb$inboundSchema,
+  TopicBreadcrumb$Outbound,
+  TopicBreadcrumb$outboundSchema,
+} from "./topicbreadcrumb.js";
 
 /**
  * Format of the source document (HTML, Doc, or PDF).
@@ -38,20 +44,6 @@ export const SnippetType = {
   ArticleContent: "articleContent",
 } as const;
 export type SnippetType = ClosedEnum<typeof SnippetType>;
-
-/**
- * Defines the relationship between this resource and another object.
- */
-export type SearchResultLink = {
-  /**
-   * Defines the relationship between a linked resource and the current object. <br><br> For example: self, prev, next or an object name such as 'user', 'folder' etc.
-   */
-  rel?: string | undefined;
-  /**
-   * The URL that specifies the link's destination.
-   */
-  href?: string | undefined;
-};
 
 /**
  * Represents a single document or snippet returned by search, along with its metadata and relevance score.
@@ -87,9 +79,9 @@ export type SearchResult = {
    */
   relevanceScore: number;
   /**
-   * Defines the relationship between this resource and another object.
+   * This schema contains one or more TopicSummary instances.
    */
-  link?: SearchResultLink | undefined;
+  topicBreadCrumb?: TopicBreadcrumb | undefined;
 };
 
 /** @internal */
@@ -154,63 +146,6 @@ export namespace SnippetType$ {
 }
 
 /** @internal */
-export const SearchResultLink$inboundSchema: z.ZodType<
-  SearchResultLink,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  rel: z.string().optional(),
-  href: z.string().optional(),
-});
-
-/** @internal */
-export type SearchResultLink$Outbound = {
-  rel?: string | undefined;
-  href?: string | undefined;
-};
-
-/** @internal */
-export const SearchResultLink$outboundSchema: z.ZodType<
-  SearchResultLink$Outbound,
-  z.ZodTypeDef,
-  SearchResultLink
-> = z.object({
-  rel: z.string().optional(),
-  href: z.string().optional(),
-});
-
-/**
- * @internal
- * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
- */
-export namespace SearchResultLink$ {
-  /** @deprecated use `SearchResultLink$inboundSchema` instead. */
-  export const inboundSchema = SearchResultLink$inboundSchema;
-  /** @deprecated use `SearchResultLink$outboundSchema` instead. */
-  export const outboundSchema = SearchResultLink$outboundSchema;
-  /** @deprecated use `SearchResultLink$Outbound` instead. */
-  export type Outbound = SearchResultLink$Outbound;
-}
-
-export function searchResultLinkToJSON(
-  searchResultLink: SearchResultLink,
-): string {
-  return JSON.stringify(
-    SearchResultLink$outboundSchema.parse(searchResultLink),
-  );
-}
-
-export function searchResultLinkFromJSON(
-  jsonString: string,
-): SafeParseResult<SearchResultLink, SDKValidationError> {
-  return safeParse(
-    jsonString,
-    (x) => SearchResultLink$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'SearchResultLink' from JSON`,
-  );
-}
-
-/** @internal */
 export const SearchResult$inboundSchema: z.ZodType<
   SearchResult,
   z.ZodTypeDef,
@@ -224,7 +159,7 @@ export const SearchResult$inboundSchema: z.ZodType<
   snippet: z.string(),
   snippetType: SnippetType$inboundSchema.optional(),
   relevanceScore: z.number(),
-  link: z.lazy(() => SearchResultLink$inboundSchema).optional(),
+  topicBreadCrumb: TopicBreadcrumb$inboundSchema.optional(),
 });
 
 /** @internal */
@@ -237,7 +172,7 @@ export type SearchResult$Outbound = {
   snippet: string;
   snippetType?: string | undefined;
   relevanceScore: number;
-  link?: SearchResultLink$Outbound | undefined;
+  topicBreadCrumb?: TopicBreadcrumb$Outbound | undefined;
 };
 
 /** @internal */
@@ -254,7 +189,7 @@ export const SearchResult$outboundSchema: z.ZodType<
   snippet: z.string(),
   snippetType: SnippetType$outboundSchema.optional(),
   relevanceScore: z.number(),
-  link: z.lazy(() => SearchResultLink$outboundSchema).optional(),
+  topicBreadCrumb: TopicBreadcrumb$outboundSchema.optional(),
 });
 
 /**

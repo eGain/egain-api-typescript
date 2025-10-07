@@ -25,7 +25,7 @@ export type GetArticlesInTopicRequest = {
   /**
    * The ID of the topic. It is used to restrict to a specific topic.
    */
-  dollarFilterTopicId: string;
+  filterTopicId: string;
   /**
    * The attributes of an Article to be returned *in addition to* the default list of attributes, listed below. Multiple additional attributes can be specified using a comma-separated list. Passing 'all' will return all attributes.
    *
@@ -54,7 +54,7 @@ export type GetArticlesInTopicRequest = {
   /**
    * A comma separated list of Tag / Tag Group IDs. The query results will be filtered by the tags that are specified.<br><br>Tag IDs and Tag Group IDs can be mixed together.
    */
-  dollarFilterTags?: string | undefined;
+  filterTags?: string | undefined;
   /**
    * For agents with the View Author Portal or View Staging Portal actions, this determines which version of the Article is returned.<li>'Authoring' returns the most recent version of an Article checked-in by an author.</li><li>'Staging' returns the updated version currently being processed in a workflow.</li><li>'Publish' returns the most recently published version.</li>
    */
@@ -90,11 +90,11 @@ export const GetArticlesInTopicRequest$inboundSchema: z.ZodType<
   "Accept-Language": models.AcceptLanguage$inboundSchema,
   portalID: z.string(),
   searchProfileId: z.string().optional(),
-  "$filter[topicId]": z.string(),
+  filterTopicId: z.string(),
   articleResultAdditionalAttributes: z.array(
     models.ArticleResultAdditionalAttributes$inboundSchema,
   ).optional(),
-  "$filter[tags]": z.string().optional(),
+  filterTags: z.string().optional(),
   workflowMilestone: models.WorkflowMilestone$inboundSchema.optional(),
   language: models.LanguageQueryParameter$inboundSchema.optional(),
   pagenum: z.number().int().default(1),
@@ -104,8 +104,6 @@ export const GetArticlesInTopicRequest$inboundSchema: z.ZodType<
 }).transform((v) => {
   return remap$(v, {
     "Accept-Language": "acceptLanguage",
-    "$filter[topicId]": "dollarFilterTopicId",
-    "$filter[tags]": "dollarFilterTags",
   });
 });
 
@@ -114,9 +112,9 @@ export type GetArticlesInTopicRequest$Outbound = {
   "Accept-Language": string;
   portalID: string;
   searchProfileId?: string | undefined;
-  "$filter[topicId]": string;
+  filterTopicId: string;
   articleResultAdditionalAttributes?: Array<string> | undefined;
-  "$filter[tags]"?: string | undefined;
+  filterTags?: string | undefined;
   workflowMilestone?: string | undefined;
   language?: string | undefined;
   pagenum: number;
@@ -134,11 +132,11 @@ export const GetArticlesInTopicRequest$outboundSchema: z.ZodType<
   acceptLanguage: models.AcceptLanguage$outboundSchema,
   portalID: z.string(),
   searchProfileId: z.string().optional(),
-  dollarFilterTopicId: z.string(),
+  filterTopicId: z.string(),
   articleResultAdditionalAttributes: z.array(
     models.ArticleResultAdditionalAttributes$outboundSchema,
   ).optional(),
-  dollarFilterTags: z.string().optional(),
+  filterTags: z.string().optional(),
   workflowMilestone: models.WorkflowMilestone$outboundSchema.optional(),
   language: models.LanguageQueryParameter$outboundSchema.optional(),
   pagenum: z.number().int().default(1),
@@ -148,8 +146,6 @@ export const GetArticlesInTopicRequest$outboundSchema: z.ZodType<
 }).transform((v) => {
   return remap$(v, {
     acceptLanguage: "Accept-Language",
-    dollarFilterTopicId: "$filter[topicId]",
-    dollarFilterTags: "$filter[tags]",
   });
 });
 

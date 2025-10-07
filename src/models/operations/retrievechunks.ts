@@ -25,7 +25,7 @@ export type RetrieveChunksRequest = {
    * The ID of the portal being accessed.<br><br>A portal ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
    */
   portalID: string;
-  dollarFilterUserProfileID?: string | undefined;
+  filterUserProfileID?: string | undefined;
   /**
    * The language that describes the details of a resource. Resources available in different languages may differ from each other. <br><br> If lang is not passed, then the portal's default language is used.
    */
@@ -36,11 +36,11 @@ export type RetrieveChunksRequest = {
    * @remarks
    * and each value is an array of **Tag IDs** for that category.
    */
-  dollarFilterTags?: { [k: string]: Array<string> } | undefined;
+  filterTags?: { [k: string]: Array<string> } | undefined;
   /**
    * An array of topic IDs. It is used to restrict search results to specific topics.
    */
-  dollarFilterTopicIds?: Array<string> | undefined;
+  filterTopicIds?: Array<string> | undefined;
   retrieveRequest?: models.RetrieveRequest | undefined;
 };
 
@@ -52,16 +52,13 @@ export const RetrieveChunksRequest$inboundSchema: z.ZodType<
 > = z.object({
   q: z.string(),
   portalID: z.string(),
-  "$filter[userProfileID]": z.string().optional(),
+  filterUserProfileID: z.string().optional(),
   language: models.LanguageCodeParameter$inboundSchema.optional(),
-  "$filter[tags]": z.record(z.array(z.string())).optional(),
-  "$filter[topicIds]": z.array(z.string()).optional(),
+  filterTags: z.record(z.array(z.string())).optional(),
+  filterTopicIds: z.array(z.string()).optional(),
   RetrieveRequest: models.RetrieveRequest$inboundSchema.optional(),
 }).transform((v) => {
   return remap$(v, {
-    "$filter[userProfileID]": "dollarFilterUserProfileID",
-    "$filter[tags]": "dollarFilterTags",
-    "$filter[topicIds]": "dollarFilterTopicIds",
     "RetrieveRequest": "retrieveRequest",
   });
 });
@@ -70,10 +67,10 @@ export const RetrieveChunksRequest$inboundSchema: z.ZodType<
 export type RetrieveChunksRequest$Outbound = {
   q: string;
   portalID: string;
-  "$filter[userProfileID]"?: string | undefined;
+  filterUserProfileID?: string | undefined;
   language?: string | undefined;
-  "$filter[tags]"?: { [k: string]: Array<string> } | undefined;
-  "$filter[topicIds]"?: Array<string> | undefined;
+  filterTags?: { [k: string]: Array<string> } | undefined;
+  filterTopicIds?: Array<string> | undefined;
   RetrieveRequest?: models.RetrieveRequest$Outbound | undefined;
 };
 
@@ -85,16 +82,13 @@ export const RetrieveChunksRequest$outboundSchema: z.ZodType<
 > = z.object({
   q: z.string(),
   portalID: z.string(),
-  dollarFilterUserProfileID: z.string().optional(),
+  filterUserProfileID: z.string().optional(),
   language: models.LanguageCodeParameter$outboundSchema.optional(),
-  dollarFilterTags: z.record(z.array(z.string())).optional(),
-  dollarFilterTopicIds: z.array(z.string()).optional(),
+  filterTags: z.record(z.array(z.string())).optional(),
+  filterTopicIds: z.array(z.string()).optional(),
   retrieveRequest: models.RetrieveRequest$outboundSchema.optional(),
 }).transform((v) => {
   return remap$(v, {
-    dollarFilterUserProfileID: "$filter[userProfileID]",
-    dollarFilterTags: "$filter[tags]",
-    dollarFilterTopicIds: "$filter[topicIds]",
     retrieveRequest: "RetrieveRequest",
   });
 });

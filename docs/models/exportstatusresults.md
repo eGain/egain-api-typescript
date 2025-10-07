@@ -1,13 +1,13 @@
-# Results
+# ExportStatusResults
 
 Breakdown of completed job results.
 
 ## Example Usage
 
 ```typescript
-import { Results } from "@egain/egain-api-typescript/models";
+import { ExportStatusResults } from "@egain/egain-api-typescript/models";
 
-let value: Results = {
+let value: ExportStatusResults = {
   successful: 4485,
   warnings: 10,
   errors: 5,

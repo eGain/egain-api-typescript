@@ -55,15 +55,13 @@ export type KnowledgeExportLanguage = {
   code: KnowledgeExportCode;
 };
 
-export const KnowledgeExportResourceType = {
+export const ResourceType = {
   Articles: "articles",
   Topics: "topics",
   Portals: "portals",
   All: "all",
 } as const;
-export type KnowledgeExportResourceType = ClosedEnum<
-  typeof KnowledgeExportResourceType
->;
+export type ResourceType = ClosedEnum<typeof ResourceType>;
 
 /**
  * Type of data destination
@@ -166,7 +164,7 @@ export type KnowledgeExport = {
    * | personalization | Article personalization details, incuding tag categories.
    * | editions | The editions of the Article, including the publish profile (view) associated with each edition.
    */
-  resourceTypes: Array<KnowledgeExportResourceType>;
+  resourceTypes: Array<ResourceType>;
   dataDestination: DataDestination;
 };
 
@@ -267,24 +265,22 @@ export function knowledgeExportLanguageFromJSON(
 }
 
 /** @internal */
-export const KnowledgeExportResourceType$inboundSchema: z.ZodNativeEnum<
-  typeof KnowledgeExportResourceType
-> = z.nativeEnum(KnowledgeExportResourceType);
+export const ResourceType$inboundSchema: z.ZodNativeEnum<typeof ResourceType> =
+  z.nativeEnum(ResourceType);
 
 /** @internal */
-export const KnowledgeExportResourceType$outboundSchema: z.ZodNativeEnum<
-  typeof KnowledgeExportResourceType
-> = KnowledgeExportResourceType$inboundSchema;
+export const ResourceType$outboundSchema: z.ZodNativeEnum<typeof ResourceType> =
+  ResourceType$inboundSchema;
 
 /**
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace KnowledgeExportResourceType$ {
-  /** @deprecated use `KnowledgeExportResourceType$inboundSchema` instead. */
-  export const inboundSchema = KnowledgeExportResourceType$inboundSchema;
-  /** @deprecated use `KnowledgeExportResourceType$outboundSchema` instead. */
-  export const outboundSchema = KnowledgeExportResourceType$outboundSchema;
+export namespace ResourceType$ {
+  /** @deprecated use `ResourceType$inboundSchema` instead. */
+  export const inboundSchema = ResourceType$inboundSchema;
+  /** @deprecated use `ResourceType$outboundSchema` instead. */
+  export const outboundSchema = ResourceType$outboundSchema;
 }
 
 /** @internal */
@@ -437,7 +433,7 @@ export const KnowledgeExport$inboundSchema: z.ZodType<
   articleCategories: ArticleCategories$inboundSchema.default("searchable"),
   portalID: z.string(),
   language: z.lazy(() => KnowledgeExportLanguage$inboundSchema),
-  resourceTypes: z.array(KnowledgeExportResourceType$inboundSchema),
+  resourceTypes: z.array(ResourceType$inboundSchema),
   dataDestination: z.lazy(() => DataDestination$inboundSchema),
 });
 
@@ -459,7 +455,7 @@ export const KnowledgeExport$outboundSchema: z.ZodType<
   articleCategories: ArticleCategories$outboundSchema.default("searchable"),
   portalID: z.string(),
   language: z.lazy(() => KnowledgeExportLanguage$outboundSchema),
-  resourceTypes: z.array(KnowledgeExportResourceType$outboundSchema),
+  resourceTypes: z.array(ResourceType$outboundSchema),
   dataDestination: z.lazy(() => DataDestination$outboundSchema),
 });
 

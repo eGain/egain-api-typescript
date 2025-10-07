@@ -1,13 +1,13 @@
-# ArticleTypeTypeName
+# TypeName
 
 Indicates the article category name.
 
 ## Example Usage
 
 ```typescript
-import { ArticleTypeTypeName } from "@egain/egain-api-typescript/models";
+import { TypeName } from "@egain/egain-api-typescript/models";
 
-let value: ArticleTypeTypeName = "General";
+let value: TypeName = "Data Link";
 ```
 
 ## Values

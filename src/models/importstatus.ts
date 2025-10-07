@@ -8,6 +8,9 @@ import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
+/**
+ * Status of the job.
+ */
 export const ImportStatusStatus = {
   Scheduled: "Scheduled",
   InProgress: "In Progress",
@@ -15,11 +18,99 @@ export const ImportStatusStatus = {
   Failed: "Failed",
   Cancelled: "Cancelled",
 } as const;
+/**
+ * Status of the job.
+ */
 export type ImportStatusStatus = ClosedEnum<typeof ImportStatusStatus>;
 
+export const JobType = {
+  Import: "Import",
+  Validation: "Validation",
+} as const;
+export type JobType = ClosedEnum<typeof JobType>;
+
+/**
+ * Progress of the job.
+ */
+export type ImportStatusProgress = {
+  /**
+   * Number of items processed.
+   */
+  processed?: number | undefined;
+  /**
+   * Number of total items to process.
+   */
+  total?: number | undefined;
+  /**
+   * Percentage of total items that have been processed.
+   */
+  percentage?: number | undefined;
+};
+
+/**
+ * Result of job.
+ */
+export type ImportStatusResults = {
+  /**
+   * Number of item succesfully processed by job.
+   */
+  succesfull?: number | undefined;
+  /**
+   * Number of warnings encountered during job.
+   */
+  warnings?: number | undefined;
+  /**
+   * Number of errors encountered during job.
+   */
+  errors?: number | undefined;
+};
+
 export type ImportStatus = {
+  /**
+   * Status of the job.
+   */
   status: ImportStatusStatus;
+  jobType: JobType;
+  /**
+   * Progress of the job.
+   */
+  progress?: ImportStatusProgress | undefined;
+  /**
+   * Location of the job log file.
+   */
   logFileLocation?: string | undefined;
+  /**
+   * Start time of job.
+   */
+  startTime?: Date | undefined;
+  /**
+   * Estimated completion time of job.
+   */
+  estimatedCompletion?: Date | undefined;
+  /**
+   * Current operation of job being processed.
+   */
+  currentOperation?: string | undefined;
+  /**
+   * Completion time of job.
+   */
+  completionTime?: Date | undefined;
+  /**
+   * Failure time of job.
+   */
+  failureTime?: Date | undefined;
+  /**
+   * Result of job.
+   */
+  results?: ImportStatusResults | undefined;
+  /**
+   * Error of job.
+   */
+  error?: string | undefined;
+  /**
+   * Indicates if job is retryable.
+   */
+  retryable?: boolean | undefined;
 };
 
 /** @internal */
@@ -44,19 +135,184 @@ export namespace ImportStatusStatus$ {
 }
 
 /** @internal */
+export const JobType$inboundSchema: z.ZodNativeEnum<typeof JobType> = z
+  .nativeEnum(JobType);
+
+/** @internal */
+export const JobType$outboundSchema: z.ZodNativeEnum<typeof JobType> =
+  JobType$inboundSchema;
+
+/**
+ * @internal
+ * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
+ */
+export namespace JobType$ {
+  /** @deprecated use `JobType$inboundSchema` instead. */
+  export const inboundSchema = JobType$inboundSchema;
+  /** @deprecated use `JobType$outboundSchema` instead. */
+  export const outboundSchema = JobType$outboundSchema;
+}
+
+/** @internal */
+export const ImportStatusProgress$inboundSchema: z.ZodType<
+  ImportStatusProgress,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  processed: z.number().optional(),
+  total: z.number().optional(),
+  percentage: z.number().optional(),
+});
+
+/** @internal */
+export type ImportStatusProgress$Outbound = {
+  processed?: number | undefined;
+  total?: number | undefined;
+  percentage?: number | undefined;
+};
+
+/** @internal */
+export const ImportStatusProgress$outboundSchema: z.ZodType<
+  ImportStatusProgress$Outbound,
+  z.ZodTypeDef,
+  ImportStatusProgress
+> = z.object({
+  processed: z.number().optional(),
+  total: z.number().optional(),
+  percentage: z.number().optional(),
+});
+
+/**
+ * @internal
+ * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
+ */
+export namespace ImportStatusProgress$ {
+  /** @deprecated use `ImportStatusProgress$inboundSchema` instead. */
+  export const inboundSchema = ImportStatusProgress$inboundSchema;
+  /** @deprecated use `ImportStatusProgress$outboundSchema` instead. */
+  export const outboundSchema = ImportStatusProgress$outboundSchema;
+  /** @deprecated use `ImportStatusProgress$Outbound` instead. */
+  export type Outbound = ImportStatusProgress$Outbound;
+}
+
+export function importStatusProgressToJSON(
+  importStatusProgress: ImportStatusProgress,
+): string {
+  return JSON.stringify(
+    ImportStatusProgress$outboundSchema.parse(importStatusProgress),
+  );
+}
+
+export function importStatusProgressFromJSON(
+  jsonString: string,
+): SafeParseResult<ImportStatusProgress, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ImportStatusProgress$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ImportStatusProgress' from JSON`,
+  );
+}
+
+/** @internal */
+export const ImportStatusResults$inboundSchema: z.ZodType<
+  ImportStatusResults,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  succesfull: z.number().optional(),
+  warnings: z.number().optional(),
+  errors: z.number().optional(),
+});
+
+/** @internal */
+export type ImportStatusResults$Outbound = {
+  succesfull?: number | undefined;
+  warnings?: number | undefined;
+  errors?: number | undefined;
+};
+
+/** @internal */
+export const ImportStatusResults$outboundSchema: z.ZodType<
+  ImportStatusResults$Outbound,
+  z.ZodTypeDef,
+  ImportStatusResults
+> = z.object({
+  succesfull: z.number().optional(),
+  warnings: z.number().optional(),
+  errors: z.number().optional(),
+});
+
+/**
+ * @internal
+ * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
+ */
+export namespace ImportStatusResults$ {
+  /** @deprecated use `ImportStatusResults$inboundSchema` instead. */
+  export const inboundSchema = ImportStatusResults$inboundSchema;
+  /** @deprecated use `ImportStatusResults$outboundSchema` instead. */
+  export const outboundSchema = ImportStatusResults$outboundSchema;
+  /** @deprecated use `ImportStatusResults$Outbound` instead. */
+  export type Outbound = ImportStatusResults$Outbound;
+}
+
+export function importStatusResultsToJSON(
+  importStatusResults: ImportStatusResults,
+): string {
+  return JSON.stringify(
+    ImportStatusResults$outboundSchema.parse(importStatusResults),
+  );
+}
+
+export function importStatusResultsFromJSON(
+  jsonString: string,
+): SafeParseResult<ImportStatusResults, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ImportStatusResults$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ImportStatusResults' from JSON`,
+  );
+}
+
+/** @internal */
 export const ImportStatus$inboundSchema: z.ZodType<
   ImportStatus,
   z.ZodTypeDef,
   unknown
 > = z.object({
   status: ImportStatusStatus$inboundSchema,
+  jobType: JobType$inboundSchema,
+  progress: z.lazy(() => ImportStatusProgress$inboundSchema).optional(),
   logFileLocation: z.string().optional(),
+  startTime: z.string().datetime({ offset: true }).transform(v => new Date(v))
+    .optional(),
+  estimatedCompletion: z.string().datetime({ offset: true }).transform(v =>
+    new Date(v)
+  ).optional(),
+  currentOperation: z.string().optional(),
+  completionTime: z.string().datetime({ offset: true }).transform(v =>
+    new Date(v)
+  ).optional(),
+  failureTime: z.string().datetime({ offset: true }).transform(v => new Date(v))
+    .optional(),
+  results: z.lazy(() => ImportStatusResults$inboundSchema).optional(),
+  error: z.string().optional(),
+  retryable: z.boolean().optional(),
 });
 
 /** @internal */
 export type ImportStatus$Outbound = {
   status: string;
+  jobType: string;
+  progress?: ImportStatusProgress$Outbound | undefined;
   logFileLocation?: string | undefined;
+  startTime?: string | undefined;
+  estimatedCompletion?: string | undefined;
+  currentOperation?: string | undefined;
+  completionTime?: string | undefined;
+  failureTime?: string | undefined;
+  results?: ImportStatusResults$Outbound | undefined;
+  error?: string | undefined;
+  retryable?: boolean | undefined;
 };
 
 /** @internal */
@@ -66,7 +322,17 @@ export const ImportStatus$outboundSchema: z.ZodType<
   ImportStatus
 > = z.object({
   status: ImportStatusStatus$outboundSchema,
+  jobType: JobType$outboundSchema,
+  progress: z.lazy(() => ImportStatusProgress$outboundSchema).optional(),
   logFileLocation: z.string().optional(),
+  startTime: z.date().transform(v => v.toISOString()).optional(),
+  estimatedCompletion: z.date().transform(v => v.toISOString()).optional(),
+  currentOperation: z.string().optional(),
+  completionTime: z.date().transform(v => v.toISOString()).optional(),
+  failureTime: z.date().transform(v => v.toISOString()).optional(),
+  results: z.lazy(() => ImportStatusResults$outboundSchema).optional(),
+  error: z.string().optional(),
+  retryable: z.boolean().optional(),
 });
 
 /**

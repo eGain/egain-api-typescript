@@ -22,6 +22,10 @@ let value: ArticleAISearchResult = {
       ],
     },
   ],
+  articleTypeAttributes: {
+    typeName: "General",
+    articleTypeId: 243500000023393,
+  },
   relevanceScore: 3075.91,
 };
 ```
@@ -49,6 +53,6 @@ let value: ArticleAISearchResult = {
 | `topicBreadcrumb`                                                                                                     | [models.TopicBreadcrumb](../models/topicbreadcrumb.md)[]                                                              | :heavy_check_mark:                                                                                                    | A list of topics from the root topic to this Article. There may be multiple paths.                                    |
 | `tagCategories`                                                                                                       | [models.SchemasTags](../models/schemastags.md)[]                                                                      | :heavy_minus_sign:                                                                                                    | An array of tag categories. Note that the total number of tag categories cannot exceed 20.                            |
 | `keywords`                                                                                                            | *string*                                                                                                              | :heavy_minus_sign:                                                                                                    | N/A                                                                                                                   |
-| `articleTypeAttributes`                                                                                               | [models.ArticleTypeAttributes](../models/articletypeattributes.md)                                                    | :heavy_minus_sign:                                                                                                    | The type of the Article.                                                                                              |
+| `articleTypeAttributes`                                                                                               | [models.ArticleTypeAttributes](../models/articletypeattributes.md)                                                    | :heavy_minus_sign:                                                                                                    | The type of the Article and its attributes.                                                                           |
 | `relevanceScore`                                                                                                      | *number*                                                                                                              | :heavy_check_mark:                                                                                                    | Generated confidence score (0.0-1.0) for the snippet's relevance to the query.                                        |
 | `link`                                                                                                                | [models.ArticleAISearchResultLink](../models/articleaisearchresultlink.md)                                            | :heavy_minus_sign:                                                                                                    | Defines the relationship between this resource and another object.                                                    |

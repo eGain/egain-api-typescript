@@ -118,7 +118,7 @@ async function $do(
         payload.articleResultAdditionalAttributes,
     }, { explode: false }),
     encodeFormQuery({
-      "$filter[topicId]": payload["$filter[topicId]"],
+      "$filter[topicId]": payload.filterTopicId,
       "$lang": payload.language,
     }),
   );

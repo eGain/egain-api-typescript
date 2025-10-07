@@ -25,7 +25,7 @@ export type GetArticleListDetailsRequest = {
   /**
    * The ID of the topic. It is used to restrict to a specific topic.
    */
-  dollarFilterTopicId?: string | undefined;
+  filterTopicId?: string | undefined;
   /**
    * The attributes of an Article to be returned *in addition to* the default list of attributes, listed below. Multiple additional attributes can be specified using a comma-separated list. Passing 'all' will return all attributes.
    *
@@ -66,7 +66,7 @@ export const GetArticleListDetailsRequest$inboundSchema: z.ZodType<
   "Accept-Language": models.AcceptLanguage$inboundSchema,
   portalID: z.string(),
   listID: z.string(),
-  "$filter[topicId]": z.string().optional(),
+  filterTopicId: z.string().optional(),
   articleResultAdditionalAttributes: z.array(
     models.ArticleResultAdditionalAttributes$inboundSchema,
   ).optional(),
@@ -74,7 +74,6 @@ export const GetArticleListDetailsRequest$inboundSchema: z.ZodType<
 }).transform((v) => {
   return remap$(v, {
     "Accept-Language": "acceptLanguage",
-    "$filter[topicId]": "dollarFilterTopicId",
   });
 });
 
@@ -83,7 +82,7 @@ export type GetArticleListDetailsRequest$Outbound = {
   "Accept-Language": string;
   portalID: string;
   listID: string;
-  "$filter[topicId]"?: string | undefined;
+  filterTopicId?: string | undefined;
   articleResultAdditionalAttributes?: Array<string> | undefined;
   language?: string | undefined;
 };
@@ -97,7 +96,7 @@ export const GetArticleListDetailsRequest$outboundSchema: z.ZodType<
   acceptLanguage: models.AcceptLanguage$outboundSchema,
   portalID: z.string(),
   listID: z.string(),
-  dollarFilterTopicId: z.string().optional(),
+  filterTopicId: z.string().optional(),
   articleResultAdditionalAttributes: z.array(
     models.ArticleResultAdditionalAttributes$outboundSchema,
   ).optional(),
@@ -105,7 +104,6 @@ export const GetArticleListDetailsRequest$outboundSchema: z.ZodType<
 }).transform((v) => {
   return remap$(v, {
     acceptLanguage: "Accept-Language",
-    dollarFilterTopicId: "$filter[topicId]",
   });
 });
 

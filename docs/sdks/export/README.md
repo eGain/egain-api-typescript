@@ -41,7 +41,7 @@ async function run() {
     ],
     dataDestination: {
       destinationType: "AWS S3 bucket",
-      path: "https://s3.us-west-2.amazonaws.com/amzn-s3-demo-bucket1",
+      path: "s3://amzn-s3-demo-bucket/mydeptfolder",
       region: "us-west-2",
       credentials: {
         accessKey: "s3-access-user",
@@ -81,7 +81,7 @@ async function run() {
     ],
     dataDestination: {
       destinationType: "AWS S3 bucket",
-      path: "https://s3.us-west-2.amazonaws.com/amzn-s3-demo-bucket1",
+      path: "s3://amzn-s3-demo-bucket/mydeptfolder",
       region: "us-west-2",
       credentials: {
         accessKey: "s3-access-user",

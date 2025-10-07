@@ -126,7 +126,7 @@ async function $do(
         payload.articleResultAdditionalAttributes,
     }, { explode: false }),
     encodeFormQuery({
-      "$filter[tags]": payload["$filter[tags]"],
+      "$filter[tags]": payload.filterTags,
       "$lang": payload.language,
       "$pagenum": payload.pagenum,
       "$pagesize": payload.pagesize,

@@ -24,6 +24,10 @@ let value: SearchResults = {
           ],
         },
       ],
+      articleTypeAttributes: {
+        typeName: "General",
+        articleTypeId: 243500000023393,
+      },
       relevanceScore: 3941.01,
     },
   ],
@@ -35,4 +39,3 @@ let value: SearchResults = {
 | Field                                                                | Type                                                                 | Required                                                             | Description                                                          |
 | -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- |
 | `article`                                                            | [models.ArticleAISearchResult](../models/articleaisearchresult.md)[] | :heavy_minus_sign:                                                   | N/A                                                                  |
-| `topic`                                                              | [models.TopicAISearchResult](../models/topicaisearchresult.md)[]     | :heavy_minus_sign:                                                   | N/A                                                                  |

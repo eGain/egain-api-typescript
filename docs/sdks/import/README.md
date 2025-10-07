@@ -299,6 +299,8 @@ async function run() {
     dataSource: {
       type: "AWS S3 bucket",
       path: "s3://mybucket/myfolder/",
+      region: "us-east-1",
+      credentials: {},
     },
   });
 
@@ -327,6 +329,8 @@ async function run() {
     dataSource: {
       type: "AWS S3 bucket",
       path: "s3://mybucket/myfolder/",
+      region: "us-east-1",
+      credentials: {},
     },
   });
   if (res.ok) {

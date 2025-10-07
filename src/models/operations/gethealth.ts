@@ -4,6 +4,7 @@
 
 import * as z from "zod";
 import { safeParse } from "../../lib/schemas.js";
+import { ClosedEnum } from "../../types/enums.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
@@ -13,6 +14,168 @@ export const GetHealthServerList = [
    */
   "https://${API_DOMAIN}/knowledge/contentmgr/v4",
 ] as const;
+
+/**
+ * **Health Status**
+ *
+ * @remarks
+ *
+ * The overall health status of the service. Possible values:
+ * - **healthy**: Service is operating normally
+ * - **degraded**: Service is functional but with performance issues
+ * - **unhealthy**: Service is experiencing critical issues
+ * - **maintenance**: Service is under planned maintenance
+ */
+export const ServiceUnavailableStatus = {
+  Healthy: "healthy",
+  Degraded: "degraded",
+  Unhealthy: "unhealthy",
+  Maintenance: "maintenance",
+} as const;
+/**
+ * **Health Status**
+ *
+ * @remarks
+ *
+ * The overall health status of the service. Possible values:
+ * - **healthy**: Service is operating normally
+ * - **degraded**: Service is functional but with performance issues
+ * - **unhealthy**: Service is experiencing critical issues
+ * - **maintenance**: Service is under planned maintenance
+ */
+export type ServiceUnavailableStatus = ClosedEnum<
+  typeof ServiceUnavailableStatus
+>;
+
+/**
+ * Health status of database component.
+ */
+export const Database = {
+  Healthy: "healthy",
+  Degraded: "degraded",
+  Unhealthy: "unhealthy",
+  Maintenance: "maintenance",
+} as const;
+/**
+ * Health status of database component.
+ */
+export type Database = ClosedEnum<typeof Database>;
+
+/**
+ * Health status of file system component.
+ */
+export const FileSystem = {
+  Healthy: "healthy",
+  Degraded: "degraded",
+  Unhealthy: "unhealthy",
+  Maintenance: "maintenance",
+} as const;
+/**
+ * Health status of file system component.
+ */
+export type FileSystem = ClosedEnum<typeof FileSystem>;
+
+/**
+ * Health status of external services components.
+ */
+export const ExternalServices = {
+  Healthy: "healthy",
+  Degraded: "degraded",
+  Unhealthy: "unhealthy",
+  Maintenance: "maintenance",
+} as const;
+/**
+ * Health status of external services components.
+ */
+export type ExternalServices = ClosedEnum<typeof ExternalServices>;
+
+/**
+ * Health status of processing engine component.
+ */
+export const ProcessingEngine = {
+  Healthy: "healthy",
+  Degraded: "degraded",
+  Unhealthy: "unhealthy",
+  Maintenance: "maintenance",
+} as const;
+/**
+ * Health status of processing engine component.
+ */
+export type ProcessingEngine = ClosedEnum<typeof ProcessingEngine>;
+
+/**
+ * Health status of storage component.
+ */
+export const Storage = {
+  Healthy: "healthy",
+  Degraded: "degraded",
+  Unhealthy: "unhealthy",
+  Maintenance: "maintenance",
+} as const;
+/**
+ * Health status of storage component.
+ */
+export type Storage = ClosedEnum<typeof Storage>;
+
+/**
+ * **Comonents**:
+ *
+ * @remarks
+ *
+ * Health status of import service componenets
+ */
+export type Components = {
+  /**
+   * Health status of database component.
+   */
+  database?: Database | undefined;
+  /**
+   * Health status of file system component.
+   */
+  fileSystem?: FileSystem | undefined;
+  /**
+   * Health status of external services components.
+   */
+  externalServices?: ExternalServices | undefined;
+  /**
+   * Health status of processing engine component.
+   */
+  processingEngine?: ProcessingEngine | undefined;
+  /**
+   * Health status of storage component.
+   */
+  storage?: Storage | undefined;
+};
+
+/**
+ * **Health Status**
+ *
+ * @remarks
+ *
+ * The overall health status of the service. Possible values:
+ * - **healthy**: Service is operating normally
+ * - **degraded**: Service is functional but with performance issues
+ * - **unhealthy**: Service is experiencing critical issues
+ * - **maintenance**: Service is under planned maintenance
+ */
+export const Status = {
+  Healthy: "healthy",
+  Degraded: "degraded",
+  Unhealthy: "unhealthy",
+  Maintenance: "maintenance",
+} as const;
+/**
+ * **Health Status**
+ *
+ * @remarks
+ *
+ * The overall health status of the service. Possible values:
+ * - **healthy**: Service is operating normally
+ * - **degraded**: Service is functional but with performance issues
+ * - **unhealthy**: Service is experiencing critical issues
+ * - **maintenance**: Service is under planned maintenance
+ */
+export type Status = ClosedEnum<typeof Status>;
 
 /**
  * ## Service is Healthy
@@ -41,7 +204,7 @@ export type GetHealthResponse = {
    * - **unhealthy**: Service is experiencing critical issues
    * - **maintenance**: Service is under planned maintenance
    */
-  status?: string | undefined;
+  status?: Status | undefined;
   /**
    * **Health Check Timestamp**
    *
@@ -53,7 +216,7 @@ export type GetHealthResponse = {
    * - Monitoring health check response times
    * - Historical health trend analysis
    */
-  timestamp?: Date | undefined;
+  timestamp?: any | undefined;
   /**
    * **API Version**
    *
@@ -81,14 +244,214 @@ export type GetHealthResponse = {
 };
 
 /** @internal */
+export const ServiceUnavailableStatus$inboundSchema: z.ZodNativeEnum<
+  typeof ServiceUnavailableStatus
+> = z.nativeEnum(ServiceUnavailableStatus);
+
+/** @internal */
+export const ServiceUnavailableStatus$outboundSchema: z.ZodNativeEnum<
+  typeof ServiceUnavailableStatus
+> = ServiceUnavailableStatus$inboundSchema;
+
+/**
+ * @internal
+ * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
+ */
+export namespace ServiceUnavailableStatus$ {
+  /** @deprecated use `ServiceUnavailableStatus$inboundSchema` instead. */
+  export const inboundSchema = ServiceUnavailableStatus$inboundSchema;
+  /** @deprecated use `ServiceUnavailableStatus$outboundSchema` instead. */
+  export const outboundSchema = ServiceUnavailableStatus$outboundSchema;
+}
+
+/** @internal */
+export const Database$inboundSchema: z.ZodNativeEnum<typeof Database> = z
+  .nativeEnum(Database);
+
+/** @internal */
+export const Database$outboundSchema: z.ZodNativeEnum<typeof Database> =
+  Database$inboundSchema;
+
+/**
+ * @internal
+ * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
+ */
+export namespace Database$ {
+  /** @deprecated use `Database$inboundSchema` instead. */
+  export const inboundSchema = Database$inboundSchema;
+  /** @deprecated use `Database$outboundSchema` instead. */
+  export const outboundSchema = Database$outboundSchema;
+}
+
+/** @internal */
+export const FileSystem$inboundSchema: z.ZodNativeEnum<typeof FileSystem> = z
+  .nativeEnum(FileSystem);
+
+/** @internal */
+export const FileSystem$outboundSchema: z.ZodNativeEnum<typeof FileSystem> =
+  FileSystem$inboundSchema;
+
+/**
+ * @internal
+ * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
+ */
+export namespace FileSystem$ {
+  /** @deprecated use `FileSystem$inboundSchema` instead. */
+  export const inboundSchema = FileSystem$inboundSchema;
+  /** @deprecated use `FileSystem$outboundSchema` instead. */
+  export const outboundSchema = FileSystem$outboundSchema;
+}
+
+/** @internal */
+export const ExternalServices$inboundSchema: z.ZodNativeEnum<
+  typeof ExternalServices
+> = z.nativeEnum(ExternalServices);
+
+/** @internal */
+export const ExternalServices$outboundSchema: z.ZodNativeEnum<
+  typeof ExternalServices
+> = ExternalServices$inboundSchema;
+
+/**
+ * @internal
+ * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
+ */
+export namespace ExternalServices$ {
+  /** @deprecated use `ExternalServices$inboundSchema` instead. */
+  export const inboundSchema = ExternalServices$inboundSchema;
+  /** @deprecated use `ExternalServices$outboundSchema` instead. */
+  export const outboundSchema = ExternalServices$outboundSchema;
+}
+
+/** @internal */
+export const ProcessingEngine$inboundSchema: z.ZodNativeEnum<
+  typeof ProcessingEngine
+> = z.nativeEnum(ProcessingEngine);
+
+/** @internal */
+export const ProcessingEngine$outboundSchema: z.ZodNativeEnum<
+  typeof ProcessingEngine
+> = ProcessingEngine$inboundSchema;
+
+/**
+ * @internal
+ * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
+ */
+export namespace ProcessingEngine$ {
+  /** @deprecated use `ProcessingEngine$inboundSchema` instead. */
+  export const inboundSchema = ProcessingEngine$inboundSchema;
+  /** @deprecated use `ProcessingEngine$outboundSchema` instead. */
+  export const outboundSchema = ProcessingEngine$outboundSchema;
+}
+
+/** @internal */
+export const Storage$inboundSchema: z.ZodNativeEnum<typeof Storage> = z
+  .nativeEnum(Storage);
+
+/** @internal */
+export const Storage$outboundSchema: z.ZodNativeEnum<typeof Storage> =
+  Storage$inboundSchema;
+
+/**
+ * @internal
+ * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
+ */
+export namespace Storage$ {
+  /** @deprecated use `Storage$inboundSchema` instead. */
+  export const inboundSchema = Storage$inboundSchema;
+  /** @deprecated use `Storage$outboundSchema` instead. */
+  export const outboundSchema = Storage$outboundSchema;
+}
+
+/** @internal */
+export const Components$inboundSchema: z.ZodType<
+  Components,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  database: Database$inboundSchema.optional(),
+  fileSystem: FileSystem$inboundSchema.optional(),
+  externalServices: ExternalServices$inboundSchema.optional(),
+  processingEngine: ProcessingEngine$inboundSchema.optional(),
+  storage: Storage$inboundSchema.optional(),
+});
+
+/** @internal */
+export type Components$Outbound = {
+  database?: string | undefined;
+  fileSystem?: string | undefined;
+  externalServices?: string | undefined;
+  processingEngine?: string | undefined;
+  storage?: string | undefined;
+};
+
+/** @internal */
+export const Components$outboundSchema: z.ZodType<
+  Components$Outbound,
+  z.ZodTypeDef,
+  Components
+> = z.object({
+  database: Database$outboundSchema.optional(),
+  fileSystem: FileSystem$outboundSchema.optional(),
+  externalServices: ExternalServices$outboundSchema.optional(),
+  processingEngine: ProcessingEngine$outboundSchema.optional(),
+  storage: Storage$outboundSchema.optional(),
+});
+
+/**
+ * @internal
+ * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
+ */
+export namespace Components$ {
+  /** @deprecated use `Components$inboundSchema` instead. */
+  export const inboundSchema = Components$inboundSchema;
+  /** @deprecated use `Components$outboundSchema` instead. */
+  export const outboundSchema = Components$outboundSchema;
+  /** @deprecated use `Components$Outbound` instead. */
+  export type Outbound = Components$Outbound;
+}
+
+export function componentsToJSON(components: Components): string {
+  return JSON.stringify(Components$outboundSchema.parse(components));
+}
+
+export function componentsFromJSON(
+  jsonString: string,
+): SafeParseResult<Components, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Components$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Components' from JSON`,
+  );
+}
+
+/** @internal */
+export const Status$inboundSchema: z.ZodNativeEnum<typeof Status> = z
+  .nativeEnum(Status);
+
+/** @internal */
+export const Status$outboundSchema: z.ZodNativeEnum<typeof Status> =
+  Status$inboundSchema;
+
+/**
+ * @internal
+ * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
+ */
+export namespace Status$ {
+  /** @deprecated use `Status$inboundSchema` instead. */
+  export const inboundSchema = Status$inboundSchema;
+  /** @deprecated use `Status$outboundSchema` instead. */
+  export const outboundSchema = Status$outboundSchema;
+}
+
+/** @internal */
 export const GetHealthResponse$inboundSchema: z.ZodType<
   GetHealthResponse,
   z.ZodTypeDef,
   unknown
 > = z.object({
-  status: z.string().optional(),
-  timestamp: z.string().datetime({ offset: true }).transform(v => new Date(v))
-    .optional(),
+  status: Status$inboundSchema.optional(),
+  timestamp: z.any().optional(),
   version: z.string().optional(),
   uptime: z.string().optional(),
 });
@@ -96,7 +459,7 @@ export const GetHealthResponse$inboundSchema: z.ZodType<
 /** @internal */
 export type GetHealthResponse$Outbound = {
   status?: string | undefined;
-  timestamp?: string | undefined;
+  timestamp?: any | undefined;
   version?: string | undefined;
   uptime?: string | undefined;
 };
@@ -107,8 +470,8 @@ export const GetHealthResponse$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   GetHealthResponse
 > = z.object({
-  status: z.string().optional(),
-  timestamp: z.date().transform(v => v.toISOString()).optional(),
+  status: Status$outboundSchema.optional(),
+  timestamp: z.any().optional(),
   version: z.string().optional(),
   uptime: z.string().optional(),
 });
