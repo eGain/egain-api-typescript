@@ -29,7 +29,7 @@ import { Result } from "../types/fp.js";
  * Get the best search results for a user query
  *
  * @remarks
- * Submit a user query and receive a list of search results.
+ * The Search API is a hybrid search service that combines semantic understanding with keyword precision to deliver fast, contextual, and relevant results from your enterprise knowledge base. It enables secure, role-aware access to articles, FAQs, and documentation across customer, agent, and employee interfaces. Each query returns a ranked list of results with snippets, metadata, and relevance scores. <br>**This endpoint is only available for Self Service environments.**
  */
 export function portalSearchAiSearch(
   client: EgainCore,
@@ -119,7 +119,7 @@ async function $do(
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
     operationID: "aiSearch",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
 

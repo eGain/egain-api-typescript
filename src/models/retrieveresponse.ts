@@ -86,7 +86,7 @@ export type RetrieveResponse = {
   /**
    * Top search results with relevance scores and metadata.
    */
-  searchResults?: Array<SearchResult> | undefined;
+  searchResults: Array<SearchResult>;
   channel?: RetrieveResponseChannel | undefined;
   /**
    * Unique ID for this specific API call or event.
@@ -95,7 +95,7 @@ export type RetrieveResponse = {
   /**
    * ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
    */
-  sessionId?: string | undefined;
+  sessionId: string;
 };
 
 /** @internal */
@@ -267,19 +267,19 @@ export const RetrieveResponse$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   answer: z.lazy(() => RetrieveResponseAnswer$inboundSchema).optional(),
-  searchResults: z.array(SearchResult$inboundSchema).optional(),
+  searchResults: z.array(SearchResult$inboundSchema),
   channel: z.lazy(() => RetrieveResponseChannel$inboundSchema).optional(),
   eventId: z.string().optional(),
-  sessionId: z.string().optional(),
+  sessionId: z.string(),
 });
 
 /** @internal */
 export type RetrieveResponse$Outbound = {
   answer?: RetrieveResponseAnswer$Outbound | undefined;
-  searchResults?: Array<SearchResult$Outbound> | undefined;
+  searchResults: Array<SearchResult$Outbound>;
   channel?: RetrieveResponseChannel$Outbound | undefined;
   eventId?: string | undefined;
-  sessionId?: string | undefined;
+  sessionId: string;
 };
 
 /** @internal */
@@ -289,10 +289,10 @@ export const RetrieveResponse$outboundSchema: z.ZodType<
   RetrieveResponse
 > = z.object({
   answer: z.lazy(() => RetrieveResponseAnswer$outboundSchema).optional(),
-  searchResults: z.array(SearchResult$outboundSchema).optional(),
+  searchResults: z.array(SearchResult$outboundSchema),
   channel: z.lazy(() => RetrieveResponseChannel$outboundSchema).optional(),
   eventId: z.string().optional(),
-  sessionId: z.string().optional(),
+  sessionId: z.string(),
 });
 
 /**

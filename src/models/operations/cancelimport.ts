@@ -8,14 +8,14 @@ import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
-export const GetImportContentServerList = [
+export const CancelImportServerList = [
   /**
    * Production Server
    */
   "https://${API_DOMAIN}/knowledge/contentmgr/v4",
 ] as const;
 
-export type GetImportContentRequest = {
+export type CancelImportRequest = {
   /**
    * **Job ID Parameter**
    *
@@ -34,8 +34,8 @@ export type GetImportContentRequest = {
 };
 
 /** @internal */
-export const GetImportContentRequest$inboundSchema: z.ZodType<
-  GetImportContentRequest,
+export const CancelImportRequest$inboundSchema: z.ZodType<
+  CancelImportRequest,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -47,15 +47,15 @@ export const GetImportContentRequest$inboundSchema: z.ZodType<
 });
 
 /** @internal */
-export type GetImportContentRequest$Outbound = {
+export type CancelImportRequest$Outbound = {
   job_id: string;
 };
 
 /** @internal */
-export const GetImportContentRequest$outboundSchema: z.ZodType<
-  GetImportContentRequest$Outbound,
+export const CancelImportRequest$outboundSchema: z.ZodType<
+  CancelImportRequest$Outbound,
   z.ZodTypeDef,
-  GetImportContentRequest
+  CancelImportRequest
 > = z.object({
   jobId: z.string(),
 }).transform((v) => {
@@ -68,29 +68,29 @@ export const GetImportContentRequest$outboundSchema: z.ZodType<
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace GetImportContentRequest$ {
-  /** @deprecated use `GetImportContentRequest$inboundSchema` instead. */
-  export const inboundSchema = GetImportContentRequest$inboundSchema;
-  /** @deprecated use `GetImportContentRequest$outboundSchema` instead. */
-  export const outboundSchema = GetImportContentRequest$outboundSchema;
-  /** @deprecated use `GetImportContentRequest$Outbound` instead. */
-  export type Outbound = GetImportContentRequest$Outbound;
+export namespace CancelImportRequest$ {
+  /** @deprecated use `CancelImportRequest$inboundSchema` instead. */
+  export const inboundSchema = CancelImportRequest$inboundSchema;
+  /** @deprecated use `CancelImportRequest$outboundSchema` instead. */
+  export const outboundSchema = CancelImportRequest$outboundSchema;
+  /** @deprecated use `CancelImportRequest$Outbound` instead. */
+  export type Outbound = CancelImportRequest$Outbound;
 }
 
-export function getImportContentRequestToJSON(
-  getImportContentRequest: GetImportContentRequest,
+export function cancelImportRequestToJSON(
+  cancelImportRequest: CancelImportRequest,
 ): string {
   return JSON.stringify(
-    GetImportContentRequest$outboundSchema.parse(getImportContentRequest),
+    CancelImportRequest$outboundSchema.parse(cancelImportRequest),
   );
 }
 
-export function getImportContentRequestFromJSON(
+export function cancelImportRequestFromJSON(
   jsonString: string,
-): SafeParseResult<GetImportContentRequest, SDKValidationError> {
+): SafeParseResult<CancelImportRequest, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => GetImportContentRequest$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'GetImportContentRequest' from JSON`,
+    (x) => CancelImportRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CancelImportRequest' from JSON`,
   );
 }

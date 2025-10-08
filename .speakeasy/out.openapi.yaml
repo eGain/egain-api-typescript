@@ -3,7 +3,7 @@ openapi: 3.0.0
 info:
   title: Knowledge Portal Manager APIs
   version: 4.0.0
-  description: "### License\n  The following licenses are required to use the Knowledge Access APIs:\n  * If the user is an agent, then the *Knowledge + AI* license is required.\n  * If the user is a customer, the *Self-Service* and *Advanced Self-Service* licenses must be available.\n### API Resource Limits\nThe following Resources have predefined limits for specific access attributes for Enterprise use.\n\n| Resource | Attribute | Enterprise\n| ---------------- | ---------------------------- | ----------\n| Article Reference Limits |Number of attachments used in any article | 50\n|  |Number of custom attributes in an article | 15\n|  |Number of publish views used in an article version | 20\n| Topic Reference Limits |User-defined topics in a department| 50000\n|  |Depth of topics  | 20\n|  |Topics at any level | 2500\n|  |Number of custom attributes in a topic | 15\n| Portal Reference Limits | Tag categories in a portal | 15\n|  |Topics to be included in a portal | 2500\n|  |Number of articles to display in announcements | 25\n|  |Maximum related articles in portal setting | 100\n|  |Usage links and link groups setup for a portal | 25\n    \n      \n"
+  description: "### License\n  The following licenses are required to use the Knowledge Access APIs:\n  * If the user is an agent, then the *Knowledge + AI* license is required.\n  * If the user is a customer, the *Self-Service* and *Advanced Self-Service* licenses must be available.\n\n### Tiers\n\n| Tier\t|Tier Name|\tNamed Users |\tDescription\n| ---------- | ---------- | ---------- | ----------------------------\n| Tier 1 |  Starter |\tUp to 10|\tDesigned for small-scale implementations or pilot environments\n| Tier 2 |\tGrowth\t| Up to 1000|\tSuitable for mid-scale deployments requiring moderate scalability\n| Tier 3 |\tEnterprise\t| Greater than 1000|\tSupports large-scale environments with extended configuration options\n\n### API Resource Limits\nThe following Resources have predefined limits for specific access attributes for Starter, Growth and Enterprise use.\n\n| Resource | Limits | Starter | Growth | Enterprise\n| ---------------- | ---------------------------- | ---------- | ---------- | ----------\n| Article Reference |Number of attachments used in any article | 25 | 50 |50\n|  |Number of custom attributes in an article | 10 | 25| 50 \n|  |Number of publish views used in an article version | 20 | 20 | 20\n| Topic Reference |User-defined topics in a department| 1000| 5000 | 50000\n|  |Depth of topics  | 5 | 20 | 20\n|  |Topics at any level | 500 | 2500 | 2500\n|  |Number of custom attributes in a topic | 10 | 10 | 10\n| Portal Reference | Tag categories in a portal | 15 | 15 | 15\n|  |Topics to be included in a portal | 100 | 500 | 5000 \n|  |Number of articles to display in announcements | 10 | 25 | 25\n|  |Usage links and link groups setup for a portal | 5 | 10 | 25\n    \n      \n"
   contact:
     name: API Support
     email: apisupport@egain.com
@@ -11,9 +11,6 @@ info:
 servers:
   - url: https://${API_DOMAIN}/knowledge/portalmgr/v4
     description: Production Server
-    variables:
-      API_DOMAIN:
-        default: api.egain.cloud
 tags:
   - name: Answers
     description: APIs for Answers
@@ -24,7 +21,7 @@ tags:
       Content import and validation operations for bulk knowledge content management.
 
       These APIs enable you to:
-      - Import content from Amazon S3 buckets
+      - Import content from Data Sources
       - Validate content structure and format before import
       - Monitor import progress and access detailed logs
       - Schedule imports for optimal timing
@@ -32,26 +29,11 @@ tags:
 
       **Supported Data Sources:**
       - Amazon S3 buckets
+      - SFTP Servers
 
 
       **Supported Content Formats:**
-      - Content needs to be in this format: https://egaincorp.atlassian.net/wiki/x/DwDyCQ
-  - name: Health Check
-    description: |
-      Service health monitoring and status endpoints for infrastructure monitoring.
-
-      Use these endpoints to:
-      - Monitor service availability
-      - Check system health status
-      - Verify API version information
-      - Monitor service uptime
-      - Detect service issues proactively
-
-      **Monitoring Integration:**
-      - Load balancer health checks
-      - Infrastructure monitoring tools (Nagios, Zabbix, etc.)
-      - Application performance monitoring (APM) tools
-      - Custom health check scripts
+      - Content needs to be in this format: [Guide to Data Import Format](../../../../../developer-portal/guides/ingestion/data-import-format-guide.md)
   - name: Article
     description: Article APIs
   - name: Article Lists
@@ -91,7 +73,7 @@ paths:
       operationId: retrieveChunks
       tags:
         - Retrieve
-      description: The Retrieve API enables enterprises to directly access relevant content chunks from their organizational knowledge sources. It is designed for scenarios where developers want granular control over retrieved information, such as powering custom search, analytics, or retrieval-augmented generation (RAG) pipelines. <br><br> In addition to raw chunk retrieval, the API can return **Certified Answers** if it meets the 'Certified Answer' threshold score. Responses include relevance scores, metadata, and references to maintain transparency and flexibility. By leveraging the Retrieve API, organizations can build tailored experiences while retaining confidence in the source material.
+      description: The Retrieve API enables enterprises to directly access relevant content chunks from their organizational knowledge sources. It is designed for scenarios where developers want granular control over retrieved information, such as powering custom search, analytics, or retrieval-augmented generation (RAG) pipelines. <br><br> In addition to raw chunk retrieval, the API can return **Certified Answers** if it meets the 'Certified Answer' threshold score. Responses include relevance scores, metadata, and references to maintain transparency and flexibility. By leveraging the Retrieve API, organizations can build tailored experiences while retaining confidence in the source material. <br>**This endpoint is only available for Self Service environments.**
       parameters:
         - $ref: '#/components/parameters/q'
         - $ref: '#/components/parameters/portalReadableId'
@@ -124,16 +106,13 @@ paths:
       servers:
         - url: https://${API_DOMAIN}/core/aiservices/v4
           description: aiservices
-          variables:
-            API_DOMAIN:
-              default: api.egain.cloud
   /{portalID}/answers:
     post:
       summary: Get the best answer for a user query
       operationId: getBestAnswer
       tags:
         - Answers
-      description: "The **Answers API** allows enterprises to deliver fast, accurate, and contextual responses powered by their organizational knowledge. It supports two complementary approaches:  \n<li> **Certified Answers**: Direct snippets retrieved from enterprise-authored content. </li>  \n<li> **Generative Answers**: Natural language responses synthesized by a large language model (LLM).  </li>\n\nEvery response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments.\n"
+      description: "The **Answers API** allows enterprises to deliver fast, accurate, and contextual responses powered by their organizational knowledge. It supports two complementary approaches:  \n  - **Certified Answers**: Direct snippets retrieved from enterprise-authored content.\n  - **Generative Answers**: Natural language responses synthesized by a large language model (LLM).\n\nEvery response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments. <br>**This endpoint is only available for Self Service environments.**\n"
       parameters:
         - $ref: '#/components/parameters/q'
         - $ref: '#/components/parameters/portalReadableId'
@@ -164,16 +143,16 @@ paths:
       servers:
         - url: https://${API_DOMAIN}/core/aiservices/v4
           description: aiservices
-          variables:
-            API_DOMAIN:
-              default: api.egain.cloud
   /import/content:
     post:
       description: |
         # Import Content
 
         ## Overview
-        This API initiates a bulk content import operation from Amazon S3 buckets. It creates an asynchronous import job that processes content in the background, allowing you to import large volumes of content without blocking your application.
+        This API initiates a bulk content import operation from Data Sources. It creates an asynchronous import job that processes content in the background, allowing you to import large volumes of content without blocking your application.
+
+        ## Pre-requisties
+        1. Content in Data Source needs to be in this format: [Guide to Data Import Format](../../../../../developer-portal/guides/ingestion/data-import-format-guide.md)
 
         ## How It Works
         1. **Job Creation**: The API creates an import job and returns a unique job ID
@@ -198,8 +177,8 @@ paths:
         | Actor | Permission |
         | ------- | --------|
         | User |<ul><li>User must be a department user.</li><li>Content can only be imported in user's home department.</li><li>User must have 'Author' role.</li><li>Content can only be imported if the user has all the required languages assigned.</li></ul>|
-      summary: Import content from external sources
-      operationId: createImport
+      summary: Import content from external sources by creating an import job
+      operationId: createImportJob
       tags:
         - Content Import
       requestBody:
@@ -285,9 +264,6 @@ paths:
       servers:
         - url: https://${API_DOMAIN}/knowledge/contentmgr/v4
           description: Production Server
-          variables:
-            API_DOMAIN:
-              default: api.egain.cloud
   /import/content/{job_id}/status:
     get:
       description: |
@@ -322,7 +298,7 @@ paths:
         | ------- | --------|
         | User |<ul><li>User must be a department user.</li><li>User must have 'Author' role.</li><li>The job must have been created by the logged in user, or the logged in user must have 'View' permissions on the user who created the job.</li></ul>|
       summary: Get the current status of an import or validation job
-      operationId: getImportContent
+      operationId: getImportStatus
       parameters:
         - $ref: '#/components/parameters/jobId'
       responses:
@@ -427,14 +403,11 @@ paths:
       servers:
         - url: https://${API_DOMAIN}/knowledge/contentmgr/v4
           description: Production Server
-          variables:
-            API_DOMAIN:
-              default: api.egain.cloud
   /import/content/validate:
     post:
       description: "# Validate Import Content\n\n## Overview\nThis API enables users to validate content structure, format, and compliance before importing it into the production knowledge base. Validation is a non-destructive operation that checks content without making any changes to your existing data.\n\n## What Validation Checks\n- **Content Structure**: Verifies required fields and data types\n- **Format Compliance**: Ensures content meets platform requirements\n- **Language Support**: Validates content against supported languages\n- **Metadata Mapping**: Checks field mappings and transformations\n- **Business Rules**: Validates against department-specific rules\n\n## Validation Benefits\n- **Risk Mitigation**: Identify issues before affecting production data\n- **Quality Assurance**: Ensure content meets organizational standards\n- **Cost Savings**: Avoid failed imports that waste processing time\n- **Compliance**: Meet regulatory and internal content requirements\n\n## Validation Process\n1. **Content Analysis**: System analyzes content structure and format\n2. **Rule Validation**: Applies business rules and validation logic\n3. **Quality Assessment**: Evaluates content quality and completeness\n4. **Report Generation**: Creates detailed validation report\n5. **Issue Categorization**: Classifies issues by severity and type\n\n## Common Validation Issues\n- **Missing Required Fields**: Title, description, category, etc.\n- **Invalid Data Types**: Incorrect field formats (dates, numbers, etc.)\n- **Language Mismatches**: Content language not supported by department\n\n## Best Practices\n- **Always Validate First**: Run validation before any import operation\n- **Review Reports**: Carefully examine validation results and warnings\n- **Fix Issues**: Address validation errors before proceeding with import\n- **Test Small Batches**: Validate with small content samples first\n- **Iterate**: Use validation feedback to improve content quality\n\n## Permissions \n| Actor | Permission |\n| ------- | --------|\n| User |<ul><li>User must be a department user.</li><li>User must have 'Author' role.</li><li>Content can only be imported if the user has all the required languages assigned.</li></ul>|\n"
-      summary: Validate content structure and format before import
-      operationId: createImportValidation
+      summary: Validate content structure and format before import by creating an import validation job
+      operationId: createImportValidationJob
       tags:
         - Content Import
       requestBody:
@@ -517,14 +490,11 @@ paths:
       servers:
         - url: https://${API_DOMAIN}/knowledge/contentmgr/v4
           description: Production Server
-          variables:
-            API_DOMAIN:
-              default: api.egain.cloud
   /import/content/{job_id}/cancel:
     post:
       description: "# Cancel Import or Validation Job\n\n## Overview\nThis API allows users to cancel import or validation operations that are currently in progress or scheduled for future execution. Cancellation is immediate for scheduled jobs and graceful for running jobs.\n\n## Cancellation Behavior\n- **Scheduled Jobs**: Immediate cancellation, no processing occurs\n- **In Progress Jobs**: Graceful shutdown, current item completes, no new items start\n- **Completed Jobs**: Cannot be cancelled (returns error)\n- **Failed Jobs**: Cannot be cancelled (already stopped)\n\n## When to Cancel\n- **Content Issues**: Discover problems with source content\n- **Timing Changes**: Need to reschedule for different time\n- **Resource Constraints**: System resources are needed elsewhere\n- **User Request**: Manual cancellation by authorized users\n- **System Maintenance**: Planned maintenance windows\n\n## Cancellation Process\n1. **Request Received**: System receives cancellation request\n2. **Status Check**: Verifies current job status\n3. **Graceful Shutdown**: For running jobs, completes current item\n4. **Resource Cleanup**: Releases allocated system resources\n5. **Status Update**: Marks job as cancelled\n6. **Notification**: Updates job status and logs\n\n## Post-Cancellation\n- **Job Status**: Changes to \"Cancelled\"\n- **Partial Results**: Any completed items remain in system\n- **Logs**: Cancellation reason and timing recorded\n- **Resources**: System resources freed for other operations\n\n## Best Practices\n- **Monitor Jobs**: Regularly check job status to identify candidates for cancellation\n- **Plan Cancellations**: Schedule cancellations during low-usage periods\n- **Resource Planning**: Consider resource impact before cancelling large jobs\n\n## Permissions \n| Actor | Permission |\n| ------- | --------|\n| User |<li>User must be a department user.</li><li>Content can only be validated for user's home department.</li><li>User must have 'Author' role.</li><li>The job must have been created by the logged in user, or the logged in user must have 'Edit' permissions on the user who created the job.</li></ul>|\n"
       summary: Cancel an import or validation job
-      operationId: patchImportContentValidation
+      operationId: cancelImport
       parameters:
         - $ref: '#/components/parameters/jobId'
       responses:
@@ -548,9 +518,6 @@ paths:
       servers:
         - url: https://${API_DOMAIN}/knowledge/contentmgr/v4
           description: Production Server
-          variables:
-            API_DOMAIN:
-              default: api.egain.cloud
   /import/content/health:
     get:
       description: |
@@ -588,6 +555,8 @@ paths:
         | System |<ul><li>No authentication required for basic health checks.</li><li>This endpoint is designed for infrastructure monitoring.</li><li>Rate limiting applies to prevent abuse.</li></ul>|
       summary: Check service health status
       operationId: getHealth
+      x-internal: true
+      x-speakeasy-group: content.health
       tags:
         - Health Check
       responses:
@@ -799,13 +768,9 @@ paths:
                       storage: unhealthy
       security:
         - accessToken: []
-      x-speakeasy-group: content.health
       servers:
         - url: https://${API_DOMAIN}/knowledge/contentmgr/v4
           description: Production Server
-          variables:
-            API_DOMAIN:
-              default: api.egain.cloud
   /portals/{portalID}/articles/{articleID}:
     get:
       summary: Get Article by ID
@@ -2864,7 +2829,8 @@ paths:
       tags:
         - Search
       operationId: aiSearch
-      description: Submit a user query and receive a list of search results.
+      description: |
+        The Search API is a hybrid search service that combines semantic understanding with keyword precision to deliver fast, contextual, and relevant results from your enterprise knowledge base. It enables secure, role-aware access to articles, FAQs, and documentation across customer, agent, and employee interfaces. Each query returns a ranked list of results with snippets, metadata, and relevance scores. <br>**This endpoint is only available for Self Service environments.**
       parameters:
         - $ref: '#/components/parameters/q'
         - $ref: '#/components/parameters/portalReadableId'
@@ -5002,36 +4968,16 @@ components:
               minLength: 2
               maxLength: 1000
               description: A descriptive name for the channel (e.g., "web", "mobile app", "agent console").
-        context:
-          type: object
-          description: Additional contextual metadata that enriches the query, providing the LLM with relevant details for tailoring the response.
-          maxProperties: 3
-          properties:
-            userContext:
-              type: string
-              description: Information about the end user (e.g., preferences, profile data, or behavioral signals).
-              maxLength: 350000
-              minLength: 1
-            pageContext:
-              type: string
-              description: Details about the UI or page where the query was initiated (e.g., page URL, section, or component).
-              minLength: 1
-              maxLength: 350000
-            companyContext:
-              type: string
-              description: Information about the organization associated with the user, used for tailoring responses in enterprise environments.
-              minLength: 1
-              maxLength: 350000
         eventId:
           type: string
-          maxLength: 20
+          maxLength: 255
           description: Unique ID for this specific API call or event.
-          pattern: ^[0-9]+$
+          pattern: ^[\w\W]*$
         sessionId:
           type: string
-          maxLength: 20
+          maxLength: 255
           description: ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
-          pattern: ^[0-9]+$
+          pattern: ^[\w\W]*$
     RetrieveRequest:
       type: object
       properties:
@@ -5056,14 +5002,14 @@ components:
               example: Eight Bank Website
         eventId:
           type: string
-          maxLength: 20
+          maxLength: 255
           description: Unique ID for this specific API call or event.
-          pattern: ^[0-9]+$
+          pattern: ^[\w\W]*$
         sessionId:
           type: string
-          maxLength: 20
+          maxLength: 255
           description: ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
-          pattern: ^[0-9]+$
+          pattern: ^[\w\W]*$
     TopicBreadcrumb:
       title: Topic Breadcrumb
       type: object
@@ -5201,6 +5147,9 @@ components:
           $ref: '#/components/schemas/TopicBreadcrumb'
     RetrieveResponse:
       type: object
+      required:
+        - searchResults
+        - sessionId
       properties:
         answer:
           type: object
@@ -5262,16 +5211,20 @@ components:
               example: Eight Bank Page
         eventId:
           type: string
-          maxLength: 20
+          maxLength: 255
           description: Unique ID for this specific API call or event.
-          pattern: ^[0-9]+$
+          pattern: ^[\w\W]*$
         sessionId:
           type: string
-          maxLength: 20
+          maxLength: 255
           description: ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
-          pattern: ^[0-9]+$
+          pattern: ^[\w\W]*$
     AnswersResponse:
       type: object
+      required:
+        - searchResults
+        - answer
+        - sessionId
       properties:
         answer:
           type: object
@@ -5329,13 +5282,13 @@ components:
         sessionId:
           type: string
           description: ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
-          maxLength: 20
-          pattern: ^[0-9]+$
+          maxLength: 255
+          pattern: ^[\w\W]*$
         eventId:
           type: string
           description: Unique ID for this specific API call or event.
-          maxLength: 20
-          pattern: ^[0-9]+$
+          maxLength: 255
+          pattern: ^[\w\W]*$
     ImportContent:
       type: object
       properties:
@@ -9522,7 +9475,7 @@ components:
           maxItems: 15
         snippet:
           type: string
-          description: A snippet of the article content.
+          description: A semantic snippet of the article content.
           maxLength: 5000
           pattern: ^[\w\W]+$
         keywordSnippet:
@@ -9541,14 +9494,6 @@ components:
           minimum: 1
           maximum: 5
           description: Number of additional snippets.
-        opensearchHighlightingRaw:
-          type: object
-          description: Article content used for highlighting a keyword search result
-          properties:
-            articleContent:
-              type: array
-              items:
-                type: string
         contextualSummary:
           type: string
           description: Contextual Summary generated as part of metadata for embedding.

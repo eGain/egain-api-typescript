@@ -16,28 +16,35 @@ Developer-friendly & type-safe Typescript SDK specifically catered to leverage *
 <!-- Start Summary [summary] -->
 ## Summary
 
-Knowledge Portal Manager APIs: 
-### License
+Knowledge Portal Manager APIs: ### License
   The following licenses are required to use the Knowledge Access APIs:
   * If the user is an agent, then the *Knowledge + AI* license is required.
   * If the user is a customer, the *Self-Service* and *Advanced Self-Service* licenses must be available.
-### API Resource Limits
-The following Resources have predefined limits for specific access attributes for Enterprise use.
 
-| Resource | Attribute | Enterprise
-| ---------------- | ---------------------------- | ----------
-| Article Reference Limits |Number of attachments used in any article | 50
-|  |Number of custom attributes in an article | 15
-|  |Number of publish views used in an article version | 20
-| Topic Reference Limits |User-defined topics in a department| 50000
-|  |Depth of topics  | 20
-|  |Topics at any level | 2500
-|  |Number of custom attributes in a topic | 15
-| Portal Reference Limits | Tag categories in a portal | 15
-|  |Topics to be included in a portal | 2500
-|  |Number of articles to display in announcements | 25
-|  |Maximum related articles in portal setting | 100
-|  |Usage links and link groups setup for a portal | 25
+### Tiers
+
+| Tier	|Tier Name|	Named Users |	Description
+| ---------- | ---------- | ---------- | ----------------------------
+| Tier 1 |  Starter |	Up to 10|	Designed for small-scale implementations or pilot environments
+| Tier 2 |	Growth	| Up to 1000|	Suitable for mid-scale deployments requiring moderate scalability
+| Tier 3 |	Enterprise	| Greater than 1000|	Supports large-scale environments with extended configuration options
+
+### API Resource Limits
+The following Resources have predefined limits for specific access attributes for Starter, Growth and Enterprise use.
+
+| Resource | Limits | Starter | Growth | Enterprise
+| ---------------- | ---------------------------- | ---------- | ---------- | ----------
+| Article Reference |Number of attachments used in any article | 25 | 50 |50
+|  |Number of custom attributes in an article | 10 | 25| 50 
+|  |Number of publish views used in an article version | 20 | 20 | 20
+| Topic Reference |User-defined topics in a department| 1000| 5000 | 50000
+|  |Depth of topics  | 5 | 20 | 20
+|  |Topics at any level | 500 | 2500 | 2500
+|  |Number of custom attributes in a topic | 10 | 10 | 10
+| Portal Reference | Tag categories in a portal | 15 | 15 | 15
+|  |Topics to be included in a portal | 100 | 500 | 5000 
+|  |Number of articles to display in announcements | 10 | 25 | 25
+|  |Usage links and link groups setup for a portal | 5 | 10 | 25
     
       
 
@@ -203,9 +210,6 @@ run();
 <details open>
 <summary>Available methods</summary>
 
-### [aiservices](docs/sdks/aiservices/README.md)
-
-
 #### [aiservices.answers](docs/sdks/answers/README.md)
 
 * [getBestAnswer](docs/sdks/answers/README.md#getbestanswer) - Get the best answer for a user query
@@ -214,23 +218,16 @@ run();
 
 * [retrieveChunks](docs/sdks/retrieve/README.md#retrievechunks) - Retrieve Chunks
 
-### [content](docs/sdks/content/README.md)
-
-
 #### [content.health](docs/sdks/health/README.md)
 
 * [getHealth](docs/sdks/health/README.md#gethealth) - Check service health status
 
 #### [content.import](docs/sdks/import/README.md)
 
-* [createImport](docs/sdks/import/README.md#createimport) - Import content from external sources
-* [getImportContent](docs/sdks/import/README.md#getimportcontent) - Get the current status of an import or validation job
-* [createImportValidation](docs/sdks/import/README.md#createimportvalidation) - Validate content structure and format before import
-* [patchImportContentValidation](docs/sdks/import/README.md#patchimportcontentvalidation) - Cancel an import or validation job
-
-
-### [portal](docs/sdks/portal/README.md)
-
+* [createImportJob](docs/sdks/import/README.md#createimportjob) - Import content from external sources by creating an import job
+* [getImportStatus](docs/sdks/import/README.md#getimportstatus) - Get the current status of an import or validation job
+* [createImportValidationJob](docs/sdks/import/README.md#createimportvalidationjob) - Validate content structure and format before import by creating an import validation job
+* [cancelImport](docs/sdks/import/README.md#cancelimport) - Cancel an import or validation job
 
 #### [portal.article](docs/sdks/article/README.md)
 
@@ -376,10 +373,10 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`aiservicesAnswersGetBestAnswer`](docs/sdks/answers/README.md#getbestanswer) - Get the best answer for a user query
 - [`aiservicesRetrieveRetrieveChunks`](docs/sdks/retrieve/README.md#retrievechunks) - Retrieve Chunks
 - [`contentHealthGetHealth`](docs/sdks/health/README.md#gethealth) - Check service health status
-- [`contentImportCreateImport`](docs/sdks/import/README.md#createimport) - Import content from external sources
-- [`contentImportCreateImportValidation`](docs/sdks/import/README.md#createimportvalidation) - Validate content structure and format before import
-- [`contentImportGetImportContent`](docs/sdks/import/README.md#getimportcontent) - Get the current status of an import or validation job
-- [`contentImportPatchImportContentValidation`](docs/sdks/import/README.md#patchimportcontentvalidation) - Cancel an import or validation job
+- [`contentImportCancelImport`](docs/sdks/import/README.md#cancelimport) - Cancel an import or validation job
+- [`contentImportCreateImportJob`](docs/sdks/import/README.md#createimportjob) - Import content from external sources by creating an import job
+- [`contentImportCreateImportValidationJob`](docs/sdks/import/README.md#createimportvalidationjob) - Validate content structure and format before import by creating an import validation job
+- [`contentImportGetImportStatus`](docs/sdks/import/README.md#getimportstatus) - Get the current status of an import or validation job
 - [`portalArticleAddAsReference`](docs/sdks/article/README.md#addasreference) - Add as Reference
 - [`portalArticleAddToReply`](docs/sdks/article/README.md#addtoreply) - Add Article to Reply
 - [`portalArticleComplyArticle`](docs/sdks/article/README.md#complyarticle) - Comply With an Article
@@ -617,7 +614,7 @@ const egain = new Egain({
 
 async function run() {
   try {
-    const result = await egain.content.import.createImport({
+    const result = await egain.content.import.createImportJob({
       dataSource: {
         type: "AWS S3 bucket",
         path: "s3://mybucket/myfolder/",
@@ -684,53 +681,6 @@ run();
 <!-- Start Server Selection [server] -->
 ## Server Selection
 
-### Server Variables
-
-The default server `https://${API_DOMAIN}/knowledge/portalmgr/v4` contains variables and is set to `https://$api.egain.cloud/knowledge/portalmgr/v4` by default. To override default values, the following parameters are available when initializing the SDK client instance:
-
-| Variable     | Parameter           | Default             | Description |
-| ------------ | ------------------- | ------------------- | ----------- |
-| `API_DOMAIN` | `apiDomain: string` | `"api.egain.cloud"` |             |
-
-#### Example
-
-```typescript
-import { Egain } from "@egain/egain-api-typescript";
-
-const egain = new Egain({
-  apiDomain: "<value>",
-  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
-});
-
-async function run() {
-  const result = await egain.aiservices.retrieve.retrieveChunks({
-    q: "fair lending",
-    portalID: "PROD-1000",
-    filterUserProfileID: "PROD-3210",
-    language: "en-US",
-    filterTags: {
-      "PROD-1234": [
-        "PROD-2000",
-        "PROD-2003",
-      ],
-      "PROD-2005": [
-        "PROD-2007",
-      ],
-    },
-    retrieveRequest: {
-      channel: {
-        name: "Eight Bank Website",
-      },
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-
-```
-
 ### Override Server URL Per-Client
 
 The default server can be overridden globally by passing a URL to the `serverURL: string` optional parameter when initializing the SDK client instance. For example:
@@ -738,7 +688,7 @@ The default server can be overridden globally by passing a URL to the `serverURL
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  serverURL: "https://$api.egain.cloud/knowledge/portalmgr/v4",
+  serverURL: "https://${API_DOMAIN}/knowledge/portalmgr/v4",
   accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
@@ -802,7 +752,7 @@ async function run() {
       },
     },
   }, {
-    serverURL: "https://$api.egain.cloud/core/aiservices/v4",
+    serverURL: "https://${API_DOMAIN}/core/aiservices/v4",
   });
 
   console.log(result);

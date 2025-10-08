@@ -10,10 +10,10 @@
 ## getBestAnswer
 
 The **Answers API** allows enterprises to deliver fast, accurate, and contextual responses powered by their organizational knowledge. It supports two complementary approaches:  
-<li> **Certified Answers**: Direct snippets retrieved from enterprise-authored content. </li>  
-<li> **Generative Answers**: Natural language responses synthesized by a large language model (LLM).  </li>
+  - **Certified Answers**: Direct snippets retrieved from enterprise-authored content.
+  - **Generative Answers**: Natural language responses synthesized by a large language model (LLM).
 
-Every response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments.
+Every response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments. <br>**This endpoint is only available for Self Service environments.**
 
 
 ### Example Usage

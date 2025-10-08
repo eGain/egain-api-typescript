@@ -31,30 +31,8 @@ export type AnswersRequestChannel = {
   name?: string | undefined;
 };
 
-/**
- * Additional contextual metadata that enriches the query, providing the LLM with relevant details for tailoring the response.
- */
-export type Context = {
-  /**
-   * Information about the end user (e.g., preferences, profile data, or behavioral signals).
-   */
-  userContext?: string | undefined;
-  /**
-   * Details about the UI or page where the query was initiated (e.g., page URL, section, or component).
-   */
-  pageContext?: string | undefined;
-  /**
-   * Information about the organization associated with the user, used for tailoring responses in enterprise environments.
-   */
-  companyContext?: string | undefined;
-};
-
 export type AnswersRequest = {
   channel?: AnswersRequestChannel | undefined;
-  /**
-   * Additional contextual metadata that enriches the query, providing the LLM with relevant details for tailoring the response.
-   */
-  context?: Context | undefined;
   /**
    * Unique ID for this specific API call or event.
    */
@@ -144,66 +122,12 @@ export function answersRequestChannelFromJSON(
 }
 
 /** @internal */
-export const Context$inboundSchema: z.ZodType<Context, z.ZodTypeDef, unknown> =
-  z.object({
-    userContext: z.string().optional(),
-    pageContext: z.string().optional(),
-    companyContext: z.string().optional(),
-  });
-
-/** @internal */
-export type Context$Outbound = {
-  userContext?: string | undefined;
-  pageContext?: string | undefined;
-  companyContext?: string | undefined;
-};
-
-/** @internal */
-export const Context$outboundSchema: z.ZodType<
-  Context$Outbound,
-  z.ZodTypeDef,
-  Context
-> = z.object({
-  userContext: z.string().optional(),
-  pageContext: z.string().optional(),
-  companyContext: z.string().optional(),
-});
-
-/**
- * @internal
- * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
- */
-export namespace Context$ {
-  /** @deprecated use `Context$inboundSchema` instead. */
-  export const inboundSchema = Context$inboundSchema;
-  /** @deprecated use `Context$outboundSchema` instead. */
-  export const outboundSchema = Context$outboundSchema;
-  /** @deprecated use `Context$Outbound` instead. */
-  export type Outbound = Context$Outbound;
-}
-
-export function contextToJSON(context: Context): string {
-  return JSON.stringify(Context$outboundSchema.parse(context));
-}
-
-export function contextFromJSON(
-  jsonString: string,
-): SafeParseResult<Context, SDKValidationError> {
-  return safeParse(
-    jsonString,
-    (x) => Context$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'Context' from JSON`,
-  );
-}
-
-/** @internal */
 export const AnswersRequest$inboundSchema: z.ZodType<
   AnswersRequest,
   z.ZodTypeDef,
   unknown
 > = z.object({
   channel: z.lazy(() => AnswersRequestChannel$inboundSchema).optional(),
-  context: z.lazy(() => Context$inboundSchema).optional(),
   eventId: z.string().optional(),
   sessionId: z.string().optional(),
 });
@@ -211,7 +135,6 @@ export const AnswersRequest$inboundSchema: z.ZodType<
 /** @internal */
 export type AnswersRequest$Outbound = {
   channel?: AnswersRequestChannel$Outbound | undefined;
-  context?: Context$Outbound | undefined;
   eventId?: string | undefined;
   sessionId?: string | undefined;
 };
@@ -223,7 +146,6 @@ export const AnswersRequest$outboundSchema: z.ZodType<
   AnswersRequest
 > = z.object({
   channel: z.lazy(() => AnswersRequestChannel$outboundSchema).optional(),
-  context: z.lazy(() => Context$outboundSchema).optional(),
   eventId: z.string().optional(),
   sessionId: z.string().optional(),
 });

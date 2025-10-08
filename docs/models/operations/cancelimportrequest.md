@@ -1,11 +1,11 @@
-# GetImportContentRequest
+# CancelImportRequest
 
 ## Example Usage
 
 ```typescript
-import { GetImportContentRequest } from "@egain/egain-api-typescript/models/operations";
+import { CancelImportRequest } from "@egain/egain-api-typescript/models/operations";
 
-let value: GetImportContentRequest = {
+let value: CancelImportRequest = {
   jobId: "7A84B875-6F75-4C7B-B137-0632B62DB0BD",
 };
 ```

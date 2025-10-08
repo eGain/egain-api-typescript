@@ -26,10 +26,6 @@ export type SDKOptions = {
    */
   serverIdx?: number | undefined;
   /**
-   * Sets the API_DOMAIN variable for url substitution
-   */
-  apiDomain?: string | undefined;
-  /**
    * Allows overriding the default server URL used by the SDK
    */
   serverURL?: string | undefined;
@@ -48,12 +44,7 @@ export type SDKOptions = {
 export function serverURLFromOptions(options: SDKOptions): URL | null {
   let serverURL = options.serverURL;
 
-  const serverParams: Params[] = [
-    {
-      "API_DOMAIN": options.apiDomain ?? "api.egain.cloud",
-    },
-  ];
-  let params: Params = {};
+  const params: Params = {};
 
   if (!serverURL) {
     const serverIdx = options.serverIdx ?? 0;
@@ -61,7 +52,6 @@ export function serverURLFromOptions(options: SDKOptions): URL | null {
       throw new Error(`Invalid server index ${serverIdx}`);
     }
     serverURL = ServerList[serverIdx] || "";
-    params = serverParams[serverIdx] || {};
   }
 
   const u = pathToFunc(serverURL)(params);
@@ -71,8 +61,8 @@ export function serverURLFromOptions(options: SDKOptions): URL | null {
 export const SDK_METADATA = {
   language: "typescript",
   openapiDocVersion: "4.0.0",
-  sdkVersion: "0.3.5",
-  genVersion: "2.722.2",
+  sdkVersion: "0.3.8",
+  genVersion: "2.723.2",
   userAgent:
-    "speakeasy-sdk/typescript 0.3.5 2.722.2 4.0.0 @egain/egain-api-typescript",
+    "speakeasy-sdk/typescript 0.3.8 2.723.2 4.0.0 @egain/egain-api-typescript",
 } as const;

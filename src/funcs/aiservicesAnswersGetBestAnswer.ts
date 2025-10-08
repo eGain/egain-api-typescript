@@ -31,10 +31,10 @@ import { Result } from "../types/fp.js";
  *
  * @remarks
  * The **Answers API** allows enterprises to deliver fast, accurate, and contextual responses powered by their organizational knowledge. It supports two complementary approaches:
- * <li> **Certified Answers**: Direct snippets retrieved from enterprise-authored content. </li>
- * <li> **Generative Answers**: Natural language responses synthesized by a large language model (LLM).  </li>
+ *   - **Certified Answers**: Direct snippets retrieved from enterprise-authored content.
+ *   - **Generative Answers**: Natural language responses synthesized by a large language model (LLM).
  *
- * Every response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments.
+ * Every response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments. <br>**This endpoint is only available for Self Service environments.**
  */
 export function aiservicesAnswersGetBestAnswer(
   client: EgainCore,
@@ -92,9 +92,7 @@ async function $do(
   const body = encodeJSON("body", payload.AnswersRequest, { explode: true });
 
   const baseURL = options?.serverURL
-    || pathToFunc(GetBestAnswerServerList[0], { charEncoding: "percent" })({
-      API_DOMAIN: "api.egain.cloud",
-    });
+    || pathToFunc(GetBestAnswerServerList[0], { charEncoding: "percent" })();
 
   const pathParams = {
     portalID: encodeSimple("portalID", payload.portalID, {
@@ -126,7 +124,7 @@ async function $do(
     options: client._options,
     baseURL: baseURL ?? "",
     operationID: "getBestAnswer",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
 

@@ -22,51 +22,64 @@ import * as errors from "../models/errors/index.js";
 import { ResponseValidationError } from "../models/errors/responsevalidationerror.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import * as models from "../models/index.js";
-import { CreateImportServerList } from "../models/operations/createimport.js";
+import { CreateImportValidationJobServerList } from "../models/operations/createimportvalidationjob.js";
 import * as operations from "../models/operations/index.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Import content from external sources
+ * Validate content structure and format before import by creating an import validation job
  *
  * @remarks
- * # Import Content
+ * # Validate Import Content
  *
  * ## Overview
- * This API initiates a bulk content import operation from Amazon S3 buckets. It creates an asynchronous import job that processes content in the background, allowing you to import large volumes of content without blocking your application.
+ * This API enables users to validate content structure, format, and compliance before importing it into the production knowledge base. Validation is a non-destructive operation that checks content without making any changes to your existing data.
  *
- * ## How It Works
- * 1. **Job Creation**: The API creates an import job and returns a unique job ID
- * 2. **Content Processing**: Content is processed asynchronously in the background
- * 3. **Status Monitoring**: Use the job ID to monitor progress via the Status API
- * 4. **Completion**: Job completes when all content is processed or errors occur
+ * ## What Validation Checks
+ * - **Content Structure**: Verifies required fields and data types
+ * - **Format Compliance**: Ensures content meets platform requirements
+ * - **Language Support**: Validates content against supported languages
+ * - **Metadata Mapping**: Checks field mappings and transformations
+ * - **Business Rules**: Validates against department-specific rules
  *
- * ## Supported Operations
- * - **Import**: Add new content to the knowledge base
- * - **Update**: Modify existing content
+ * ## Validation Benefits
+ * - **Risk Mitigation**: Identify issues before affecting production data
+ * - **Quality Assurance**: Ensure content meets organizational standards
+ * - **Cost Savings**: Avoid failed imports that waste processing time
+ * - **Compliance**: Meet regulatory and internal content requirements
  *
- * ## Data Source Types
- * - AWS S3 bucket
- * - Shared file path
+ * ## Validation Process
+ * 1. **Content Analysis**: System analyzes content structure and format
+ * 2. **Rule Validation**: Applies business rules and validation logic
+ * 3. **Quality Assessment**: Evaluates content quality and completeness
+ * 4. **Report Generation**: Creates detailed validation report
+ * 5. **Issue Categorization**: Classifies issues by severity and type
+ *
+ * ## Common Validation Issues
+ * - **Missing Required Fields**: Title, description, category, etc.
+ * - **Invalid Data Types**: Incorrect field formats (dates, numbers, etc.)
+ * - **Language Mismatches**: Content language not supported by department
  *
  * ## Best Practices
- * - **Scheduling**: Use scheduleTime for off-peak imports to minimize system impact
- * - **Monitoring**: Regularly check job status and logs for any issues
- * - **Error Handling**: Review failed items and retry with corrections
+ * - **Always Validate First**: Run validation before any import operation
+ * - **Review Reports**: Carefully examine validation results and warnings
+ * - **Fix Issues**: Address validation errors before proceeding with import
+ * - **Test Small Batches**: Validate with small content samples first
+ * - **Iterate**: Use validation feedback to improve content quality
  *
  * ## Permissions
  * | Actor | Permission |
  * | ------- | --------|
- * | User |<ul><li>User must be a department user.</li><li>Content can only be imported in user's home department.</li><li>User must have 'Author' role.</li><li>Content can only be imported if the user has all the required languages assigned.</li></ul>|
+ * | User |<ul><li>User must be a department user.</li><li>User must have 'Author' role.</li><li>Content can only be imported if the user has all the required languages assigned.</li></ul>|
  */
-export function contentImportCreateImport(
+export function contentImportCreateImportValidationJob(
   client: EgainCore,
-  request: models.ImportContent,
+  request: models.ValidateImportContent,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.CreateImportResponse | undefined,
+    operations.CreateImportValidationJobResponse | undefined,
     | errors.WSErrorCommon
     | errors.SchemasWSErrorCommon
     | EgainError
@@ -88,12 +101,12 @@ export function contentImportCreateImport(
 
 async function $do(
   client: EgainCore,
-  request: models.ImportContent,
+  request: models.ValidateImportContent,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.CreateImportResponse | undefined,
+      operations.CreateImportValidationJobResponse | undefined,
       | errors.WSErrorCommon
       | errors.SchemasWSErrorCommon
       | EgainError
@@ -110,7 +123,7 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => models.ImportContent$outboundSchema.parse(value),
+    (value) => models.ValidateImportContent$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -120,11 +133,11 @@ async function $do(
   const body = encodeJSON("body", payload, { explode: true });
 
   const baseURL = options?.serverURL
-    || pathToFunc(CreateImportServerList[0], { charEncoding: "percent" })({
-      API_DOMAIN: "api.egain.cloud",
-    });
+    || pathToFunc(CreateImportValidationJobServerList[0], {
+      charEncoding: "percent",
+    })();
 
-  const path = pathToFunc("/import/content")();
+  const path = pathToFunc("/import/content/validate")();
 
   const headers = new Headers(compactMap({
     "Content-Type": "application/json",
@@ -138,8 +151,8 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: baseURL ?? "",
-    operationID: "createImport",
-    oAuth2Scopes: [],
+    operationID: "createImportValidationJob",
+    oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
 
@@ -181,7 +194,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.CreateImportResponse | undefined,
+    operations.CreateImportValidationJobResponse | undefined,
     | errors.WSErrorCommon
     | errors.SchemasWSErrorCommon
     | EgainError
@@ -193,9 +206,11 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.nil(202, operations.CreateImportResponse$inboundSchema.optional(), {
-      hdrs: true,
-    }),
+    M.nil(
+      202,
+      operations.CreateImportValidationJobResponse$inboundSchema.optional(),
+      { hdrs: true },
+    ),
     M.jsonErr([400, 401, 403, 406], errors.WSErrorCommon$inboundSchema),
     M.jsonErr(412, errors.SchemasWSErrorCommon$inboundSchema),
     M.jsonErr(500, errors.WSErrorCommon$inboundSchema),

@@ -87,13 +87,6 @@ export type ArticleAISearchResultCustomAttribute = {
 };
 
 /**
- * Article content used for highlighting a keyword search result
- */
-export type OpensearchHighlightingRaw = {
-  articleContent?: Array<string> | undefined;
-};
-
-/**
  * The type of the Article and its attributes.
  */
 export type ArticleTypeAttributes = {
@@ -150,7 +143,7 @@ export type ArticleAISearchResult = {
    */
   customAttributes?: Array<ArticleAISearchResultCustomAttribute> | undefined;
   /**
-   * A snippet of the article content.
+   * A semantic snippet of the article content.
    */
   snippet: string;
   /**
@@ -165,10 +158,6 @@ export type ArticleAISearchResult = {
    * Number of additional snippets.
    */
   additionalSnippetCount?: number | undefined;
-  /**
-   * Article content used for highlighting a keyword search result
-   */
-  opensearchHighlightingRaw?: OpensearchHighlightingRaw | undefined;
   /**
    * Contextual Summary generated as part of metadata for embedding.
    */
@@ -341,60 +330,6 @@ export function articleAISearchResultCustomAttributeFromJSON(
 }
 
 /** @internal */
-export const OpensearchHighlightingRaw$inboundSchema: z.ZodType<
-  OpensearchHighlightingRaw,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  articleContent: z.array(z.string()).optional(),
-});
-
-/** @internal */
-export type OpensearchHighlightingRaw$Outbound = {
-  articleContent?: Array<string> | undefined;
-};
-
-/** @internal */
-export const OpensearchHighlightingRaw$outboundSchema: z.ZodType<
-  OpensearchHighlightingRaw$Outbound,
-  z.ZodTypeDef,
-  OpensearchHighlightingRaw
-> = z.object({
-  articleContent: z.array(z.string()).optional(),
-});
-
-/**
- * @internal
- * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
- */
-export namespace OpensearchHighlightingRaw$ {
-  /** @deprecated use `OpensearchHighlightingRaw$inboundSchema` instead. */
-  export const inboundSchema = OpensearchHighlightingRaw$inboundSchema;
-  /** @deprecated use `OpensearchHighlightingRaw$outboundSchema` instead. */
-  export const outboundSchema = OpensearchHighlightingRaw$outboundSchema;
-  /** @deprecated use `OpensearchHighlightingRaw$Outbound` instead. */
-  export type Outbound = OpensearchHighlightingRaw$Outbound;
-}
-
-export function opensearchHighlightingRawToJSON(
-  opensearchHighlightingRaw: OpensearchHighlightingRaw,
-): string {
-  return JSON.stringify(
-    OpensearchHighlightingRaw$outboundSchema.parse(opensearchHighlightingRaw),
-  );
-}
-
-export function opensearchHighlightingRawFromJSON(
-  jsonString: string,
-): SafeParseResult<OpensearchHighlightingRaw, SDKValidationError> {
-  return safeParse(
-    jsonString,
-    (x) => OpensearchHighlightingRaw$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'OpensearchHighlightingRaw' from JSON`,
-  );
-}
-
-/** @internal */
 export const ArticleTypeAttributes$inboundSchema: z.ZodType<
   ArticleTypeAttributes,
   z.ZodTypeDef,
@@ -526,9 +461,6 @@ export const ArticleAISearchResult$inboundSchema: z.ZodType<
   keywordSnippet: z.string().optional(),
   additionalSnippets: z.array(AdditionalSnippets$inboundSchema).optional(),
   additionalSnippetCount: z.number().int().optional(),
-  opensearchHighlightingRaw: z.lazy(() =>
-    OpensearchHighlightingRaw$inboundSchema
-  ).optional(),
   contextualSummary: z.string().optional(),
   description: z.string().optional(),
   summary: z.string().optional(),
@@ -557,7 +489,6 @@ export type ArticleAISearchResult$Outbound = {
   keywordSnippet?: string | undefined;
   additionalSnippets?: Array<AdditionalSnippets$Outbound> | undefined;
   additionalSnippetCount?: number | undefined;
-  opensearchHighlightingRaw?: OpensearchHighlightingRaw$Outbound | undefined;
   contextualSummary?: string | undefined;
   description?: string | undefined;
   summary?: string | undefined;
@@ -589,9 +520,6 @@ export const ArticleAISearchResult$outboundSchema: z.ZodType<
   keywordSnippet: z.string().optional(),
   additionalSnippets: z.array(AdditionalSnippets$outboundSchema).optional(),
   additionalSnippetCount: z.number().int().optional(),
-  opensearchHighlightingRaw: z.lazy(() =>
-    OpensearchHighlightingRaw$outboundSchema
-  ).optional(),
   contextualSummary: z.string().optional(),
   description: z.string().optional(),
   summary: z.string().optional(),

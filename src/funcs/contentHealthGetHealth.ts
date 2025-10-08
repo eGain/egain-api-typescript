@@ -105,9 +105,7 @@ async function $do(
   ]
 > {
   const baseURL = options?.serverURL
-    || pathToFunc(GetHealthServerList[0], { charEncoding: "percent" })({
-      API_DOMAIN: "api.egain.cloud",
-    });
+    || pathToFunc(GetHealthServerList[0], { charEncoding: "percent" })();
 
   const path = pathToFunc("/import/content/health")();
 
@@ -123,7 +121,7 @@ async function $do(
     options: client._options,
     baseURL: baseURL ?? "",
     operationID: "getHealth",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
 

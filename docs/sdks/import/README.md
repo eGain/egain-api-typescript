@@ -5,17 +5,20 @@
 
 ### Available Operations
 
-* [createImport](#createimport) - Import content from external sources
-* [getImportContent](#getimportcontent) - Get the current status of an import or validation job
-* [createImportValidation](#createimportvalidation) - Validate content structure and format before import
-* [patchImportContentValidation](#patchimportcontentvalidation) - Cancel an import or validation job
+* [createImportJob](#createimportjob) - Import content from external sources by creating an import job
+* [getImportStatus](#getimportstatus) - Get the current status of an import or validation job
+* [createImportValidationJob](#createimportvalidationjob) - Validate content structure and format before import by creating an import validation job
+* [cancelImport](#cancelimport) - Cancel an import or validation job
 
-## createImport
+## createImportJob
 
 # Import Content
 
 ## Overview
-This API initiates a bulk content import operation from Amazon S3 buckets. It creates an asynchronous import job that processes content in the background, allowing you to import large volumes of content without blocking your application.
+This API initiates a bulk content import operation from Data Sources. It creates an asynchronous import job that processes content in the background, allowing you to import large volumes of content without blocking your application.
+
+## Pre-requisties
+1. Content in Data Source needs to be in this format: [Guide to Data Import Format](../../../../../developer-portal/guides/ingestion/data-import-format-guide.md)
 
 ## How It Works
 1. **Job Creation**: The API creates an import job and returns a unique job ID
@@ -44,7 +47,7 @@ This API initiates a bulk content import operation from Amazon S3 buckets. It cr
 
 ### Example Usage
 
-<!-- UsageSnippet language="typescript" operationID="createImport" method="post" path="/import/content" -->
+<!-- UsageSnippet language="typescript" operationID="createImportJob" method="post" path="/import/content" -->
 ```typescript
 import { Egain } from "@egain/egain-api-typescript";
 
@@ -53,7 +56,7 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.content.import.createImport({
+  const result = await egain.content.import.createImportJob({
     dataSource: {
       type: "AWS S3 bucket",
       path: "s3://mybucket/myfolder/",
@@ -78,7 +81,7 @@ The standalone function version of this method:
 
 ```typescript
 import { EgainCore } from "@egain/egain-api-typescript/core.js";
-import { contentImportCreateImport } from "@egain/egain-api-typescript/funcs/contentImportCreateImport.js";
+import { contentImportCreateImportJob } from "@egain/egain-api-typescript/funcs/contentImportCreateImportJob.js";
 
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -87,7 +90,7 @@ const egain = new EgainCore({
 });
 
 async function run() {
-  const res = await contentImportCreateImport(egain, {
+  const res = await contentImportCreateImportJob(egain, {
     dataSource: {
       type: "AWS S3 bucket",
       path: "s3://mybucket/myfolder/",
@@ -103,7 +106,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("contentImportCreateImport failed:", res.error);
+    console.log("contentImportCreateImportJob failed:", res.error);
   }
 }
 
@@ -122,7 +125,7 @@ run();
 
 ### Response
 
-**Promise\<[operations.CreateImportResponse](../../models/operations/createimportresponse.md)\>**
+**Promise\<[operations.CreateImportJobResponse](../../models/operations/createimportjobresponse.md)\>**
 
 ### Errors
 
@@ -133,7 +136,7 @@ run();
 | errors.WSErrorCommon        | 500                         | application/json            |
 | errors.EgainDefaultError    | 4XX, 5XX                    | \*/\*                       |
 
-## getImportContent
+## getImportStatus
 
 # Get Import Job Status
 
@@ -169,7 +172,7 @@ Log files contain detailed information about:
 
 ### Example Usage
 
-<!-- UsageSnippet language="typescript" operationID="getImportContent" method="get" path="/import/content/{job_id}/status" -->
+<!-- UsageSnippet language="typescript" operationID="getImportStatus" method="get" path="/import/content/{job_id}/status" -->
 ```typescript
 import { Egain } from "@egain/egain-api-typescript";
 
@@ -178,7 +181,7 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.content.import.getImportContent({
+  const result = await egain.content.import.getImportStatus({
     jobId: "7A84B875-6F75-4C7B-B137-0632B62DB0BD",
   });
 
@@ -194,7 +197,7 @@ The standalone function version of this method:
 
 ```typescript
 import { EgainCore } from "@egain/egain-api-typescript/core.js";
-import { contentImportGetImportContent } from "@egain/egain-api-typescript/funcs/contentImportGetImportContent.js";
+import { contentImportGetImportStatus } from "@egain/egain-api-typescript/funcs/contentImportGetImportStatus.js";
 
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -203,14 +206,14 @@ const egain = new EgainCore({
 });
 
 async function run() {
-  const res = await contentImportGetImportContent(egain, {
+  const res = await contentImportGetImportStatus(egain, {
     jobId: "7A84B875-6F75-4C7B-B137-0632B62DB0BD",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("contentImportGetImportContent failed:", res.error);
+    console.log("contentImportGetImportStatus failed:", res.error);
   }
 }
 
@@ -221,7 +224,7 @@ run();
 
 | Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.GetImportContentRequest](../../models/operations/getimportcontentrequest.md)                                                                                       | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `request`                                                                                                                                                                      | [operations.GetImportStatusRequest](../../models/operations/getimportstatusrequest.md)                                                                                         | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
 | `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
 | `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
 | `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
@@ -239,7 +242,7 @@ run();
 | errors.WSErrorCommon     | 500                      | application/json         |
 | errors.EgainDefaultError | 4XX, 5XX                 | \*/\*                    |
 
-## createImportValidation
+## createImportValidationJob
 
 # Validate Import Content
 
@@ -286,7 +289,7 @@ This API enables users to validate content structure, format, and compliance bef
 
 ### Example Usage
 
-<!-- UsageSnippet language="typescript" operationID="createImportValidation" method="post" path="/import/content/validate" -->
+<!-- UsageSnippet language="typescript" operationID="createImportValidationJob" method="post" path="/import/content/validate" -->
 ```typescript
 import { Egain } from "@egain/egain-api-typescript";
 
@@ -295,7 +298,7 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.content.import.createImportValidation({
+  const result = await egain.content.import.createImportValidationJob({
     dataSource: {
       type: "AWS S3 bucket",
       path: "s3://mybucket/myfolder/",
@@ -316,7 +319,7 @@ The standalone function version of this method:
 
 ```typescript
 import { EgainCore } from "@egain/egain-api-typescript/core.js";
-import { contentImportCreateImportValidation } from "@egain/egain-api-typescript/funcs/contentImportCreateImportValidation.js";
+import { contentImportCreateImportValidationJob } from "@egain/egain-api-typescript/funcs/contentImportCreateImportValidationJob.js";
 
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -325,7 +328,7 @@ const egain = new EgainCore({
 });
 
 async function run() {
-  const res = await contentImportCreateImportValidation(egain, {
+  const res = await contentImportCreateImportValidationJob(egain, {
     dataSource: {
       type: "AWS S3 bucket",
       path: "s3://mybucket/myfolder/",
@@ -337,7 +340,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("contentImportCreateImportValidation failed:", res.error);
+    console.log("contentImportCreateImportValidationJob failed:", res.error);
   }
 }
 
@@ -356,7 +359,7 @@ run();
 
 ### Response
 
-**Promise\<[operations.CreateImportValidationResponse](../../models/operations/createimportvalidationresponse.md)\>**
+**Promise\<[operations.CreateImportValidationJobResponse](../../models/operations/createimportvalidationjobresponse.md)\>**
 
 ### Errors
 
@@ -367,7 +370,7 @@ run();
 | errors.WSErrorCommon        | 500                         | application/json            |
 | errors.EgainDefaultError    | 4XX, 5XX                    | \*/\*                       |
 
-## patchImportContentValidation
+## cancelImport
 
 # Cancel Import or Validation Job
 
@@ -414,7 +417,7 @@ This API allows users to cancel import or validation operations that are current
 
 ### Example Usage
 
-<!-- UsageSnippet language="typescript" operationID="patchImportContentValidation" method="post" path="/import/content/{job_id}/cancel" -->
+<!-- UsageSnippet language="typescript" operationID="cancelImport" method="post" path="/import/content/{job_id}/cancel" -->
 ```typescript
 import { Egain } from "@egain/egain-api-typescript";
 
@@ -423,7 +426,7 @@ const egain = new Egain({
 });
 
 async function run() {
-  await egain.content.import.patchImportContentValidation({
+  await egain.content.import.cancelImport({
     jobId: "7A84B875-6F75-4C7B-B137-0632B62DB0BD",
   });
 
@@ -439,7 +442,7 @@ The standalone function version of this method:
 
 ```typescript
 import { EgainCore } from "@egain/egain-api-typescript/core.js";
-import { contentImportPatchImportContentValidation } from "@egain/egain-api-typescript/funcs/contentImportPatchImportContentValidation.js";
+import { contentImportCancelImport } from "@egain/egain-api-typescript/funcs/contentImportCancelImport.js";
 
 // Use `EgainCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -448,14 +451,14 @@ const egain = new EgainCore({
 });
 
 async function run() {
-  const res = await contentImportPatchImportContentValidation(egain, {
+  const res = await contentImportCancelImport(egain, {
     jobId: "7A84B875-6F75-4C7B-B137-0632B62DB0BD",
   });
   if (res.ok) {
     const { value: result } = res;
     
   } else {
-    console.log("contentImportPatchImportContentValidation failed:", res.error);
+    console.log("contentImportCancelImport failed:", res.error);
   }
 }
 
@@ -466,7 +469,7 @@ run();
 
 | Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.PatchImportContentValidationRequest](../../models/operations/patchimportcontentvalidationrequest.md)                                                               | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `request`                                                                                                                                                                      | [operations.CancelImportRequest](../../models/operations/cancelimportrequest.md)                                                                                               | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
 | `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
 | `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
 | `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |

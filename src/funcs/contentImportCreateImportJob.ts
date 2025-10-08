@@ -22,64 +22,54 @@ import * as errors from "../models/errors/index.js";
 import { ResponseValidationError } from "../models/errors/responsevalidationerror.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import * as models from "../models/index.js";
-import { CreateImportValidationServerList } from "../models/operations/createimportvalidation.js";
+import { CreateImportJobServerList } from "../models/operations/createimportjob.js";
 import * as operations from "../models/operations/index.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Validate content structure and format before import
+ * Import content from external sources by creating an import job
  *
  * @remarks
- * # Validate Import Content
+ * # Import Content
  *
  * ## Overview
- * This API enables users to validate content structure, format, and compliance before importing it into the production knowledge base. Validation is a non-destructive operation that checks content without making any changes to your existing data.
+ * This API initiates a bulk content import operation from Data Sources. It creates an asynchronous import job that processes content in the background, allowing you to import large volumes of content without blocking your application.
  *
- * ## What Validation Checks
- * - **Content Structure**: Verifies required fields and data types
- * - **Format Compliance**: Ensures content meets platform requirements
- * - **Language Support**: Validates content against supported languages
- * - **Metadata Mapping**: Checks field mappings and transformations
- * - **Business Rules**: Validates against department-specific rules
+ * ## Pre-requisties
+ * 1. Content in Data Source needs to be in this format: [Guide to Data Import Format](../../../../../developer-portal/guides/ingestion/data-import-format-guide.md)
  *
- * ## Validation Benefits
- * - **Risk Mitigation**: Identify issues before affecting production data
- * - **Quality Assurance**: Ensure content meets organizational standards
- * - **Cost Savings**: Avoid failed imports that waste processing time
- * - **Compliance**: Meet regulatory and internal content requirements
+ * ## How It Works
+ * 1. **Job Creation**: The API creates an import job and returns a unique job ID
+ * 2. **Content Processing**: Content is processed asynchronously in the background
+ * 3. **Status Monitoring**: Use the job ID to monitor progress via the Status API
+ * 4. **Completion**: Job completes when all content is processed or errors occur
  *
- * ## Validation Process
- * 1. **Content Analysis**: System analyzes content structure and format
- * 2. **Rule Validation**: Applies business rules and validation logic
- * 3. **Quality Assessment**: Evaluates content quality and completeness
- * 4. **Report Generation**: Creates detailed validation report
- * 5. **Issue Categorization**: Classifies issues by severity and type
+ * ## Supported Operations
+ * - **Import**: Add new content to the knowledge base
+ * - **Update**: Modify existing content
  *
- * ## Common Validation Issues
- * - **Missing Required Fields**: Title, description, category, etc.
- * - **Invalid Data Types**: Incorrect field formats (dates, numbers, etc.)
- * - **Language Mismatches**: Content language not supported by department
+ * ## Data Source Types
+ * - AWS S3 bucket
+ * - Shared file path
  *
  * ## Best Practices
- * - **Always Validate First**: Run validation before any import operation
- * - **Review Reports**: Carefully examine validation results and warnings
- * - **Fix Issues**: Address validation errors before proceeding with import
- * - **Test Small Batches**: Validate with small content samples first
- * - **Iterate**: Use validation feedback to improve content quality
+ * - **Scheduling**: Use scheduleTime for off-peak imports to minimize system impact
+ * - **Monitoring**: Regularly check job status and logs for any issues
+ * - **Error Handling**: Review failed items and retry with corrections
  *
  * ## Permissions
  * | Actor | Permission |
  * | ------- | --------|
- * | User |<ul><li>User must be a department user.</li><li>User must have 'Author' role.</li><li>Content can only be imported if the user has all the required languages assigned.</li></ul>|
+ * | User |<ul><li>User must be a department user.</li><li>Content can only be imported in user's home department.</li><li>User must have 'Author' role.</li><li>Content can only be imported if the user has all the required languages assigned.</li></ul>|
  */
-export function contentImportCreateImportValidation(
+export function contentImportCreateImportJob(
   client: EgainCore,
-  request: models.ValidateImportContent,
+  request: models.ImportContent,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.CreateImportValidationResponse | undefined,
+    operations.CreateImportJobResponse | undefined,
     | errors.WSErrorCommon
     | errors.SchemasWSErrorCommon
     | EgainError
@@ -101,12 +91,12 @@ export function contentImportCreateImportValidation(
 
 async function $do(
   client: EgainCore,
-  request: models.ValidateImportContent,
+  request: models.ImportContent,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.CreateImportValidationResponse | undefined,
+      operations.CreateImportJobResponse | undefined,
       | errors.WSErrorCommon
       | errors.SchemasWSErrorCommon
       | EgainError
@@ -123,7 +113,7 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => models.ValidateImportContent$outboundSchema.parse(value),
+    (value) => models.ImportContent$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -133,13 +123,9 @@ async function $do(
   const body = encodeJSON("body", payload, { explode: true });
 
   const baseURL = options?.serverURL
-    || pathToFunc(CreateImportValidationServerList[0], {
-      charEncoding: "percent",
-    })({
-      API_DOMAIN: "api.egain.cloud",
-    });
+    || pathToFunc(CreateImportJobServerList[0], { charEncoding: "percent" })();
 
-  const path = pathToFunc("/import/content/validate")();
+  const path = pathToFunc("/import/content")();
 
   const headers = new Headers(compactMap({
     "Content-Type": "application/json",
@@ -153,8 +139,8 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: baseURL ?? "",
-    operationID: "createImportValidation",
-    oAuth2Scopes: [],
+    operationID: "createImportJob",
+    oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
 
@@ -196,7 +182,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.CreateImportValidationResponse | undefined,
+    operations.CreateImportJobResponse | undefined,
     | errors.WSErrorCommon
     | errors.SchemasWSErrorCommon
     | EgainError
@@ -208,11 +194,9 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.nil(
-      202,
-      operations.CreateImportValidationResponse$inboundSchema.optional(),
-      { hdrs: true },
-    ),
+    M.nil(202, operations.CreateImportJobResponse$inboundSchema.optional(), {
+      hdrs: true,
+    }),
     M.jsonErr([400, 401, 403, 406], errors.WSErrorCommon$inboundSchema),
     M.jsonErr(412, errors.SchemasWSErrorCommon$inboundSchema),
     M.jsonErr(500, errors.WSErrorCommon$inboundSchema),

@@ -30,7 +30,7 @@ import { Result } from "../types/fp.js";
  * Retrieve Chunks
  *
  * @remarks
- * The Retrieve API enables enterprises to directly access relevant content chunks from their organizational knowledge sources. It is designed for scenarios where developers want granular control over retrieved information, such as powering custom search, analytics, or retrieval-augmented generation (RAG) pipelines. <br><br> In addition to raw chunk retrieval, the API can return **Certified Answers** if it meets the 'Certified Answer' threshold score. Responses include relevance scores, metadata, and references to maintain transparency and flexibility. By leveraging the Retrieve API, organizations can build tailored experiences while retaining confidence in the source material.
+ * The Retrieve API enables enterprises to directly access relevant content chunks from their organizational knowledge sources. It is designed for scenarios where developers want granular control over retrieved information, such as powering custom search, analytics, or retrieval-augmented generation (RAG) pipelines. <br><br> In addition to raw chunk retrieval, the API can return **Certified Answers** if it meets the 'Certified Answer' threshold score. Responses include relevance scores, metadata, and references to maintain transparency and flexibility. By leveraging the Retrieve API, organizations can build tailored experiences while retaining confidence in the source material. <br>**This endpoint is only available for Self Service environments.**
  */
 export function aiservicesRetrieveRetrieveChunks(
   client: EgainCore,
@@ -88,9 +88,7 @@ async function $do(
   const body = encodeJSON("body", payload.RetrieveRequest, { explode: true });
 
   const baseURL = options?.serverURL
-    || pathToFunc(RetrieveChunksServerList[0], { charEncoding: "percent" })({
-      API_DOMAIN: "api.egain.cloud",
-    });
+    || pathToFunc(RetrieveChunksServerList[0], { charEncoding: "percent" })();
 
   const pathParams = {
     portalID: encodeSimple("portalID", payload.portalID, {
@@ -122,7 +120,7 @@ async function $do(
     options: client._options,
     baseURL: baseURL ?? "",
     operationID: "retrieveChunks",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
 

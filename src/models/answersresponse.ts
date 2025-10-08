@@ -77,16 +77,16 @@ export type AnswersResponseChannel = {
 };
 
 export type AnswersResponse = {
-  answer?: AnswersResponseAnswer | undefined;
+  answer: AnswersResponseAnswer;
   /**
    * List of top search results used to support the answer. Includes snippets, metadata, and relevance scores.
    */
-  searchResults?: Array<SearchResult> | undefined;
+  searchResults: Array<SearchResult>;
   channel?: AnswersResponseChannel | undefined;
   /**
    * ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
    */
-  sessionId?: string | undefined;
+  sessionId: string;
   /**
    * Unique ID for this specific API call or event.
    */
@@ -261,19 +261,19 @@ export const AnswersResponse$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
-  answer: z.lazy(() => AnswersResponseAnswer$inboundSchema).optional(),
-  searchResults: z.array(SearchResult$inboundSchema).optional(),
+  answer: z.lazy(() => AnswersResponseAnswer$inboundSchema),
+  searchResults: z.array(SearchResult$inboundSchema),
   channel: z.lazy(() => AnswersResponseChannel$inboundSchema).optional(),
-  sessionId: z.string().optional(),
+  sessionId: z.string(),
   eventId: z.string().optional(),
 });
 
 /** @internal */
 export type AnswersResponse$Outbound = {
-  answer?: AnswersResponseAnswer$Outbound | undefined;
-  searchResults?: Array<SearchResult$Outbound> | undefined;
+  answer: AnswersResponseAnswer$Outbound;
+  searchResults: Array<SearchResult$Outbound>;
   channel?: AnswersResponseChannel$Outbound | undefined;
-  sessionId?: string | undefined;
+  sessionId: string;
   eventId?: string | undefined;
 };
 
@@ -283,10 +283,10 @@ export const AnswersResponse$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   AnswersResponse
 > = z.object({
-  answer: z.lazy(() => AnswersResponseAnswer$outboundSchema).optional(),
-  searchResults: z.array(SearchResult$outboundSchema).optional(),
+  answer: z.lazy(() => AnswersResponseAnswer$outboundSchema),
+  searchResults: z.array(SearchResult$outboundSchema),
   channel: z.lazy(() => AnswersResponseChannel$outboundSchema).optional(),
-  sessionId: z.string().optional(),
+  sessionId: z.string(),
   eventId: z.string().optional(),
 });
 

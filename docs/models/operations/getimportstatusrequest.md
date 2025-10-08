@@ -1,11 +1,11 @@
-# PatchImportContentValidationRequest
+# GetImportStatusRequest
 
 ## Example Usage
 
 ```typescript
-import { PatchImportContentValidationRequest } from "@egain/egain-api-typescript/models/operations";
+import { GetImportStatusRequest } from "@egain/egain-api-typescript/models/operations";
 
-let value: PatchImportContentValidationRequest = {
+let value: GetImportStatusRequest = {
   jobId: "7A84B875-6F75-4C7B-B137-0632B62DB0BD",
 };
 ```

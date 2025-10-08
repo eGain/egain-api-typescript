@@ -1,15 +1,16 @@
-# CreateImportResponse
+# CreateImportValidationJobResponse
 
 ## Example Usage
 
 ```typescript
-import { CreateImportResponse } from "@egain/egain-api-typescript/models/operations";
+import { CreateImportValidationJobResponse } from "@egain/egain-api-typescript/models/operations";
 
-let value: CreateImportResponse = {
+let value: CreateImportValidationJobResponse = {
   headers: {
-    "key": [],
-    "key1": [
+    "key": [
       "<value 1>",
+      "<value 2>",
+      "<value 3>",
     ],
   },
 };

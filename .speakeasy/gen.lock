@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 941f5295-94f8-4bce-a1a1-3fcca6bf9341
 management:
-  docChecksum: 1ec202684243639caff85638206854ba
+  docChecksum: 298bf3dc14b494cc7c6c3a2ab35da04f
   docVersion: 4.0.0
-  speakeasyVersion: 1.635.1
-  generationVersion: 2.722.2
-  releaseVersion: 0.3.5
-  configChecksum: 3449df12a3d404dd9fbdaab66fecae7b
+  speakeasyVersion: 1.636.0
+  generationVersion: 2.723.2
+  releaseVersion: 0.3.8
+  configChecksum: 377e8d88221a84c04328fbb6b4cd83fa
   published: true
 features:
   typescript:
@@ -21,7 +21,7 @@ features:
     globalSecurityCallbacks: 0.1.0
     globalSecurityFlattening: 0.1.0
     globalServerURLs: 2.82.5
-    groups: 2.81.2
+    groups: 2.81.3
     ignores: 2.81.1
     methodArguments: 0.1.2
     methodServerURLs: 2.82.1
@@ -140,7 +140,6 @@ generatedFiles:
   - docs/models/configurableattributes.md
   - docs/models/contactperson.md
   - docs/models/contacts.md
-  - docs/models/context.md
   - docs/models/createbookmark.md
   - docs/models/createdby.md
   - docs/models/createddateandtime.md
@@ -216,7 +215,6 @@ generatedFiles:
   - docs/models/modifysuggestion.md
   - docs/models/modifysuggestionattachments.md
   - docs/models/name.md
-  - docs/models/opensearchhighlightingraw.md
   - docs/models/operation.md
   - docs/models/operations/acceptghsolutionrequest.md
   - docs/models/operations/accesssource.md
@@ -225,12 +223,13 @@ generatedFiles:
   - docs/models/operations/addtoreplyrequest.md
   - docs/models/operations/aisearchrequest.md
   - docs/models/operations/avertcustomerescalationrequest.md
+  - docs/models/operations/cancelimportrequest.md
   - docs/models/operations/completecustomerescalationrequest.md
   - docs/models/operations/complyarticlerequest.md
   - docs/models/operations/components.md
   - docs/models/operations/createfederatedsearchresulteventrequest.md
-  - docs/models/operations/createimportresponse.md
-  - docs/models/operations/createimportvalidationresponse.md
+  - docs/models/operations/createimportjobresponse.md
+  - docs/models/operations/createimportvalidationjobresponse.md
   - docs/models/operations/createquickpickrequest.md
   - docs/models/operations/createsearchresulteventforconnectorsrequest.md
   - docs/models/operations/createsignedurlrequest.md
@@ -271,7 +270,7 @@ generatedFiles:
   - docs/models/operations/getchildtopicsrequest.md
   - docs/models/operations/getclusterbycasebasereleaseidrequest.md
   - docs/models/operations/gethealthresponse.md
-  - docs/models/operations/getimportcontentrequest.md
+  - docs/models/operations/getimportstatusrequest.md
   - docs/models/operations/getmyportalsrequest.md
   - docs/models/operations/getmysubscriptionrequest.md
   - docs/models/operations/getpendingcompliancearticlesrequest.md
@@ -289,7 +288,6 @@ generatedFiles:
   - docs/models/operations/getusermilestonesrequest.md
   - docs/models/operations/makesuggestionrequest.md
   - docs/models/operations/modifysuggestionsrequest.md
-  - docs/models/operations/patchimportcontentvalidationrequest.md
   - docs/models/operations/processingengine.md
   - docs/models/operations/ratearticlerequest.md
   - docs/models/operations/rejectghsolutionrequest.md
@@ -415,15 +413,12 @@ generatedFiles:
   - docs/models/workflow.md
   - docs/models/workflowmilestone.md
   - docs/models/wserrorcommondetail.md
-  - docs/sdks/aiservices/README.md
   - docs/sdks/answers/README.md
   - docs/sdks/article/README.md
   - docs/sdks/articlelists/README.md
   - docs/sdks/attachment/README.md
   - docs/sdks/bookmark/README.md
   - docs/sdks/connectorssearchevents/README.md
-  - docs/sdks/content/README.md
-  - docs/sdks/egain/README.md
   - docs/sdks/escalation/README.md
   - docs/sdks/export/README.md
   - docs/sdks/federatedsearchevent/README.md
@@ -432,7 +427,6 @@ generatedFiles:
   - docs/sdks/health/README.md
   - docs/sdks/import/README.md
   - docs/sdks/populararticles/README.md
-  - docs/sdks/portal/README.md
   - docs/sdks/retrieve/README.md
   - docs/sdks/search/README.md
   - docs/sdks/suggestion/README.md
@@ -451,10 +445,10 @@ generatedFiles:
   - src/funcs/aiservicesAnswersGetBestAnswer.ts
   - src/funcs/aiservicesRetrieveRetrieveChunks.ts
   - src/funcs/contentHealthGetHealth.ts
-  - src/funcs/contentImportCreateImport.ts
-  - src/funcs/contentImportCreateImportValidation.ts
-  - src/funcs/contentImportGetImportContent.ts
-  - src/funcs/contentImportPatchImportContentValidation.ts
+  - src/funcs/contentImportCancelImport.ts
+  - src/funcs/contentImportCreateImportJob.ts
+  - src/funcs/contentImportCreateImportValidationJob.ts
+  - src/funcs/contentImportGetImportStatus.ts
   - src/funcs/portalArticleAddAsReference.ts
   - src/funcs/portalArticleAddToReply.ts
   - src/funcs/portalArticleComplyArticle.ts
@@ -676,11 +670,12 @@ generatedFiles:
   - src/models/operations/addtoreply.ts
   - src/models/operations/aisearch.ts
   - src/models/operations/avertcustomerescalation.ts
+  - src/models/operations/cancelimport.ts
   - src/models/operations/completecustomerescalation.ts
   - src/models/operations/complyarticle.ts
   - src/models/operations/createfederatedsearchresultevent.ts
-  - src/models/operations/createimport.ts
-  - src/models/operations/createimportvalidation.ts
+  - src/models/operations/createimportjob.ts
+  - src/models/operations/createimportvalidationjob.ts
   - src/models/operations/createquickpick.ts
   - src/models/operations/createsearchresulteventforconnectors.ts
   - src/models/operations/createsignedurl.ts
@@ -717,7 +712,7 @@ generatedFiles:
   - src/models/operations/getchildtopics.ts
   - src/models/operations/getclusterbycasebasereleaseid.ts
   - src/models/operations/gethealth.ts
-  - src/models/operations/getimportcontent.ts
+  - src/models/operations/getimportstatus.ts
   - src/models/operations/getmyportals.ts
   - src/models/operations/getmysubscription.ts
   - src/models/operations/getpendingcompliancearticles.ts
@@ -736,7 +731,6 @@ generatedFiles:
   - src/models/operations/index.ts
   - src/models/operations/makesuggestion.ts
   - src/models/operations/modifysuggestions.ts
-  - src/models/operations/patchimportcontentvalidation.ts
   - src/models/operations/ratearticle.ts
   - src/models/operations/rejectghsolution.ts
   - src/models/operations/restorequickpick.ts
@@ -7507,7 +7501,7 @@ examples:
         application/json: {"channel": {"type": "custom", "name": "Eight Bank Website"}}
       responses:
         "200":
-          application/json: {"answer": {"answerValue": "Per the Lending FAQ document...", "references": [{"id": "<id>", "name": "<value>", "docType": "HTML", "source": "eGain Article"}], "answerType": "certified", "relevanceScore": 0.99}, "searchResults": [{"id": "PROD-48192", "name": "Lending FAQs", "docType": "Pdf", "source": "eGain Article", "snippet": "Fair lending is a part of...", "relevanceScore": 4661.16}], "channel": {"type": "custom", "name": "Eight Bank Page"}}
+          application/json: {"answer": {"answerValue": "Per the Lending FAQ document...", "references": [{"id": "<id>", "name": "<value>", "docType": "HTML", "source": "eGain Article"}], "answerType": "certified", "relevanceScore": 0.99}, "searchResults": [{"id": "PROD-48192", "name": "Lending FAQs", "docType": "Pdf", "source": "eGain Article", "snippet": "Fair lending is a part of...", "relevanceScore": 4661.16}], "channel": {"type": "custom", "name": "Eight Bank Page"}, "sessionId": "<id>"}
   getBestAnswerForUserQuery:
     speakeasy-default-get-best-answer-for-user-query:
       parameters:
@@ -7533,5 +7527,165 @@ examples:
           $filter[tags]: {"PROD-1234": ["PROD-2000", "PROD-2003"], "PROD-2005": ["PROD-2007"]}
       responses:
         "200":
-          application/json: {"answer": {"answerValue": "<value>", "references": [{"id": "<id>", "name": "<value>", "docType": "Doc", "source": "eGain Article", "topicBreadCrumb": {"topicSummary": [{"id": "PROD-1921"}]}}], "answerType": "certified", "relevanceScore": 2129.24}, "searchResults": [{"id": "PROD-48192", "name": "Lending FAQs", "docType": "Pdf", "source": "eGain Article", "snippet": "Fair lending is a part of...", "relevanceScore": 2894.84}]}
+          application/json: {"answer": {"answerValue": "<value>", "references": [{"id": "<id>", "name": "<value>", "docType": "Doc", "source": "eGain Article", "topicBreadCrumb": {"topicSummary": [{"id": "PROD-1921"}]}}], "answerType": "certified", "relevanceScore": 2129.24}, "searchResults": [{"id": "PROD-48192", "name": "Lending FAQs", "docType": "Pdf", "source": "eGain Article", "snippet": "Fair lending is a part of...", "relevanceScore": 2894.84}], "sessionId": "<id>"}
+  createImportJob:
+    Import content in the Department:
+      requestBody:
+        application/json: {"dataSource": {"type": "AWS S3 bucket", "path": "s3://mybucket/myfolder/", "region": "us-east-1", "credentials": {}}, "operation": "import", "scheduleTime": {"date": "2024-03-01T10:00:00.000Z"}}
+      responses:
+        "400":
+          application/json: {"code": "<value>", "developerMessage": "<value>"}
+        "412":
+          application/json: {"code": "<value>", "developerMessage": "<value>"}
+        "500":
+          application/json: {"code": "<value>", "developerMessage": "<value>"}
+    Update existing content:
+      requestBody:
+        application/json: {"dataSource": {"type": "Shared file path", "path": "sftp://server.com/content/updates/", "credentials": {}}, "operation": "reimport", "scheduleTime": {"date": "2024-03-01T02:00:00.000Z"}}
+      responses:
+        "400":
+          application/json: {"code": "<value>", "developerMessage": "<value>"}
+        "412":
+          application/json: {"code": "<value>", "developerMessage": "<value>"}
+        "500":
+          application/json: {"code": "<value>", "developerMessage": "<value>"}
+    LimitExceeded Value:
+      requestBody:
+        application/json: {"dataSource": {"type": "Shared file path", "path": "https://runny-hello.net"}, "operation": "reimport", "scheduleTime": {"date": "2024-03-01T10:00:00.000Z"}}
+      responses:
+        "400":
+          application/json: {"code": "400-10424", "developerMessage": "Limit exceeded. The allowed limit for '{0}' is '{1}'."}
+        "500":
+          application/json: {"code": "400-10424", "developerMessage": "Limit exceeded. The allowed limit for '{0}' is '{1}'."}
+    Invalid Value:
+      requestBody:
+        application/json: {"dataSource": {"type": "Shared file path", "path": "https://runny-hello.net"}, "operation": "reimport", "scheduleTime": {"date": "2024-03-01T10:00:00.000Z"}}
+      responses:
+        "400":
+          application/json: {"code": "400-152", "developerMessage": "Invalid value is provided in the request body for the following attribute:'<attribute_name>'."}
+        "500":
+          application/json: {"code": "400-152", "developerMessage": "Invalid value is provided in the request body for the following attribute:'<attribute_name>'."}
+    precondition failed:
+      requestBody:
+        application/json: {"dataSource": {"type": "Shared file path", "path": "https://runny-hello.net"}, "operation": "reimport", "scheduleTime": {"date": "2024-03-01T10:00:00.000Z"}}
+      responses:
+        "412":
+          application/json: {"code": "412-100", "developerMessage": "Pre condition failed"}
+  getImportStatus:
+    Job in Progress:
+      parameters:
+        path:
+          job_id: "7A84B875-6F75-4C7B-B137-0632B62DB0BD"
+      responses:
+        "200":
+          application/json: {"status": "In Progress", "jobType": "Import", "progress": {"processed": 1250, "total": 5000, "percentage": 25}, "logFileLocation": "s3://mybucket/logs/import-logs-7A84B875-6F75-4C7B-B137-0632B62DB0BD.txt", "startTime": "2024-03-01T10:00:00.000Z", "estimatedCompletion": "2024-03-01T11:30:00.000Z", "currentOperation": "Processing content items"}
+    Completed Import Job:
+      parameters:
+        path:
+          job_id: "7A84B875-6F75-4C7B-B137-0632B62DB0BD"
+      responses:
+        "200":
+          application/json: {"status": "Successful", "jobType": "Import", "progress": {"processed": 5000, "total": 5000, "percentage": 100}, "logFileLocation": "s3://mybucket/logs/import-logs-7A84B875-6F75-4C7B-B137-0632B62DB0BD.txt", "startTime": "2024-03-01T10:00:00.000Z", "completionTime": "2024-03-01T11:15:00.000Z", "results": {"warnings": 10, "errors": 5}}
+    Completed Validation Job:
+      parameters:
+        path:
+          job_id: "7A84B875-6F75-4C7B-B137-0632B62DB0BD"
+      responses:
+        "200":
+          application/json: {"status": "Successful", "jobType": "Validation", "progress": {"processed": 5000, "total": 5000, "percentage": 100}, "logFileLocation": "s3://mybucket/logs/import-logs-7A84B875-6F75-4C7B-B137-0632B62DB0BD.txt", "startTime": "2024-03-01T10:00:00.000Z", "completionTime": "2024-03-01T11:15:00.000Z", "results": {"warnings": 10, "errors": 5}}
+    Failed Job:
+      parameters:
+        path:
+          job_id: "7A84B875-6F75-4C7B-B137-0632B62DB0BD"
+      responses:
+        "200":
+          application/json: {"status": "Failed", "jobType": "Import", "progress": {"processed": 1250, "total": 5000, "percentage": 25}, "logFileLocation": "s3://mybucket/logs/import-logs-7A84B875-6F75-4C7B-B137-0632B62DB0BD.txt", "startTime": "2024-03-01T10:00:00.000Z", "failureTime": "2024-03-01T10:45:00.000Z", "error": "Database connection timeout after processing 1250 items", "retryable": true}
+    Unsupported Parameters:
+      parameters:
+        path:
+          job_id: "7A84B875-6F75-4C7B-B137-0632B62DB0BD"
+      responses:
+        "400":
+          application/json: {"code": "400-101", "developerMessage": "Unsupported query parameter(s) supplied: '<query_parameter>'."}
+        "500":
+          application/json: {"code": "400-101", "developerMessage": "Unsupported query parameter(s) supplied: '<query_parameter>'."}
+    Invalid Value:
+      parameters:
+        path:
+          job_id: "7A84B875-6F75-4C7B-B137-0632B62DB0BD"
+      responses:
+        "400":
+          application/json: {"code": "400-152", "developerMessage": "Invalid value is provided in the request body for the following attribute:'<attribute_name>'."}
+        "500":
+          application/json: {"code": "400-152", "developerMessage": "Invalid value is provided in the request body for the following attribute:'<attribute_name>'."}
+    Missing required query parameter:
+      parameters:
+        path:
+          job_id: "7A84B875-6F75-4C7B-B137-0632B62DB0BD"
+      responses:
+        "400":
+          application/json: {"code": "400-112", "developerMessage": "Required query parameter(s) is missing. The following parameters are required: '<query_parameter>'."}
+        "500":
+          application/json: {"code": "400-112", "developerMessage": "Required query parameter(s) is missing. The following parameters are required: '<query_parameter>'."}
+  createImportValidationJob:
+    S3 content validation:
+      requestBody:
+        application/json: {"dataSource": {"type": "AWS S3 bucket", "path": "s3://mybucket/myfolder/", "region": "us-east-1", "credentials": {}}}
+      responses:
+        "400":
+          application/json: {"code": "<value>", "developerMessage": "<value>"}
+        "412":
+          application/json: {"code": "<value>", "developerMessage": "<value>"}
+        "500":
+          application/json: {"code": "<value>", "developerMessage": "<value>"}
+    SFTP content validation:
+      requestBody:
+        application/json: {"dataSource": {"type": "Shared file path", "path": "s3://mybucket/myfolder/"}}
+      responses:
+        "400":
+          application/json: {"code": "<value>", "developerMessage": "<value>"}
+        "412":
+          application/json: {"code": "<value>", "developerMessage": "<value>"}
+        "500":
+          application/json: {"code": "<value>", "developerMessage": "<value>"}
+    Unsupported Parameters:
+      requestBody:
+        application/json: {"dataSource": {"type": "AWS S3 bucket", "path": "https://emotional-litter.name/"}}
+      responses:
+        "400":
+          application/json: {"code": "400-101", "developerMessage": "Unsupported query parameter(s) supplied: '<query_parameter>'."}
+        "500":
+          application/json: {"code": "400-101", "developerMessage": "Unsupported query parameter(s) supplied: '<query_parameter>'."}
+    Invalid Value:
+      requestBody:
+        application/json: {"dataSource": {"type": "AWS S3 bucket", "path": "https://emotional-litter.name/"}}
+      responses:
+        "400":
+          application/json: {"code": "400-152", "developerMessage": "Invalid value is provided in the request body for the following attribute:'<attribute_name>'."}
+        "500":
+          application/json: {"code": "400-152", "developerMessage": "Invalid value is provided in the request body for the following attribute:'<attribute_name>'."}
+    Missing required query parameter:
+      requestBody:
+        application/json: {"dataSource": {"type": "AWS S3 bucket", "path": "https://emotional-litter.name/"}}
+      responses:
+        "400":
+          application/json: {"code": "400-112", "developerMessage": "Required query parameter(s) is missing. The following parameters are required: '<query_parameter>'."}
+        "500":
+          application/json: {"code": "400-112", "developerMessage": "Required query parameter(s) is missing. The following parameters are required: '<query_parameter>'."}
+    precondition failed:
+      requestBody:
+        application/json: {"dataSource": {"type": "AWS S3 bucket", "path": "https://emotional-litter.name/"}}
+      responses:
+        "412":
+          application/json: {"code": "412-100", "developerMessage": "Pre condition failed"}
+  cancelImport:
+    Unauthorized:
+      parameters:
+        path:
+          job_id: "7A84B875-6F75-4C7B-B137-0632B62DB0BD"
+      responses:
+        "401":
+          application/json: {"code": "401-101", "developerMessage": "Invalid or expired 'Authorization' header provided. New login is required."}
+        "500":
+          application/json: {"code": "401-101", "developerMessage": "Invalid or expired 'Authorization' header provided. New login is required."}
 examplesVersion: 1.0.2
