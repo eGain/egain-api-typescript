@@ -110,7 +110,7 @@ yarn add @egain/egain-api-typescript
 <!-- Start Requirements [requirements] -->
 ## Requirements
 
-For supported JavaScript runtimes, please consult [RUNTIMES.md](RUNTIMES.md).
+For supported JavaScript runtimes, please consult [RUNTIMES.md](https://github.com/eGain/egain-api-typescript/blob/main/RUNTIMES.md).
 <!-- End Requirements [requirements] -->
 
 <!-- Start SDK Example Usage [usage] -->
@@ -364,7 +364,7 @@ runtimes or other environments where application bundle size is a primary
 concern. When using a bundler to build your application, all unused
 functionality will be either excluded from the final bundle or tree-shaken away.
 
-To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
+To read more about standalone functions, check [FUNCTIONS.md](https://github.com/eGain/egain-api-typescript/blob/main/FUNCTIONS.md).
 
 <details>
 
