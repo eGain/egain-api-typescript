@@ -13,7 +13,7 @@ export const RetrieveChunksServerList = [
   /**
    * aiservices
    */
-  "https://${API_DOMAIN}/core/aiservices/v4",
+  "https://api.aidev.egain.cloud/core/aiservices/v4",
 ] as const;
 
 export type RetrieveChunksRequest = {

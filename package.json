@@ -1,6 +1,6 @@
 {
   "name": "@egain/egain-api-typescript",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "author": "Speakeasy",
   "type": "module",
   "tshy": {

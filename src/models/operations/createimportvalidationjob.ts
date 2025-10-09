@@ -12,7 +12,7 @@ export const CreateImportValidationJobServerList = [
   /**
    * Production Server
    */
-  "https://${API_DOMAIN}/knowledge/contentmgr/v4",
+  "https://api.aidev.egain.cloud/knowledge/contentmgr/v4",
 ] as const;
 
 export type CreateImportValidationJobResponse = {

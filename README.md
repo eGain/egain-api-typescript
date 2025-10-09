@@ -689,7 +689,7 @@ The default server can be overridden globally by passing a URL to the `serverURL
 import { Egain } from "@egain/egain-api-typescript";
 
 const egain = new Egain({
-  serverURL: "https://${API_DOMAIN}/knowledge/portalmgr/v4",
+  serverURL: "https://api.aidev.egain.cloud/knowledge/portalmgr/v4",
   accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
 });
 
@@ -753,7 +753,7 @@ async function run() {
       },
     },
   }, {
-    serverURL: "https://${API_DOMAIN}/core/aiservices/v4",
+    serverURL: "https://api.aidev.egain.cloud/core/aiservices/v4",
   });
 
   console.log(result);

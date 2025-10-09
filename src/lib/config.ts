@@ -14,7 +14,7 @@ export const ServerList = [
   /**
    * Production Server
    */
-  "https://${API_DOMAIN}/knowledge/portalmgr/v4",
+  "https://api.aidev.egain.cloud/knowledge/portalmgr/v4",
 ] as const;
 
 export type SDKOptions = {
@@ -61,8 +61,8 @@ export function serverURLFromOptions(options: SDKOptions): URL | null {
 export const SDK_METADATA = {
   language: "typescript",
   openapiDocVersion: "4.0.0",
-  sdkVersion: "0.3.8",
-  genVersion: "2.723.2",
+  sdkVersion: "0.3.9",
+  genVersion: "2.723.8",
   userAgent:
-    "speakeasy-sdk/typescript 0.3.8 2.723.2 4.0.0 @egain/egain-api-typescript",
+    "speakeasy-sdk/typescript 0.3.9 2.723.8 4.0.0 @egain/egain-api-typescript",
 } as const;
