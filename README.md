@@ -16,7 +16,8 @@ Developer-friendly & type-safe Typescript SDK specifically catered to leverage *
 <!-- Start Summary [summary] -->
 ## Summary
 
-Knowledge Portal Manager APIs: ### License
+Knowledge Portal Manager APIs: 
+### License
   The following licenses are required to use the Knowledge Access APIs:
   * If the user is an agent, then the *Knowledge + AI* license is required.
   * If the user is a customer, the *Self-Service* and *Advanced Self-Service* licenses must be available.
