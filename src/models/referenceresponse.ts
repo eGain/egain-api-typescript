@@ -70,7 +70,7 @@ export type ReferenceResponse = {
   /**
    * This schema contains one or more TopicSummary instances.
    */
-  topicBreadCrumb?: TopicBreadcrumb | undefined;
+  topicBreadcrumb?: TopicBreadcrumb | undefined;
 };
 
 /** @internal */
@@ -126,7 +126,7 @@ export const ReferenceResponse$inboundSchema: z.ZodType<
   docName: z.string().optional(),
   docType: ReferenceResponseDocType$inboundSchema,
   source: ReferenceResponseSource$inboundSchema,
-  topicBreadCrumb: TopicBreadcrumb$inboundSchema.optional(),
+  topicBreadcrumb: TopicBreadcrumb$inboundSchema.optional(),
 });
 
 /** @internal */
@@ -136,7 +136,7 @@ export type ReferenceResponse$Outbound = {
   docName?: string | undefined;
   docType: string;
   source: string;
-  topicBreadCrumb?: TopicBreadcrumb$Outbound | undefined;
+  topicBreadcrumb?: TopicBreadcrumb$Outbound | undefined;
 };
 
 /** @internal */
@@ -150,7 +150,7 @@ export const ReferenceResponse$outboundSchema: z.ZodType<
   docName: z.string().optional(),
   docType: ReferenceResponseDocType$outboundSchema,
   source: ReferenceResponseSource$outboundSchema,
-  topicBreadCrumb: TopicBreadcrumb$outboundSchema.optional(),
+  topicBreadcrumb: TopicBreadcrumb$outboundSchema.optional(),
 });
 
 /**

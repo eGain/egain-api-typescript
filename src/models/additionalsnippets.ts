@@ -39,7 +39,7 @@ export type AdditionalSnippets = {
   /**
    * Name of the attachment, if an attachment was used as the source content.
    */
-  docName: string;
+  docName?: string | undefined;
   /**
    * A snippet of the article content.
    */
@@ -84,7 +84,7 @@ export const AdditionalSnippets$inboundSchema: z.ZodType<
   id: z.string(),
   name: z.string(),
   docType: AdditionalSnippetsDocType$inboundSchema,
-  docName: z.string(),
+  docName: z.string().optional(),
   snippet: z.string(),
   keywordSnippet: z.string().optional(),
   relevanceScore: z.number(),
@@ -95,7 +95,7 @@ export type AdditionalSnippets$Outbound = {
   id: string;
   name: string;
   docType: string;
-  docName: string;
+  docName?: string | undefined;
   snippet: string;
   keywordSnippet?: string | undefined;
   relevanceScore: number;
@@ -110,7 +110,7 @@ export const AdditionalSnippets$outboundSchema: z.ZodType<
   id: z.string(),
   name: z.string(),
   docType: AdditionalSnippetsDocType$outboundSchema,
-  docName: z.string(),
+  docName: z.string().optional(),
   snippet: z.string(),
   keywordSnippet: z.string().optional(),
   relevanceScore: z.number(),

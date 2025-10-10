@@ -13,7 +13,7 @@ let value: AnswersResponseAnswer = {
       name: "<value>",
       docType: "Doc",
       source: "eGain Attachment",
-      topicBreadCrumb: {
+      topicBreadcrumb: {
         topicSummary: [
           {
             id: "PROD-1921",

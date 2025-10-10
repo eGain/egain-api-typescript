@@ -81,7 +81,7 @@ export type SearchResult = {
   /**
    * This schema contains one or more TopicSummary instances.
    */
-  topicBreadCrumb?: TopicBreadcrumb | undefined;
+  topicBreadcrumb?: TopicBreadcrumb | undefined;
 };
 
 /** @internal */
@@ -159,7 +159,7 @@ export const SearchResult$inboundSchema: z.ZodType<
   snippet: z.string(),
   snippetType: SnippetType$inboundSchema.optional(),
   relevanceScore: z.number(),
-  topicBreadCrumb: TopicBreadcrumb$inboundSchema.optional(),
+  topicBreadcrumb: TopicBreadcrumb$inboundSchema.optional(),
 });
 
 /** @internal */
@@ -172,7 +172,7 @@ export type SearchResult$Outbound = {
   snippet: string;
   snippetType?: string | undefined;
   relevanceScore: number;
-  topicBreadCrumb?: TopicBreadcrumb$Outbound | undefined;
+  topicBreadcrumb?: TopicBreadcrumb$Outbound | undefined;
 };
 
 /** @internal */
@@ -189,7 +189,7 @@ export const SearchResult$outboundSchema: z.ZodType<
   snippet: z.string(),
   snippetType: SnippetType$outboundSchema.optional(),
   relevanceScore: z.number(),
-  topicBreadCrumb: TopicBreadcrumb$outboundSchema.optional(),
+  topicBreadcrumb: TopicBreadcrumb$outboundSchema.optional(),
 });
 
 /**

@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 941f5295-94f8-4bce-a1a1-3fcca6bf9341
 management:
-  docChecksum: 1d154c1f511ae4fc48197c5680d235d7
+  docChecksum: 326cf7dcde87562622d8c6e3ca8e66d0
   docVersion: 4.0.0
   speakeasyVersion: 1.636.2
   generationVersion: 2.723.8
-  releaseVersion: 0.3.9
-  configChecksum: b08a70bbdfc10c11c0a8b34cd1c4bc54
+  releaseVersion: 0.3.10
+  configChecksum: e48e37d2baefd214149f6461fefaac6c
   published: true
 features:
   typescript:
@@ -7527,7 +7527,7 @@ examples:
           $filter[tags]: {"PROD-1234": ["PROD-2000", "PROD-2003"], "PROD-2005": ["PROD-2007"]}
       responses:
         "200":
-          application/json: {"answer": {"answerValue": "<value>", "references": [{"id": "<id>", "name": "<value>", "docType": "Doc", "source": "eGain Article", "topicBreadCrumb": {"topicSummary": [{"id": "PROD-1921"}]}}], "answerType": "certified", "relevanceScore": 2129.24}, "searchResults": [{"id": "PROD-48192", "name": "Lending FAQs", "docType": "Pdf", "source": "eGain Article", "snippet": "Fair lending is a part of...", "relevanceScore": 2894.84}], "sessionId": "<id>"}
+          application/json: {"answer": {"answerValue": "<value>", "references": [{"id": "<id>", "name": "<value>", "docType": "Doc", "source": "eGain Article"}], "answerType": "certified", "relevanceScore": 2129.24}, "searchResults": [{"id": "PROD-48192", "name": "Lending FAQs", "docType": "Pdf", "source": "eGain Article", "snippet": "Fair lending is a part of...", "relevanceScore": 2894.84}], "sessionId": "<id>"}
   createImportJob:
     Import content in the Department:
       requestBody:
