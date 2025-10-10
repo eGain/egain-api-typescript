@@ -104,7 +104,7 @@ paths:
       security:
         - accessToken: []
       servers:
-        - url: https://${API_DOMAIN}/core/aiservices/v4
+        - url: https://api.aidev.egain.cloud/core/aiservices/v4
           description: aiservices
   /{portalID}/answers:
     post:
@@ -141,7 +141,7 @@ paths:
         - accessToken: []
       x-speakeasy-group: aiservices.answers
       servers:
-        - url: https://${API_DOMAIN}/core/aiservices/v4
+        - url: https://api.aidev.egain.cloud/core/aiservices/v4
           description: aiservices
   /import/content:
     post:
