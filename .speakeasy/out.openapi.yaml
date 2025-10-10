@@ -104,7 +104,7 @@ paths:
       security:
         - accessToken: []
       servers:
-        - url: https://api.aidev.egain.cloud/core/aiservices/v4
+        - url: https://${API_DOMAIN}/core/aiservices/v4
           description: aiservices
   /{portalID}/answers:
     post:
@@ -141,7 +141,7 @@ paths:
         - accessToken: []
       x-speakeasy-group: aiservices.answers
       servers:
-        - url: https://api.aidev.egain.cloud/core/aiservices/v4
+        - url: https://${API_DOMAIN}/core/aiservices/v4
           description: aiservices
   /import/content:
     post:
@@ -5102,7 +5102,11 @@ components:
           minimum: 0
           maximum: 1
         topicBreadcrumb:
-          $ref: '#/components/schemas/TopicBreadcrumb'
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicBreadcrumb'
+          minItems: 1
+          maxItems: 50
     ReferenceResponse:
       type: object
       required:
@@ -5144,7 +5148,11 @@ components:
             - eGain Attachment
           description: Source Type
         topicBreadcrumb:
-          $ref: '#/components/schemas/TopicBreadcrumb'
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicBreadcrumb'
+          minItems: 1
+          maxItems: 50
     RetrieveResponse:
       type: object
       required:

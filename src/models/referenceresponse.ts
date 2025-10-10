@@ -67,10 +67,7 @@ export type ReferenceResponse = {
    * Source Type
    */
   source: ReferenceResponseSource;
-  /**
-   * This schema contains one or more TopicSummary instances.
-   */
-  topicBreadcrumb?: TopicBreadcrumb | undefined;
+  topicBreadcrumb?: Array<TopicBreadcrumb> | undefined;
 };
 
 /** @internal */
@@ -126,7 +123,7 @@ export const ReferenceResponse$inboundSchema: z.ZodType<
   docName: z.string().optional(),
   docType: ReferenceResponseDocType$inboundSchema,
   source: ReferenceResponseSource$inboundSchema,
-  topicBreadcrumb: TopicBreadcrumb$inboundSchema.optional(),
+  topicBreadcrumb: z.array(TopicBreadcrumb$inboundSchema).optional(),
 });
 
 /** @internal */
@@ -136,7 +133,7 @@ export type ReferenceResponse$Outbound = {
   docName?: string | undefined;
   docType: string;
   source: string;
-  topicBreadcrumb?: TopicBreadcrumb$Outbound | undefined;
+  topicBreadcrumb?: Array<TopicBreadcrumb$Outbound> | undefined;
 };
 
 /** @internal */
@@ -150,7 +147,7 @@ export const ReferenceResponse$outboundSchema: z.ZodType<
   docName: z.string().optional(),
   docType: ReferenceResponseDocType$outboundSchema,
   source: ReferenceResponseSource$outboundSchema,
-  topicBreadcrumb: TopicBreadcrumb$outboundSchema.optional(),
+  topicBreadcrumb: z.array(TopicBreadcrumb$outboundSchema).optional(),
 });
 
 /**

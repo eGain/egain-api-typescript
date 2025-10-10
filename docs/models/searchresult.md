@@ -14,13 +14,15 @@ let value: SearchResult = {
   source: "eGain Article",
   snippet: "Fair lending is a part of...",
   relevanceScore: 7090.86,
-  topicBreadcrumb: {
-    topicSummary: [
-      {
-        id: "PROD-1921",
-      },
-    ],
-  },
+  topicBreadcrumb: [
+    {
+      topicSummary: [
+        {
+          id: "PROD-1921",
+        },
+      ],
+    },
+  ],
 };
 ```
 
@@ -36,4 +38,4 @@ let value: SearchResult = {
 | `snippet`                                                                                                                                      | *string*                                                                                                                                       | :heavy_check_mark:                                                                                                                             | Retrieved text returned for the query. This may be a **chunk of an article** or the **entire article content** if the content is small enough. | Fair lending is a part of...                                                                                                                   |
 | `snippetType`                                                                                                                                  | [models.SnippetType](../models/snippettype.md)                                                                                                 | :heavy_minus_sign:                                                                                                                             | N/A                                                                                                                                            |                                                                                                                                                |
 | `relevanceScore`                                                                                                                               | *number*                                                                                                                                       | :heavy_check_mark:                                                                                                                             | Generated confidence score (0.0-1.0) for the snippet's relevance to the query.                                                                 |                                                                                                                                                |
-| `topicBreadcrumb`                                                                                                                              | [models.TopicBreadcrumb](../models/topicbreadcrumb.md)                                                                                         | :heavy_minus_sign:                                                                                                                             | This schema contains one or more TopicSummary instances.                                                                                       |                                                                                                                                                |
+| `topicBreadcrumb`                                                                                                                              | [models.TopicBreadcrumb](../models/topicbreadcrumb.md)[]                                                                                       | :heavy_minus_sign:                                                                                                                             | N/A                                                                                                                                            |                                                                                                                                                |

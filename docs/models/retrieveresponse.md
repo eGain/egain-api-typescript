@@ -14,13 +14,15 @@ let value: RetrieveResponse = {
         name: "<value>",
         docType: "Doc",
         source: "eGain Attachment",
-        topicBreadcrumb: {
-          topicSummary: [
-            {
-              id: "PROD-1921",
-            },
-          ],
-        },
+        topicBreadcrumb: [
+          {
+            topicSummary: [
+              {
+                id: "PROD-1921",
+              },
+            ],
+          },
+        ],
       },
     ],
     answerType: "certified",
@@ -34,13 +36,15 @@ let value: RetrieveResponse = {
       source: "eGain Article",
       snippet: "Fair lending is a part of...",
       relevanceScore: 2629.42,
-      topicBreadcrumb: {
-        topicSummary: [
-          {
-            id: "PROD-1921",
-          },
-        ],
-      },
+      topicBreadcrumb: [
+        {
+          topicSummary: [
+            {
+              id: "PROD-1921",
+            },
+          ],
+        },
+      ],
     },
   ],
   channel: {

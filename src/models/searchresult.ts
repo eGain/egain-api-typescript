@@ -78,10 +78,7 @@ export type SearchResult = {
    * Generated confidence score (0.0-1.0) for the snippet's relevance to the query.
    */
   relevanceScore: number;
-  /**
-   * This schema contains one or more TopicSummary instances.
-   */
-  topicBreadcrumb?: TopicBreadcrumb | undefined;
+  topicBreadcrumb?: Array<TopicBreadcrumb> | undefined;
 };
 
 /** @internal */
@@ -159,7 +156,7 @@ export const SearchResult$inboundSchema: z.ZodType<
   snippet: z.string(),
   snippetType: SnippetType$inboundSchema.optional(),
   relevanceScore: z.number(),
-  topicBreadcrumb: TopicBreadcrumb$inboundSchema.optional(),
+  topicBreadcrumb: z.array(TopicBreadcrumb$inboundSchema).optional(),
 });
 
 /** @internal */
@@ -172,7 +169,7 @@ export type SearchResult$Outbound = {
   snippet: string;
   snippetType?: string | undefined;
   relevanceScore: number;
-  topicBreadcrumb?: TopicBreadcrumb$Outbound | undefined;
+  topicBreadcrumb?: Array<TopicBreadcrumb$Outbound> | undefined;
 };
 
 /** @internal */
@@ -189,7 +186,7 @@ export const SearchResult$outboundSchema: z.ZodType<
   snippet: z.string(),
   snippetType: SnippetType$outboundSchema.optional(),
   relevanceScore: z.number(),
-  topicBreadcrumb: TopicBreadcrumb$outboundSchema.optional(),
+  topicBreadcrumb: z.array(TopicBreadcrumb$outboundSchema).optional(),
 });
 
 /**
