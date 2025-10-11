@@ -1,17 +1,17 @@
 # SearchResultDocType
 
-Format of the source document (HTML, Doc, or PDF).
+Format of the source document (HTML, DOCX, PPTX, or PDF).
 
 ## Example Usage
 
 ```typescript
 import { SearchResultDocType } from "@egain/egain-api-typescript/models";
 
-let value: SearchResultDocType = "Pdf";
+let value: SearchResultDocType = "PDF";
 ```
 
 ## Values
 
 ```typescript
-"HTML" | "Doc" | "Pdf"
+"HTML" | "DOCX" | "PDF" | "PPTX"
 ```

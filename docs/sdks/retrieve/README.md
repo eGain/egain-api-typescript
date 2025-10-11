@@ -11,9 +11,9 @@
 
 The Retrieve API enables enterprises to directly access relevant content chunks from their organizational knowledge sources. It is designed for scenarios where developers want granular control over retrieved information, such as powering custom search, analytics, or retrieval-augmented generation (RAG) pipelines. 
 
-The Retrieve API operates through two main pipelines:
-- **Certified Answers**: provide verified, high-confidence answers.
-- **Chunk Retrieval**: retrieves fine-grained, contextually relevant content snippets.
+The Retrieve API's response will either be a Certified Answer or a list of chunks.
+- **Certified Answers Response**: This response is observed when there's a matching certified answer to the user's query.
+- **Chunk List Response**: This response is observed, if there is no matched Certified Answer.
 
 Responses for both chunks and certified answers include relevance scores and metadata. By leveraging the Retrieve API, organizations can build tailored experiences while retaining confidence in the source material.
 

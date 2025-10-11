@@ -7,30 +7,12 @@ import { AnswersResponse } from "@egain/egain-api-typescript/models";
 
 let value: AnswersResponse = {
   answer: {
-    answerValue: "<value>",
+    answerValue: "Per the lending FAQ document...",
     references: [],
     answerType: "certified",
-    relevanceScore: 635.2,
+    relevanceScore: 0.99,
   },
-  searchResults: [
-    {
-      id: "PROD-48192",
-      name: "Lending FAQs",
-      docType: "Pdf",
-      source: "eGain Article",
-      snippet: "Fair lending is a part of...",
-      relevanceScore: 2629.42,
-      topicBreadcrumb: [
-        {
-          topicSummary: [
-            {
-              id: "PROD-1921",
-            },
-          ],
-        },
-      ],
-    },
-  ],
+  searchResults: [],
   sessionId: "<id>",
 };
 ```

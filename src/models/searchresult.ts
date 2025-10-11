@@ -15,15 +15,16 @@ import {
 } from "./topicbreadcrumb.js";
 
 /**
- * Format of the source document (HTML, Doc, or PDF).
+ * Format of the source document (HTML, DOCX, PPTX, or PDF).
  */
 export const SearchResultDocType = {
   Html: "HTML",
-  Doc: "Doc",
-  Pdf: "Pdf",
+  Docx: "DOCX",
+  Pdf: "PDF",
+  Pptx: "PPTX",
 } as const;
 /**
- * Format of the source document (HTML, Doc, or PDF).
+ * Format of the source document (HTML, DOCX, PPTX, or PDF).
  */
 export type SearchResultDocType = ClosedEnum<typeof SearchResultDocType>;
 
@@ -62,7 +63,7 @@ export type SearchResult = {
    */
   docName?: string | undefined;
   /**
-   * Format of the source document (HTML, Doc, or PDF).
+   * Format of the source document (HTML, DOCX, PPTX, or PDF).
    */
   docType: SearchResultDocType;
   /**

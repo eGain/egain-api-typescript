@@ -15,15 +15,16 @@ import {
 } from "./topicbreadcrumb.js";
 
 /**
- * Format of the source document (HTML, Doc, or PDF).
+ * Format of the source document (HTML, DOCX, PPTX, or PDF).
  */
 export const ReferenceResponseDocType = {
   Html: "HTML",
-  Doc: "Doc",
+  Docx: "DOCX",
   Pdf: "PDF",
+  Pptx: "PPTX",
 } as const;
 /**
- * Format of the source document (HTML, Doc, or PDF).
+ * Format of the source document (HTML, DOCX, PPTX, or PDF).
  */
 export type ReferenceResponseDocType = ClosedEnum<
   typeof ReferenceResponseDocType
@@ -60,7 +61,7 @@ export type ReferenceResponse = {
    */
   docName?: string | undefined;
   /**
-   * Format of the source document (HTML, Doc, or PDF).
+   * Format of the source document (HTML, DOCX, PPTX, or PDF).
    */
   docType: ReferenceResponseDocType;
   /**

@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 941f5295-94f8-4bce-a1a1-3fcca6bf9341
 management:
-  docChecksum: 416a031c29b2d521d4d6b6d83e50cd8f
+  docChecksum: 24ac8b9d3acdef3a7d8319e225bc8620
   docVersion: 4.0.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 0.3.12
-  configChecksum: c31385f85fcf42d8f0d85322e20b5659
+  releaseVersion: 0.3.13
+  configChecksum: 52d6ce7483b4b6ea99e063a4d1126a27
   published: true
 features:
   typescript:
@@ -7501,7 +7501,7 @@ examples:
         application/json: {"channel": {"type": "custom", "name": "Eight Bank Website"}}
       responses:
         "200":
-          application/json: {"answer": {"answerValue": "Per the Lending FAQ document...", "references": [{"id": "<id>", "name": "<value>", "docType": "HTML", "source": "eGain Article"}], "answerType": "certified", "relevanceScore": 0.99}, "searchResults": [{"id": "PROD-48192", "name": "Lending FAQs", "docType": "Pdf", "source": "eGain Article", "snippet": "Fair lending is a part of...", "relevanceScore": 4661.16}], "channel": {"type": "custom", "name": "Eight Bank Page"}, "sessionId": "<id>"}
+          application/json: {"answer": {"answerValue": "Per the Lending FAQ document...", "references": [{"id": "<id>", "name": "<value>", "docType": "HTML", "source": "eGain Article"}], "answerType": "certified", "relevanceScore": 0.99}, "searchResults": [{"id": "PROD-48192", "name": "Lending FAQs", "docType": "PPTX", "source": "eGain Article", "snippet": "Fair lending is a part of...", "relevanceScore": 4661.16}], "channel": {"type": "custom", "name": "Eight Bank Page"}, "eventId": "6154589f-b43f-4471-b2c7-92c6c888a871", "sessionId": "6154589f-b43f-4471-b2c7-92c6c888a643"}
   getBestAnswerForUserQuery:
     speakeasy-default-get-best-answer-for-user-query:
       parameters:
@@ -7527,7 +7527,7 @@ examples:
           $filter[tags]: {"PROD-1234": ["PROD-2000", "PROD-2003"], "PROD-2005": ["PROD-2007"]}
       responses:
         "200":
-          application/json: {"answer": {"answerValue": "<value>", "references": [{"id": "<id>", "name": "<value>", "docType": "Doc", "source": "eGain Article"}], "answerType": "certified", "relevanceScore": 2129.24}, "searchResults": [{"id": "PROD-48192", "name": "Lending FAQs", "docType": "Pdf", "source": "eGain Article", "snippet": "Fair lending is a part of...", "relevanceScore": 2894.84}], "sessionId": "<id>"}
+          application/json: {"answer": {"answerValue": "Per the lending FAQ document...", "references": [{"id": "<id>", "name": "<value>", "docType": "PDF", "source": "eGain Article"}], "answerType": "certified", "relevanceScore": 0.99}, "searchResults": [{"id": "PROD-48192", "name": "Lending FAQs", "docType": "DOCX", "source": "eGain Article", "snippet": "Fair lending is a part of...", "relevanceScore": 2894.84}], "sessionId": "<id>"}
   createImportJob:
     Import content in the Department:
       requestBody:
