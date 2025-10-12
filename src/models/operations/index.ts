@@ -49,7 +49,6 @@ export * from "./getcasebasereleasebyid.js";
 export * from "./getcasebyid.js";
 export * from "./getchildtopics.js";
 export * from "./getclusterbycasebasereleaseid.js";
-export * from "./gethealth.js";
 export * from "./getimportstatus.js";
 export * from "./getmyportals.js";
 export * from "./getmysubscription.js";

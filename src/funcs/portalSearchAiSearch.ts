@@ -100,8 +100,6 @@ async function $do(
     "$filter[topicIds]": payload.filterTopicIds,
     "$filter[userProfileID]": payload.filterUserProfileID,
     "$lang": payload.language,
-    "$pagenum": payload.pagenum,
-    "$pagesize": payload.pagesize,
     "articleCustomAdditionalAttributes":
       payload.articleCustomAdditionalAttributes,
     "q": payload.q,

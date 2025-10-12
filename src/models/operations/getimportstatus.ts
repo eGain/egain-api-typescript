@@ -10,9 +10,9 @@ import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export const GetImportStatusServerList = [
   /**
-   * Production Server
+   * Production Server - Try it Out does not function
    */
-  "https://api.aidev.egain.cloud/knowledge/contentmgr/v4",
+  "http://nop",
 ] as const;
 
 export type GetImportStatusRequest = {

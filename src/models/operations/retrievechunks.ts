@@ -29,7 +29,7 @@ export type RetrieveChunksRequest = {
   /**
    * The language that describes the details of a resource. Resources available in different languages may differ from each other. <br><br> If lang is not passed, then the portal's default language is used.
    */
-  language?: models.LanguageCodeParameter | undefined;
+  language: models.LanguageCodeParameter;
   /**
    * An object where each key is a **Category Tag ID** (numeric string),
    *
@@ -53,7 +53,7 @@ export const RetrieveChunksRequest$inboundSchema: z.ZodType<
   q: z.string(),
   portalID: z.string(),
   filterUserProfileID: z.string().optional(),
-  language: models.LanguageCodeParameter$inboundSchema.optional(),
+  language: models.LanguageCodeParameter$inboundSchema,
   filterTags: z.record(z.array(z.string())).optional(),
   filterTopicIds: z.array(z.string()).optional(),
   RetrieveRequest: models.RetrieveRequest$inboundSchema.optional(),
@@ -68,7 +68,7 @@ export type RetrieveChunksRequest$Outbound = {
   q: string;
   portalID: string;
   filterUserProfileID?: string | undefined;
-  language?: string | undefined;
+  language: string;
   filterTags?: { [k: string]: Array<string> } | undefined;
   filterTopicIds?: Array<string> | undefined;
   RetrieveRequest?: models.RetrieveRequest$Outbound | undefined;
@@ -83,7 +83,7 @@ export const RetrieveChunksRequest$outboundSchema: z.ZodType<
   q: z.string(),
   portalID: z.string(),
   filterUserProfileID: z.string().optional(),
-  language: models.LanguageCodeParameter$outboundSchema.optional(),
+  language: models.LanguageCodeParameter$outboundSchema,
   filterTags: z.record(z.array(z.string())).optional(),
   filterTopicIds: z.array(z.string()).optional(),
   retrieveRequest: models.RetrieveRequest$outboundSchema.optional(),

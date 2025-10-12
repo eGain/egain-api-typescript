@@ -37,7 +37,7 @@ import { Result } from "../types/fp.js";
  * This API initiates a bulk content import operation from Data Sources. It creates an asynchronous import job that processes content in the background, allowing you to import large volumes of content without blocking your application.
  *
  * ## Pre-requisties
- * 1. Content in Data Source needs to be in this format: [Guide to Data Import Format](../../../../../developer-portal/guides/ingestion/data-import-format-guide.md)
+ * 1. Content in Data Source needs to be in this format: [Guide to Data Import Format](https://apidev.egain.com/developer-portal/guides/ingestion/data-import-format-guide/)
  *
  * ## How It Works
  * 1. **Job Creation**: The API creates an import job and returns a unique job ID

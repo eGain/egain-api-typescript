@@ -10,25 +10,43 @@ import { SearchResults } from "@egain/egain-api-typescript/models";
 let value: SearchResults = {
   article: [
     {
-      id: "<id>",
-      name: "<value>",
-      docType: "HTML",
-      source: "eGain Attachment",
-      snippet: "<value>",
-      topicBreadcrumb: [
+      id: "PROD-2996",
+      name: "Fair Lending FAQs",
+      docType: "PDF",
+      docName: "Lending FAQs",
+      source: "eGain Article",
+      customAttributes: [
         {
-          topicSummary: [
-            {
-              id: "PROD-1921",
-            },
+          name: "loan_id",
+          value: [
+            "78391",
           ],
+          type: "STRING",
         },
       ],
+      snippet: "What is fair lending...",
+      keywordSnippet: "What is fair lending...",
+      additionalSnippets: [
+        {
+          id: "PROD-2996",
+          name: "Fair Lending FAQs",
+          docType: "DOCX",
+          docName: "Banking FAQs",
+          snippet: "The following Banking FAQs...",
+          keywordSnippet: "The following Banking FAQs...",
+          relevanceScore: 0.7,
+        },
+      ],
+      additionalSnippetCount: 1,
+      contextualSummary: "The summary of the lending FAQ...",
+      modifiedDate: "2025-01-28T19:53:58Z",
+      headerPath: "FAQs",
+      topicBreadcrumb: [],
       articleTypeAttributes: {
         typeName: "General",
         articleTypeId: 243500000023393,
       },
-      relevanceScore: 3941.01,
+      relevanceScore: 0.8,
     },
   ],
 };

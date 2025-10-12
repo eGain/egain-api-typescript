@@ -12,6 +12,12 @@ import {
   AdditionalSnippets$Outbound,
   AdditionalSnippets$outboundSchema,
 } from "./additionalsnippets.js";
+import {
+  AITopicBreadcrumb,
+  AITopicBreadcrumb$inboundSchema,
+  AITopicBreadcrumb$Outbound,
+  AITopicBreadcrumb$outboundSchema,
+} from "./aitopicbreadcrumb.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 import {
   SchemasTags,
@@ -19,23 +25,18 @@ import {
   SchemasTags$Outbound,
   SchemasTags$outboundSchema,
 } from "./schemastags.js";
-import {
-  TopicBreadcrumb,
-  TopicBreadcrumb$inboundSchema,
-  TopicBreadcrumb$Outbound,
-  TopicBreadcrumb$outboundSchema,
-} from "./topicbreadcrumb.js";
 
 /**
- * Format of the source document (HTML, Doc, or PDF).
+ * Format of the source document (HTML, DOCX, PPTX or PDF).
  */
 export const ArticleAISearchResultDocType = {
   Html: "HTML",
-  Doc: "Doc",
-  Pdf: "Pdf",
+  Docx: "DOCX",
+  Pdf: "PDF",
+  Pptx: "PPTX",
 } as const;
 /**
- * Format of the source document (HTML, Doc, or PDF).
+ * Format of the source document (HTML, DOCX, PPTX or PDF).
  */
 export type ArticleAISearchResultDocType = ClosedEnum<
   typeof ArticleAISearchResultDocType
@@ -101,20 +102,6 @@ export type ArticleTypeAttributes = {
 };
 
 /**
- * Defines the relationship between this resource and another object.
- */
-export type ArticleAISearchResultLink = {
-  /**
-   * Defines the relationship between a linked resource and the current object. <br><br> For example: self, prev, next or an object name such as 'user', 'folder' etc.
-   */
-  rel?: string | undefined;
-  /**
-   * The URL that specifies the link's destination.
-   */
-  href?: string | undefined;
-};
-
-/**
  * Represents a single document or snippet returned by search, along with its metadata and relevance score.
  */
 export type ArticleAISearchResult = {
@@ -127,7 +114,7 @@ export type ArticleAISearchResult = {
    */
   name: string;
   /**
-   * Format of the source document (HTML, Doc, or PDF).
+   * Format of the source document (HTML, DOCX, PPTX or PDF).
    */
   docType: ArticleAISearchResultDocType;
   /**
@@ -163,17 +150,9 @@ export type ArticleAISearchResult = {
    */
   contextualSummary?: string | undefined;
   /**
-   * A description of the Article. The maximum allowed Article description size is 1 KB.
-   */
-  description?: string | undefined;
-  /**
-   * A brief summary of the Article, provided as metadata. 1 KB max size limit.
-   */
-  summary?: string | undefined;
-  /**
    * The date on which the Article was last modified.
    */
-  lastModifiedDate?: string | undefined;
+  modifiedDate?: string | undefined;
   /**
    * The header path of the snippet retrieved.
    */
@@ -181,12 +160,11 @@ export type ArticleAISearchResult = {
   /**
    * A list of topics from the root topic to this Article. There may be multiple paths.
    */
-  topicBreadcrumb: Array<TopicBreadcrumb>;
+  topicBreadcrumb: Array<AITopicBreadcrumb>;
   /**
    * An array of tag categories. Note that the total number of tag categories cannot exceed 20.
    */
   tagCategories?: Array<SchemasTags> | undefined;
-  keywords?: string | undefined;
   /**
    * The type of the Article and its attributes.
    */
@@ -195,10 +173,6 @@ export type ArticleAISearchResult = {
    * Generated confidence score (0.0-1.0) for the snippet's relevance to the query.
    */
   relevanceScore: number;
-  /**
-   * Defines the relationship between this resource and another object.
-   */
-  link?: ArticleAISearchResultLink | undefined;
 };
 
 /** @internal */
@@ -387,63 +361,6 @@ export function articleTypeAttributesFromJSON(
 }
 
 /** @internal */
-export const ArticleAISearchResultLink$inboundSchema: z.ZodType<
-  ArticleAISearchResultLink,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  rel: z.string().optional(),
-  href: z.string().optional(),
-});
-
-/** @internal */
-export type ArticleAISearchResultLink$Outbound = {
-  rel?: string | undefined;
-  href?: string | undefined;
-};
-
-/** @internal */
-export const ArticleAISearchResultLink$outboundSchema: z.ZodType<
-  ArticleAISearchResultLink$Outbound,
-  z.ZodTypeDef,
-  ArticleAISearchResultLink
-> = z.object({
-  rel: z.string().optional(),
-  href: z.string().optional(),
-});
-
-/**
- * @internal
- * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
- */
-export namespace ArticleAISearchResultLink$ {
-  /** @deprecated use `ArticleAISearchResultLink$inboundSchema` instead. */
-  export const inboundSchema = ArticleAISearchResultLink$inboundSchema;
-  /** @deprecated use `ArticleAISearchResultLink$outboundSchema` instead. */
-  export const outboundSchema = ArticleAISearchResultLink$outboundSchema;
-  /** @deprecated use `ArticleAISearchResultLink$Outbound` instead. */
-  export type Outbound = ArticleAISearchResultLink$Outbound;
-}
-
-export function articleAISearchResultLinkToJSON(
-  articleAISearchResultLink: ArticleAISearchResultLink,
-): string {
-  return JSON.stringify(
-    ArticleAISearchResultLink$outboundSchema.parse(articleAISearchResultLink),
-  );
-}
-
-export function articleAISearchResultLinkFromJSON(
-  jsonString: string,
-): SafeParseResult<ArticleAISearchResultLink, SDKValidationError> {
-  return safeParse(
-    jsonString,
-    (x) => ArticleAISearchResultLink$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'ArticleAISearchResultLink' from JSON`,
-  );
-}
-
-/** @internal */
 export const ArticleAISearchResult$inboundSchema: z.ZodType<
   ArticleAISearchResult,
   z.ZodTypeDef,
@@ -462,17 +379,13 @@ export const ArticleAISearchResult$inboundSchema: z.ZodType<
   additionalSnippets: z.array(AdditionalSnippets$inboundSchema).optional(),
   additionalSnippetCount: z.number().int().optional(),
   contextualSummary: z.string().optional(),
-  description: z.string().optional(),
-  summary: z.string().optional(),
-  lastModifiedDate: z.string().optional(),
+  modifiedDate: z.string().optional(),
   headerPath: z.string().optional(),
-  topicBreadcrumb: z.array(TopicBreadcrumb$inboundSchema),
+  topicBreadcrumb: z.array(AITopicBreadcrumb$inboundSchema),
   tagCategories: z.array(SchemasTags$inboundSchema).optional(),
-  keywords: z.string().optional(),
   articleTypeAttributes: z.lazy(() => ArticleTypeAttributes$inboundSchema)
     .optional(),
   relevanceScore: z.number(),
-  link: z.lazy(() => ArticleAISearchResultLink$inboundSchema).optional(),
 });
 
 /** @internal */
@@ -490,16 +403,12 @@ export type ArticleAISearchResult$Outbound = {
   additionalSnippets?: Array<AdditionalSnippets$Outbound> | undefined;
   additionalSnippetCount?: number | undefined;
   contextualSummary?: string | undefined;
-  description?: string | undefined;
-  summary?: string | undefined;
-  lastModifiedDate?: string | undefined;
+  modifiedDate?: string | undefined;
   headerPath?: string | undefined;
-  topicBreadcrumb: Array<TopicBreadcrumb$Outbound>;
+  topicBreadcrumb: Array<AITopicBreadcrumb$Outbound>;
   tagCategories?: Array<SchemasTags$Outbound> | undefined;
-  keywords?: string | undefined;
   articleTypeAttributes?: ArticleTypeAttributes$Outbound | undefined;
   relevanceScore: number;
-  link?: ArticleAISearchResultLink$Outbound | undefined;
 };
 
 /** @internal */
@@ -521,17 +430,13 @@ export const ArticleAISearchResult$outboundSchema: z.ZodType<
   additionalSnippets: z.array(AdditionalSnippets$outboundSchema).optional(),
   additionalSnippetCount: z.number().int().optional(),
   contextualSummary: z.string().optional(),
-  description: z.string().optional(),
-  summary: z.string().optional(),
-  lastModifiedDate: z.string().optional(),
+  modifiedDate: z.string().optional(),
   headerPath: z.string().optional(),
-  topicBreadcrumb: z.array(TopicBreadcrumb$outboundSchema),
+  topicBreadcrumb: z.array(AITopicBreadcrumb$outboundSchema),
   tagCategories: z.array(SchemasTags$outboundSchema).optional(),
-  keywords: z.string().optional(),
   articleTypeAttributes: z.lazy(() => ArticleTypeAttributes$outboundSchema)
     .optional(),
   relevanceScore: z.number(),
-  link: z.lazy(() => ArticleAISearchResultLink$outboundSchema).optional(),
 });
 
 /**

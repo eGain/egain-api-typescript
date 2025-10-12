@@ -1,17 +1,17 @@
 # AdditionalSnippetsDocType
 
-Format of the source document (HTML, Doc, or PDF).
+Format of the source document (HTML, DOCX, PPTX or PDF).
 
 ## Example Usage
 
 ```typescript
 import { AdditionalSnippetsDocType } from "@egain/egain-api-typescript/models";
 
-let value: AdditionalSnippetsDocType = "HTML";
+let value: AdditionalSnippetsDocType = "DOCX";
 ```
 
 ## Values
 
 ```typescript
-"HTML" | "Doc" | "Pdf"
+"HTML" | "DOCX" | "PDF" | "PPTX"
 ```

@@ -8,6 +8,8 @@ export * from "./action.js";
 export * from "./actionsearch.js";
 export * from "./additionalsnippets.js";
 export * from "./aisearchresponse.js";
+export * from "./aitopicbreadcrumb.js";
+export * from "./aitopicsummary.js";
 export * from "./allaccessibleportals.js";
 export * from "./answer.js";
 export * from "./answeredquestion.js";

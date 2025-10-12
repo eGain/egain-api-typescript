@@ -39,7 +39,7 @@ import {
 
 export type Portal = {
   /**
-   * The alphanumeric ID of the portal.<br><br>A topic ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
+   * The alphanumeric ID of the portal.<br><br>A portal ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
    */
   id: string;
   /**

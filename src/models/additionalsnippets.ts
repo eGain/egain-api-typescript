@@ -9,15 +9,16 @@ import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 /**
- * Format of the source document (HTML, Doc, or PDF).
+ * Format of the source document (HTML, DOCX, PPTX or PDF).
  */
 export const AdditionalSnippetsDocType = {
   Html: "HTML",
-  Doc: "Doc",
-  Pdf: "Pdf",
+  Docx: "DOCX",
+  Pdf: "PDF",
+  Pptx: "PPTX",
 } as const;
 /**
- * Format of the source document (HTML, Doc, or PDF).
+ * Format of the source document (HTML, DOCX, PPTX or PDF).
  */
 export type AdditionalSnippetsDocType = ClosedEnum<
   typeof AdditionalSnippetsDocType
@@ -33,7 +34,7 @@ export type AdditionalSnippets = {
    */
   name: string;
   /**
-   * Format of the source document (HTML, Doc, or PDF).
+   * Format of the source document (HTML, DOCX, PPTX or PDF).
    */
   docType: AdditionalSnippetsDocType;
   /**

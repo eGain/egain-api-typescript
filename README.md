@@ -219,10 +219,6 @@ run();
 
 * [retrieveChunks](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/retrieve/README.md#retrievechunks) - Retrieve Chunks
 
-#### [content.health](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/health/README.md)
-
-* [getHealth](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/health/README.md#gethealth) - Check service health status
-
 #### [content.import](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md)
 
 * [createImportJob](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportjob) - Import content from external sources by creating an import job
@@ -373,7 +369,6 @@ To read more about standalone functions, check [FUNCTIONS.md](https://github.com
 
 - [`aiservicesAnswersGetBestAnswer`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/answers/README.md#getbestanswer) - Get the best answer for a user query
 - [`aiservicesRetrieveRetrieveChunks`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/retrieve/README.md#retrievechunks) - Retrieve Chunks
-- [`contentHealthGetHealth`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/health/README.md#gethealth) - Check service health status
 - [`contentImportCancelImport`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#cancelimport) - Cancel an import or validation job
 - [`contentImportCreateImportJob`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportjob) - Import content from external sources by creating an import job
 - [`contentImportCreateImportValidationJob`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportvalidationjob) - Validate content structure and format before import by creating an import validation job
@@ -657,7 +652,7 @@ run();
 * [`EgainError`](./src/models/errors/egainerror.ts): The base class for HTTP error responses.
   * [`WSErrorCommon`](./src/models/errors/wserrorcommon.ts): Bad Request. *
 
-<details><summary>Less common errors (8)</summary>
+<details><summary>Less common errors (7)</summary>
 
 <br />
 
@@ -670,8 +665,7 @@ run();
 
 
 **Inherit from [`EgainError`](./src/models/errors/egainerror.ts)**:
-* [`SchemasWSErrorCommon`](./src/models/errors/schemaswserrorcommon.ts): Preconditions failed. Status code `412`. Applicable to 2 of 79 methods.*
-* [`ServiceUnavailableError`](./src/models/errors/serviceunavailableerror.ts): ## Service is Unhealthy  The Import Content service is experiencing critical issues and may not be able to process requests properly.  **Health Status Details:** - **Overall Status**: Service is unhealthy and may not function correctly  **Response Information:** - **Status**: Current health state (unhealthy) - **Timestamp**: When health check was performed - **Version**: Current API version - **Issues**: List of detected health problems. Status code `503`. Applicable to 1 of 79 methods.*
+* [`SchemasWSErrorCommon`](./src/models/errors/schemaswserrorcommon.ts): Preconditions failed. Status code `412`. Applicable to 2 of 78 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

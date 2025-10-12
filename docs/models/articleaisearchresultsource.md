@@ -7,7 +7,7 @@ The source type.
 ```typescript
 import { ArticleAISearchResultSource } from "@egain/egain-api-typescript/models";
 
-let value: ArticleAISearchResultSource = "eGain Attachment";
+let value: ArticleAISearchResultSource = "eGain Article";
 ```
 
 ## Values

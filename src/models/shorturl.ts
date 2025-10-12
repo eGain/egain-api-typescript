@@ -9,7 +9,7 @@ import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 export type ShortURL = {
   /**
-   * The alphanumeric ID of the short URL.<br><br>A topic ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
+   * The alphanumeric ID of the short URL.<br><br>A portal ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
    */
   id?: string | undefined;
   /**

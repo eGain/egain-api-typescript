@@ -26,7 +26,7 @@ export type AiSearchRequest = {
   /**
    * The language that describes the details of a resource. Resources available in different languages may differ from each other. <br><br> If lang is not passed, then the portal's default language is used.
    */
-  language?: models.LanguageCodeParameter | undefined;
+  language: models.LanguageCodeParameter;
   /**
    * An object where each key is a **Category Tag ID** (numeric string),
    *
@@ -42,14 +42,6 @@ export type AiSearchRequest = {
    * One or more comma-separated names for article custom attributes defined by the user to be returned.
    */
   articleCustomAdditionalAttributes?: string | undefined;
-  /**
-   * Pagination parameter that specifies the page number of results to be returned. Used in conjunction with $pagesize.
-   */
-  pagenum?: number | undefined;
-  /**
-   * Pagination parameter that specifies the number of results per page. Used in conjunction with $pagenum.
-   */
-  pagesize?: number | undefined;
 };
 
 /** @internal */
@@ -61,12 +53,10 @@ export const AiSearchRequest$inboundSchema: z.ZodType<
   q: z.string(),
   portalID: z.string(),
   filterUserProfileID: z.string().optional(),
-  language: models.LanguageCodeParameter$inboundSchema.optional(),
+  language: models.LanguageCodeParameter$inboundSchema,
   filterTags: z.record(z.array(z.string())).optional(),
   filterTopicIds: z.array(z.string()).optional(),
   articleCustomAdditionalAttributes: z.string().optional(),
-  pagenum: z.number().int().default(1),
-  pagesize: z.number().int().default(10),
 });
 
 /** @internal */
@@ -74,12 +64,10 @@ export type AiSearchRequest$Outbound = {
   q: string;
   portalID: string;
   filterUserProfileID?: string | undefined;
-  language?: string | undefined;
+  language: string;
   filterTags?: { [k: string]: Array<string> } | undefined;
   filterTopicIds?: Array<string> | undefined;
   articleCustomAdditionalAttributes?: string | undefined;
-  pagenum: number;
-  pagesize: number;
 };
 
 /** @internal */
@@ -91,12 +79,10 @@ export const AiSearchRequest$outboundSchema: z.ZodType<
   q: z.string(),
   portalID: z.string(),
   filterUserProfileID: z.string().optional(),
-  language: models.LanguageCodeParameter$outboundSchema.optional(),
+  language: models.LanguageCodeParameter$outboundSchema,
   filterTags: z.record(z.array(z.string())).optional(),
   filterTopicIds: z.array(z.string()).optional(),
   articleCustomAdditionalAttributes: z.string().optional(),
-  pagenum: z.number().int().default(1),
-  pagesize: z.number().int().default(10),
 });
 
 /**

@@ -3,17 +3,11 @@
  */
 
 import { ClientSDK } from "../lib/sdks.js";
-import { Health } from "./health.js";
 import { Import } from "./import.js";
 
 export class Content extends ClientSDK {
   private _import?: Import;
   get import(): Import {
     return (this._import ??= new Import(this._options));
-  }
-
-  private _health?: Health;
-  get health(): Health {
-    return (this._health ??= new Health(this._options));
   }
 }

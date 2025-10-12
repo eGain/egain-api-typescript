@@ -33,7 +33,7 @@ tags:
 
 
       **Supported Content Formats:**
-      - Content needs to be in this format: [Guide to Data Import Format](../../../../../developer-portal/guides/ingestion/data-import-format-guide.md)
+      - Content needs to be in this format: [Guide to Data Import Format](https://apidev.egain.com/developer-portal/guides/ingestion/data-import-format-guide/)
   - name: Article
     description: Article APIs
   - name: Article Lists
@@ -152,7 +152,7 @@ paths:
         This API initiates a bulk content import operation from Data Sources. It creates an asynchronous import job that processes content in the background, allowing you to import large volumes of content without blocking your application.
 
         ## Pre-requisties
-        1. Content in Data Source needs to be in this format: [Guide to Data Import Format](../../../../../developer-portal/guides/ingestion/data-import-format-guide.md)
+        1. Content in Data Source needs to be in this format: [Guide to Data Import Format](https://apidev.egain.com/developer-portal/guides/ingestion/data-import-format-guide/)
 
         ## How It Works
         1. **Job Creation**: The API creates an import job and returns a unique job ID
@@ -262,8 +262,8 @@ paths:
         - accessToken: []
       x-speakeasy-group: content.import
       servers:
-        - url: https://api.aidev.egain.cloud/knowledge/contentmgr/v4
-          description: Production Server
+        - url: http://nop
+          description: Production Server - Try it Out does not function
   /import/content/{job_id}/status:
     get:
       description: |
@@ -401,8 +401,8 @@ paths:
         - accessToken: []
       x-speakeasy-group: content.import
       servers:
-        - url: https://api.aidev.egain.cloud/knowledge/contentmgr/v4
-          description: Production Server
+        - url: http://nop
+          description: Production Server - Try it Out does not function
   /import/content/validate:
     post:
       description: "# Validate Import Content\n\n## Overview\nThis API enables users to validate content structure, format, and compliance before importing it into the production knowledge base. Validation is a non-destructive operation that checks content without making any changes to your existing data.\n\n## What Validation Checks\n- **Content Structure**: Verifies required fields and data types\n- **Format Compliance**: Ensures content meets platform requirements\n- **Language Support**: Validates content against supported languages\n- **Metadata Mapping**: Checks field mappings and transformations\n- **Business Rules**: Validates against department-specific rules\n\n## Validation Benefits\n- **Risk Mitigation**: Identify issues before affecting production data\n- **Quality Assurance**: Ensure content meets organizational standards\n- **Cost Savings**: Avoid failed imports that waste processing time\n- **Compliance**: Meet regulatory and internal content requirements\n\n## Validation Process\n1. **Content Analysis**: System analyzes content structure and format\n2. **Rule Validation**: Applies business rules and validation logic\n3. **Quality Assessment**: Evaluates content quality and completeness\n4. **Report Generation**: Creates detailed validation report\n5. **Issue Categorization**: Classifies issues by severity and type\n\n## Common Validation Issues\n- **Missing Required Fields**: Title, description, category, etc.\n- **Invalid Data Types**: Incorrect field formats (dates, numbers, etc.)\n- **Language Mismatches**: Content language not supported by department\n\n## Best Practices\n- **Always Validate First**: Run validation before any import operation\n- **Review Reports**: Carefully examine validation results and warnings\n- **Fix Issues**: Address validation errors before proceeding with import\n- **Test Small Batches**: Validate with small content samples first\n- **Iterate**: Use validation feedback to improve content quality\n\n## Permissions \n| Actor | Permission |\n| ------- | --------|\n| User |<ul><li>User must be a department user.</li><li>User must have 'Author' role.</li><li>Content can only be imported if the user has all the required languages assigned.</li></ul>|\n"
@@ -488,8 +488,8 @@ paths:
         - accessToken: []
       x-speakeasy-group: content.import
       servers:
-        - url: https://api.aidev.egain.cloud/knowledge/contentmgr/v4
-          description: Production Server
+        - url: http://nop
+          description: Production Server - Try it Out does not function
   /import/content/{job_id}/cancel:
     post:
       description: "# Cancel Import or Validation Job\n\n## Overview\nThis API allows users to cancel import or validation operations that are currently in progress or scheduled for future execution. Cancellation is immediate for scheduled jobs and graceful for running jobs.\n\n## Cancellation Behavior\n- **Scheduled Jobs**: Immediate cancellation, no processing occurs\n- **In Progress Jobs**: Graceful shutdown, current item completes, no new items start\n- **Completed Jobs**: Cannot be cancelled (returns error)\n- **Failed Jobs**: Cannot be cancelled (already stopped)\n\n## When to Cancel\n- **Content Issues**: Discover problems with source content\n- **Timing Changes**: Need to reschedule for different time\n- **Resource Constraints**: System resources are needed elsewhere\n- **User Request**: Manual cancellation by authorized users\n- **System Maintenance**: Planned maintenance windows\n\n## Cancellation Process\n1. **Request Received**: System receives cancellation request\n2. **Status Check**: Verifies current job status\n3. **Graceful Shutdown**: For running jobs, completes current item\n4. **Resource Cleanup**: Releases allocated system resources\n5. **Status Update**: Marks job as cancelled\n6. **Notification**: Updates job status and logs\n\n## Post-Cancellation\n- **Job Status**: Changes to \"Cancelled\"\n- **Partial Results**: Any completed items remain in system\n- **Logs**: Cancellation reason and timing recorded\n- **Resources**: System resources freed for other operations\n\n## Best Practices\n- **Monitor Jobs**: Regularly check job status to identify candidates for cancellation\n- **Plan Cancellations**: Schedule cancellations during low-usage periods\n- **Resource Planning**: Consider resource impact before cancelling large jobs\n\n## Permissions \n| Actor | Permission |\n| ------- | --------|\n| User |<li>User must be a department user.</li><li>Content can only be validated for user's home department.</li><li>User must have 'Author' role.</li><li>The job must have been created by the logged in user, or the logged in user must have 'Edit' permissions on the user who created the job.</li></ul>|\n"
@@ -516,261 +516,8 @@ paths:
         - accessToken: []
       x-speakeasy-group: content.import
       servers:
-        - url: https://api.aidev.egain.cloud/knowledge/contentmgr/v4
-          description: Production Server
-  /import/content/health:
-    get:
-      description: |
-        # Service Health Check
-
-        ## Overview
-        This API provides comprehensive health status information for the Import Content service. It's designed for infrastructure monitoring, load balancer health checks, and operational monitoring to ensure service availability and performance.
-
-        ## Health Check Features
-        - **Service Status**: Overall service health (healthy/unhealthy)
-        - **Version Information**: Current API version and build details
-
-        ## Monitoring Use Cases
-        - **Load Balancers**: Automatic health checks for traffic routing
-        - **Alerting Systems**: Automated notifications for service issues
-
-        ## Health Status Values
-        - **Healthy**: Service is operating normally
-        - **Unhealthy**: Service is experiencing critical issues
-        - **Maintenance**: Service is under planned maintenance
-
-        ## Response Components
-        - **Status**: Current health state
-        - **Timestamp**: When health check was performed
-        - **Version**: API version information
-        - **Uptime**: Service uptime since last restart
-
-        ## Monitoring Best Practices
-        - **Check Frequency**: Monitor every 1-2 minutes for production
-        - **Response Time**: Track health check response times
-
-        ## Permissions
-        | Actor | Permission |
-        | ------- | --------|
-        | System |<ul><li>No authentication required for basic health checks.</li><li>This endpoint is designed for infrastructure monitoring.</li><li>Rate limiting applies to prevent abuse.</li></ul>|
-      summary: Check service health status
-      operationId: getHealth
-      x-internal: true
-      x-speakeasy-group: content.health
-      tags:
-        - Health Check
-      responses:
-        '200':
-          description: |
-            ## Service is Healthy
-
-            The Import Content service is operating normally with all components functioning as expected.
-
-            **Health Status Details:**
-            - **Overall Status**: Service is healthy and ready to process requests
-
-            **Response Information:**
-            - **Status**: Current health state (healthy, degraded, unhealthy)
-            - **Timestamp**: When health check was performed
-            - **Version**: Current API version
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: healthy
-                    enum:
-                      - healthy
-                      - degraded
-                      - unhealthy
-                      - maintenance
-                    description: |
-                      **Health Status**
-
-                      The overall health status of the service. Possible values:
-                      - **healthy**: Service is operating normally
-                      - **degraded**: Service is functional but with performance issues
-                      - **unhealthy**: Service is experiencing critical issues
-                      - **maintenance**: Service is under planned maintenance
-                  timestamp:
-                    format: date-time
-                    pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
-                    example: '2024-03-01T10:00:00.000Z'
-                    description: |
-                      **Health Check Timestamp**
-
-                      The exact date and time when this health check was performed. This is useful for:
-                      - Tracking health check frequency
-                      - Correlating with other system events
-                      - Monitoring health check response times
-                      - Historical health trend analysis
-                  version:
-                    type: string
-                    example: 4.0.0
-                    maxLength: 20
-                    description: |
-                      **API Version**
-
-                      The current version of the Import Content API. This helps with:
-                      - Version compatibility checking
-                      - Feature availability verification
-                      - Upgrade planning and coordination
-                      - Support and troubleshooting
-                  uptime:
-                    type: string
-                    maxLength: 20
-                    example: 2d 5h 30m 15s
-                    description: |
-                      **Service Uptime**
-
-                      The total time the service has been running since the last restart. This metric is useful for:
-                      - Service stability monitoring
-                      - Maintenance scheduling
-                      - Performance trend analysis
-                      - Reliability assessment
-              examples:
-                Healthy Service:
-                  summary: Service operating normally
-                  description: Shows a healthy service with all components operational
-                  value:
-                    status: healthy
-                    timestamp: '2024-01-15T10:30:00.000Z'
-                    version: 4.0.0
-                    uptime: 2d 5h 30m 15s
-        '503':
-          description: |
-            ## Service is Unhealthy
-
-            The Import Content service is experiencing critical issues and may not be able to process requests properly.
-
-            **Health Status Details:**
-            - **Overall Status**: Service is unhealthy and may not function correctly
-
-            **Response Information:**
-            - **Status**: Current health state (unhealthy)
-            - **Timestamp**: When health check was performed
-            - **Version**: Current API version
-            - **Issues**: List of detected health problems
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: healthy
-                    enum:
-                      - healthy
-                      - degraded
-                      - unhealthy
-                      - maintenance
-                    description: |
-                      **Health Status**
-
-                      The overall health status of the service. Possible values:
-                      - **healthy**: Service is operating normally
-                      - **degraded**: Service is functional but with performance issues
-                      - **unhealthy**: Service is experiencing critical issues
-                      - **maintenance**: Service is under planned maintenance
-                  timestamp:
-                    format: date-time
-                    pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
-                    example: '2024-03-01T10:00:00.000Z'
-                    description: |
-                      **Health Check Timestamp**
-
-                      The exact date and time when this health check was performed. This is useful for:
-                      - Tracking health check frequency
-                      - Correlating with other system events
-                      - Monitoring health check response times
-                      - Historical health trend analysis
-                  version:
-                    type: string
-                    example: 4.0.0
-                    maxLength: 20
-                    description: |
-                      **API Version**
-
-                      The current version of the Import Content API. This helps with:
-                      - Version compatibility checking
-                      - Feature availability verification
-                      - Upgrade planning and coordination
-                      - Support and troubleshooting
-                  issues:
-                    type: array
-                    description: "**Issues**: \n  \nList of detected health problems\n"
-                    items:
-                      type: string
-                      maxLength: 1024
-                  components:
-                    type: object
-                    description: "**Comonents**: \n\nHealth status of import service componenets\n"
-                    properties:
-                      database:
-                        description: Health status of database component.
-                        type: string
-                        enum:
-                          - healthy
-                          - degraded
-                          - unhealthy
-                          - maintenance
-                      fileSystem:
-                        type: string
-                        description: Health status of file system component.
-                        enum:
-                          - healthy
-                          - degraded
-                          - unhealthy
-                          - maintenance
-                      externalServices:
-                        type: string
-                        description: Health status of external services components.
-                        enum:
-                          - healthy
-                          - degraded
-                          - unhealthy
-                          - maintenance
-                      processingEngine:
-                        type: string
-                        description: Health status of processing engine component.
-                        enum:
-                          - healthy
-                          - degraded
-                          - unhealthy
-                          - maintenance
-                      storage:
-                        type: string
-                        description: Health status of storage component.
-                        enum:
-                          - healthy
-                          - degraded
-                          - unhealthy
-                          - maintenance
-              examples:
-                Unhealthy Service:
-                  summary: Service with critical issues
-                  description: Shows a service experiencing multiple health problems
-                  value:
-                    status: unhealthy
-                    timestamp: '2024-01-15T10:30:00.000Z'
-                    version: 4.0.0
-                    issues:
-                      - Database connection failed
-                      - External service timeout
-                      - Storage system unavailable
-                    components:
-                      database: unhealthy
-                      fileSystem: healthy
-                      externalServices: unhealthy
-                      processingEngine: degraded
-                      storage: unhealthy
-      security:
-        - accessToken: []
-      servers:
-        - url: https://api.aidev.egain.cloud/knowledge/contentmgr/v4
-          description: Production Server
+        - url: http://nop
+          description: Production Server - Try it Out does not function
   /portals/{portalID}/articles/{articleID}:
     get:
       summary: Get Article by ID
@@ -2839,8 +2586,6 @@ paths:
         - $ref: '#/components/parameters/filterTags'
         - $ref: '#/components/parameters/filterTopicIds'
         - $ref: '#/components/parameters/articleCustomFields'
-        - $ref: '#/components/parameters/pagenum'
-        - $ref: '#/components/parameters/pagesize'
       responses:
         '200':
           description: Successful response
@@ -3958,6 +3703,7 @@ components:
       x-speakeasy-name-override: filterUserProfileID
     languageCode:
       name: $lang
+      required: true
       in: query
       description: The language that describes the details of a resource. Resources available in different languages may differ from each other. <br><br> If lang is not passed, then the portal's default language is used.
       schema:
@@ -9195,7 +8941,7 @@ components:
         id:
           type: string
           pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-          description: The alphanumeric ID of the portal.<br><br>A topic ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
+          description: The alphanumeric ID of the portal.<br><br>A portal ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
           minLength: 7
           maxLength: 20
         name:
@@ -9292,7 +9038,7 @@ components:
         id:
           type: string
           pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
-          description: The alphanumeric ID of the short URL.<br><br>A topic ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
+          description: The alphanumeric ID of the short URL.<br><br>A portal ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
           minLength: 7
           maxLength: 20
         templateName:
@@ -9363,41 +9109,80 @@ components:
           minLength: 7
           maxLength: 20
           pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+          example: PROD-2996
         name:
           type: string
           description: The name of the Article or source content.
           minLength: 1
           maxLength: 255
           pattern: ^[\w\W]+$
+          example: Fair Lending FAQs
         docType:
           type: string
           enum:
             - HTML
-            - Doc
-            - Pdf
-          description: Format of the source document (HTML, Doc, or PDF).
+            - DOCX
+            - PDF
+            - PPTX
+          description: Format of the source document (HTML, DOCX, PPTX or PDF).
+          example: DOCX
         docName:
           type: string
           description: Name of the attachment, if an attachment was used as the source content.
           minLength: 1
           maxLength: 255
           pattern: ^[\w\W]+$
+          example: Banking FAQs
         snippet:
           type: string
           description: A snippet of the article content.
           maxLength: 5000
           pattern: ^[\w\W]+$
+          example: The following Banking FAQs...
         keywordSnippet:
           type: string
           description: A keyword snippet of the article content.
           maxLength: 5000
           pattern: ^[\w\W]+$
+          example: The following Banking FAQs...
         relevanceScore:
           type: number
           format: float
           description: Generated confidence score (0.0-1.0) for the snippet's relevance to the query.
           minimum: 0
           maximum: 1
+          example: 0.7
+    AITopicSummary:
+      title: Topic Summary
+      type: object
+      description: This schema contains the topic ID and name of the topics. This is used by TopicBreadcrumb.
+      properties:
+        id:
+          type: string
+          pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+          description: The alphanumeric ID of the topic.<br><br>A topic ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
+          minLength: 7
+          maxLength: 20
+          example: PROD-1921
+        name:
+          type: string
+          description: The name of the topic.
+          pattern: ^[\w\W]*$
+          minLength: 1
+          maxLength: 255
+          example: Banking Regulations
+    AITopicBreadcrumb:
+      title: Topic Breadcrumb
+      type: object
+      description: This schema contains one or more TopicSummary instances.
+      properties:
+        topicSummary:
+          items:
+            $ref: '#/components/schemas/AITopicSummary'
+          description: An instance of TopicSummary.
+          type: array
+          minItems: 1
+          maxItems: 50
     schemas-Tags:
       title: Tags
       type: object
@@ -9436,31 +9221,37 @@ components:
           minLength: 7
           maxLength: 20
           pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+          example: PROD-2996
         name:
           type: string
           description: The name of the Article or source content.
           minLength: 1
           maxLength: 255
           pattern: ^[\w\W]+$
+          example: Fair Lending FAQs
         docType:
           type: string
           enum:
             - HTML
-            - Doc
-            - Pdf
-          description: Format of the source document (HTML, Doc, or PDF).
+            - DOCX
+            - PDF
+            - PPTX
+          description: Format of the source document (HTML, DOCX, PPTX or PDF).
+          example: PDF
         docName:
           type: string
           description: Name of the attachment, if an attachment was used as the source content.
           minLength: 1
           maxLength: 255
           pattern: ^[\w\W]+$
+          example: Lending FAQs
         source:
           type: string
           enum:
             - eGain Article
             - eGain Attachment
           description: The source type.
+          example: eGain Article
         customAttributes:
           type: array
           description: Custom attributes assigned to an article
@@ -9473,11 +9264,13 @@ components:
                 maxLength: 4000
                 pattern: ^[\w\W]+$
                 description: The custom attribute's name.
+                example: loan_id
               value:
                 type: array
                 items:
                   type: string
                 description: The custom attribute's values.
+                example: 78391
               type:
                 type: string
                 enum:
@@ -9486,17 +9279,20 @@ components:
                   - BOOLEAN
                   - DATETIME
                 description: The custom attribute's type.
+                example: STRING
           maxItems: 15
         snippet:
           type: string
           description: A semantic snippet of the article content.
           maxLength: 5000
           pattern: ^[\w\W]+$
+          example: What is fair lending...
         keywordSnippet:
           type: string
           description: A keyword search snippet of article content.
           maxLength: 5000
           pattern: ^[\w\W]+$
+          example: What is fair lending...
         additionalSnippets:
           type: array
           items:
@@ -9508,36 +9304,30 @@ components:
           minimum: 1
           maximum: 5
           description: Number of additional snippets.
+          example: 1
         contextualSummary:
           type: string
           description: Contextual Summary generated as part of metadata for embedding.
           maxLength: 1000
           pattern: ^[\w\W]+$
-        description:
-          type: string
-          maxLength: 1000
-          description: A description of the Article. The maximum allowed Article description size is 1 KB.
-          pattern: ^[\w\W]+$
-        summary:
-          type: string
-          maxLength: 1024
-          description: A brief summary of the Article, provided as metadata. 1 KB max size limit.
-          pattern: ^[\w\W]+$
-        lastModifiedDate:
+          example: The summary of the lending FAQ...
+        modifiedDate:
           type: string
           pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$
           minLength: 20
           maxLength: 25
           description: The date on which the Article was last modified.
+          example: '2025-01-28T19:53:58Z'
         headerPath:
           type: string
           maxLength: 100
           description: The header path of the snippet retrieved.
           pattern: ^[\w\W]+$
+          example: FAQs
         topicBreadcrumb:
           type: array
           items:
-            $ref: '#/components/schemas/TopicBreadcrumb'
+            $ref: '#/components/schemas/AITopicBreadcrumb'
           minItems: 1
           maxItems: 50
           description: A list of topics from the root topic to this Article. There may be multiple paths.
@@ -9547,9 +9337,6 @@ components:
             $ref: '#/components/schemas/schemas-Tags'
           description: An array of tag categories. Note that the total number of tag categories cannot exceed 20.
           maxItems: 20
-        keywords:
-          type: string
-          maxLength: 1024
         articleTypeAttributes:
           type: object
           description: The type of the Article and its attributes.
@@ -9572,40 +9359,12 @@ components:
           description: Generated confidence score (0.0-1.0) for the snippet's relevance to the query.
           minimum: 0
           maximum: 1
-        link:
-          type: object
-          description: Defines the relationship between this resource and another object.
-          properties:
-            rel:
-              type: string
-              maxLength: 50
-              pattern: ^[a-zA-Z]+$
-              description: 'Defines the relationship between a linked resource and the current object. <br><br> For example: self, prev, next or an object name such as ''user'', ''folder'' etc.'
-            href:
-              type: string
-              maxLength: 1000
-              pattern: (\/[^?#]*)
-              description: The URL that specifies the link's destination.
+          example: 0.8
     AISearchResponse:
       type: object
+      required:
+        - searchResults
       properties:
-        channel:
-          type: object
-          required:
-            - type
-          properties:
-            type:
-              type: string
-              enum:
-                - portal
-                - custom
-              description: The channel where the query originated, e.g., directly from the portal or via a custom integration.
-            name:
-              type: string
-              minLength: 1
-              maxLength: 255
-              description: The name of the channel.
-              pattern: ^[\w\W]+$
         searchResults:
           type: object
           description: Top search results with relevance scores
@@ -9616,8 +9375,6 @@ components:
                 $ref: '#/components/schemas/ArticleAISearchResult'
               minItems: 1
               maxItems: 50
-        paginationInfo:
-          $ref: '#/components/schemas/PaginationInfo'
     Suggestion:
       description: This schema contains information about a Suggestion.
       title: suggestion

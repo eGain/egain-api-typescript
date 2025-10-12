@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 941f5295-94f8-4bce-a1a1-3fcca6bf9341
 management:
-  docChecksum: 24ac8b9d3acdef3a7d8319e225bc8620
+  docChecksum: b5f4338a2e3dc840a8a95692cfb426dd
   docVersion: 4.0.0
   speakeasyVersion: 1.636.3
   generationVersion: 2.723.11
-  releaseVersion: 0.3.13
-  configChecksum: 52d6ce7483b4b6ea99e063a4d1126a27
+  releaseVersion: 0.3.14
+  configChecksum: 1a816a99b15f233549c31c27ac1cb925
   published: true
 features:
   typescript:
@@ -48,8 +48,8 @@ generatedFiles:
   - docs/models/additionalsnippets.md
   - docs/models/additionalsnippetsdoctype.md
   - docs/models/aisearchresponse.md
-  - docs/models/aisearchresponsechannel.md
-  - docs/models/aisearchresponsetype.md
+  - docs/models/aitopicbreadcrumb.md
+  - docs/models/aitopicsummary.md
   - docs/models/allaccessibleportals.md
   - docs/models/answer.md
   - docs/models/answeredquestion.md
@@ -73,7 +73,6 @@ generatedFiles:
   - docs/models/articleaisearchresult.md
   - docs/models/articleaisearchresultcustomattribute.md
   - docs/models/articleaisearchresultdoctype.md
-  - docs/models/articleaisearchresultlink.md
   - docs/models/articleaisearchresultsource.md
   - docs/models/articleaisearchresulttype.md
   - docs/models/articleattachment.md
@@ -168,7 +167,6 @@ generatedFiles:
   - docs/models/editionwithcontentaccesstags.md
   - docs/models/email.md
   - docs/models/errors/schemaswserrorcommon.md
-  - docs/models/errors/serviceunavailableerror.md
   - docs/models/errors/wserrorcommon.md
   - docs/models/exportstatus.md
   - docs/models/exportstatusprogress.md
@@ -226,7 +224,6 @@ generatedFiles:
   - docs/models/operations/cancelimportrequest.md
   - docs/models/operations/completecustomerescalationrequest.md
   - docs/models/operations/complyarticlerequest.md
-  - docs/models/operations/components.md
   - docs/models/operations/createfederatedsearchresulteventrequest.md
   - docs/models/operations/createimportjobresponse.md
   - docs/models/operations/createimportvalidationjobresponse.md
@@ -234,13 +231,10 @@ generatedFiles:
   - docs/models/operations/createsearchresulteventforconnectorsrequest.md
   - docs/models/operations/createsignedurlrequest.md
   - docs/models/operations/createviewedsearchresultseventforconnectorsrequest.md
-  - docs/models/operations/database.md
   - docs/models/operations/deletebookmarkrequest.md
   - docs/models/operations/deletesuggestionrequest.md
   - docs/models/operations/exportcontentresponse.md
   - docs/models/operations/exportstatusrequest.md
-  - docs/models/operations/externalservices.md
-  - docs/models/operations/filesystem.md
   - docs/models/operations/filterstatus.md
   - docs/models/operations/getacknowledgedcompliancearticlesrequest.md
   - docs/models/operations/getallarticlelistsrequest.md
@@ -269,7 +263,6 @@ generatedFiles:
   - docs/models/operations/getcasebyidrequest.md
   - docs/models/operations/getchildtopicsrequest.md
   - docs/models/operations/getclusterbycasebasereleaseidrequest.md
-  - docs/models/operations/gethealthresponse.md
   - docs/models/operations/getimportstatusrequest.md
   - docs/models/operations/getmyportalsrequest.md
   - docs/models/operations/getmysubscriptionrequest.md
@@ -288,7 +281,6 @@ generatedFiles:
   - docs/models/operations/getusermilestonesrequest.md
   - docs/models/operations/makesuggestionrequest.md
   - docs/models/operations/modifysuggestionsrequest.md
-  - docs/models/operations/processingengine.md
   - docs/models/operations/ratearticlerequest.md
   - docs/models/operations/rejectghsolutionrequest.md
   - docs/models/operations/restorequickpickrequest.md
@@ -296,14 +288,11 @@ generatedFiles:
   - docs/models/operations/searchpriortoescalationrequest.md
   - docs/models/operations/searchsuggestionrequest.md
   - docs/models/operations/selectuserprofilerequest.md
-  - docs/models/operations/serviceunavailablestatus.md
   - docs/models/operations/startcustomerescalationrequest.md
   - docs/models/operations/startcustomerescalationresponse.md
   - docs/models/operations/startghsearchrequest.md
   - docs/models/operations/startghsearchresponse.md
-  - docs/models/operations/status.md
   - docs/models/operations/stepghsearchrequest.md
-  - docs/models/operations/storage.md
   - docs/models/operations/subscribearticlerequest.md
   - docs/models/operations/unsubscribearticlerequest.md
   - docs/models/operations/uploadattachmentrequest.md
@@ -424,7 +413,6 @@ generatedFiles:
   - docs/sdks/federatedsearchevent/README.md
   - docs/sdks/general/README.md
   - docs/sdks/guidedhelp/README.md
-  - docs/sdks/health/README.md
   - docs/sdks/import/README.md
   - docs/sdks/populararticles/README.md
   - docs/sdks/retrieve/README.md
@@ -444,7 +432,6 @@ generatedFiles:
   - src/core.ts
   - src/funcs/aiservicesAnswersGetBestAnswer.ts
   - src/funcs/aiservicesRetrieveRetrieveChunks.ts
-  - src/funcs/contentHealthGetHealth.ts
   - src/funcs/contentImportCancelImport.ts
   - src/funcs/contentImportCreateImportJob.ts
   - src/funcs/contentImportCreateImportValidationJob.ts
@@ -547,6 +534,8 @@ generatedFiles:
   - src/models/actionsearch.ts
   - src/models/additionalsnippets.ts
   - src/models/aisearchresponse.ts
+  - src/models/aitopicbreadcrumb.ts
+  - src/models/aitopicsummary.ts
   - src/models/allaccessibleportals.ts
   - src/models/answer.ts
   - src/models/answeredquestion.ts
@@ -630,7 +619,6 @@ generatedFiles:
   - src/models/email.ts
   - src/models/errors/egaindefaulterror.ts
   - src/models/errors/egainerror.ts
-  - src/models/errors/gethealth.ts
   - src/models/errors/httpclienterrors.ts
   - src/models/errors/index.ts
   - src/models/errors/responsevalidationerror.ts
@@ -711,7 +699,6 @@ generatedFiles:
   - src/models/operations/getcasebyid.ts
   - src/models/operations/getchildtopics.ts
   - src/models/operations/getclusterbycasebasereleaseid.ts
-  - src/models/operations/gethealth.ts
   - src/models/operations/getimportstatus.ts
   - src/models/operations/getmyportals.ts
   - src/models/operations/getmysubscription.ts
@@ -827,7 +814,6 @@ generatedFiles:
   - src/sdk/federatedsearchevent.ts
   - src/sdk/general.ts
   - src/sdk/guidedhelp.ts
-  - src/sdk/health.ts
   - src/sdk/import.ts
   - src/sdk/index.ts
   - src/sdk/populararticles.ts

@@ -1,17 +1,17 @@
 # ArticleAISearchResultDocType
 
-Format of the source document (HTML, Doc, or PDF).
+Format of the source document (HTML, DOCX, PPTX or PDF).
 
 ## Example Usage
 
 ```typescript
 import { ArticleAISearchResultDocType } from "@egain/egain-api-typescript/models";
 
-let value: ArticleAISearchResultDocType = "Doc";
+let value: ArticleAISearchResultDocType = "PDF";
 ```
 
 ## Values
 
 ```typescript
-"HTML" | "Doc" | "Pdf"
+"HTML" | "DOCX" | "PDF" | "PPTX"
 ```

@@ -4,7 +4,6 @@
 
 import * as z from "zod";
 import { safeParse } from "../lib/schemas.js";
-import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import {
   ArticleAISearchResult,
@@ -13,35 +12,6 @@ import {
   ArticleAISearchResult$outboundSchema,
 } from "./articleaisearchresult.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
-import {
-  PaginationInfo,
-  PaginationInfo$inboundSchema,
-  PaginationInfo$Outbound,
-  PaginationInfo$outboundSchema,
-} from "./paginationinfo.js";
-
-/**
- * The channel where the query originated, e.g., directly from the portal or via a custom integration.
- */
-export const AISearchResponseType = {
-  Portal: "portal",
-  Custom: "custom",
-} as const;
-/**
- * The channel where the query originated, e.g., directly from the portal or via a custom integration.
- */
-export type AISearchResponseType = ClosedEnum<typeof AISearchResponseType>;
-
-export type AISearchResponseChannel = {
-  /**
-   * The channel where the query originated, e.g., directly from the portal or via a custom integration.
-   */
-  type: AISearchResponseType;
-  /**
-   * The name of the channel.
-   */
-  name?: string | undefined;
-};
 
 /**
  * Top search results with relevance scores
@@ -51,91 +21,11 @@ export type SearchResults = {
 };
 
 export type AISearchResponse = {
-  channel?: AISearchResponseChannel | undefined;
   /**
    * Top search results with relevance scores
    */
-  searchResults?: SearchResults | undefined;
-  paginationInfo?: PaginationInfo | undefined;
+  searchResults: SearchResults;
 };
-
-/** @internal */
-export const AISearchResponseType$inboundSchema: z.ZodNativeEnum<
-  typeof AISearchResponseType
-> = z.nativeEnum(AISearchResponseType);
-
-/** @internal */
-export const AISearchResponseType$outboundSchema: z.ZodNativeEnum<
-  typeof AISearchResponseType
-> = AISearchResponseType$inboundSchema;
-
-/**
- * @internal
- * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
- */
-export namespace AISearchResponseType$ {
-  /** @deprecated use `AISearchResponseType$inboundSchema` instead. */
-  export const inboundSchema = AISearchResponseType$inboundSchema;
-  /** @deprecated use `AISearchResponseType$outboundSchema` instead. */
-  export const outboundSchema = AISearchResponseType$outboundSchema;
-}
-
-/** @internal */
-export const AISearchResponseChannel$inboundSchema: z.ZodType<
-  AISearchResponseChannel,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  type: AISearchResponseType$inboundSchema,
-  name: z.string().optional(),
-});
-
-/** @internal */
-export type AISearchResponseChannel$Outbound = {
-  type: string;
-  name?: string | undefined;
-};
-
-/** @internal */
-export const AISearchResponseChannel$outboundSchema: z.ZodType<
-  AISearchResponseChannel$Outbound,
-  z.ZodTypeDef,
-  AISearchResponseChannel
-> = z.object({
-  type: AISearchResponseType$outboundSchema,
-  name: z.string().optional(),
-});
-
-/**
- * @internal
- * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
- */
-export namespace AISearchResponseChannel$ {
-  /** @deprecated use `AISearchResponseChannel$inboundSchema` instead. */
-  export const inboundSchema = AISearchResponseChannel$inboundSchema;
-  /** @deprecated use `AISearchResponseChannel$outboundSchema` instead. */
-  export const outboundSchema = AISearchResponseChannel$outboundSchema;
-  /** @deprecated use `AISearchResponseChannel$Outbound` instead. */
-  export type Outbound = AISearchResponseChannel$Outbound;
-}
-
-export function aiSearchResponseChannelToJSON(
-  aiSearchResponseChannel: AISearchResponseChannel,
-): string {
-  return JSON.stringify(
-    AISearchResponseChannel$outboundSchema.parse(aiSearchResponseChannel),
-  );
-}
-
-export function aiSearchResponseChannelFromJSON(
-  jsonString: string,
-): SafeParseResult<AISearchResponseChannel, SDKValidationError> {
-  return safeParse(
-    jsonString,
-    (x) => AISearchResponseChannel$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'AISearchResponseChannel' from JSON`,
-  );
-}
 
 /** @internal */
 export const SearchResults$inboundSchema: z.ZodType<
@@ -193,16 +83,12 @@ export const AISearchResponse$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
-  channel: z.lazy(() => AISearchResponseChannel$inboundSchema).optional(),
-  searchResults: z.lazy(() => SearchResults$inboundSchema).optional(),
-  paginationInfo: PaginationInfo$inboundSchema.optional(),
+  searchResults: z.lazy(() => SearchResults$inboundSchema),
 });
 
 /** @internal */
 export type AISearchResponse$Outbound = {
-  channel?: AISearchResponseChannel$Outbound | undefined;
-  searchResults?: SearchResults$Outbound | undefined;
-  paginationInfo?: PaginationInfo$Outbound | undefined;
+  searchResults: SearchResults$Outbound;
 };
 
 /** @internal */
@@ -211,9 +97,7 @@ export const AISearchResponse$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   AISearchResponse
 > = z.object({
-  channel: z.lazy(() => AISearchResponseChannel$outboundSchema).optional(),
-  searchResults: z.lazy(() => SearchResults$outboundSchema).optional(),
-  paginationInfo: PaginationInfo$outboundSchema.optional(),
+  searchResults: z.lazy(() => SearchResults$outboundSchema),
 });
 
 /**
