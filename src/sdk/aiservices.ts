@@ -3,10 +3,16 @@
  */
 
 import { ClientSDK } from "../lib/sdks.js";
+import { AiservicesPrompt } from "./aiservicesprompt.js";
 import { Answers } from "./answers.js";
 import { Retrieve } from "./retrieve.js";
 
 export class Aiservices extends ClientSDK {
+  private _prompt?: AiservicesPrompt;
+  get prompt(): AiservicesPrompt {
+    return (this._prompt ??= new AiservicesPrompt(this._options));
+  }
+
   private _retrieve?: Retrieve;
   get retrieve(): Retrieve {
     return (this._retrieve ??= new Retrieve(this._options));

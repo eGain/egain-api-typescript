@@ -6,6 +6,12 @@ import * as z from "zod";
 import { safeParse } from "../lib/schemas.js";
 import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
+import {
+  DataSourceCredentials,
+  DataSourceCredentials$inboundSchema,
+  DataSourceCredentials$Outbound,
+  DataSourceCredentials$outboundSchema,
+} from "./datasourcecredentials.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 /**
@@ -20,11 +26,6 @@ export const ImportContentType = {
  */
 export type ImportContentType = ClosedEnum<typeof ImportContentType>;
 
-export type ImportContentCredentials = {
-  accessKey?: string | undefined;
-  secretKey?: string | undefined;
-};
-
 export type ImportContentDataSource = {
   /**
    * Type of data source
@@ -38,7 +39,7 @@ export type ImportContentDataSource = {
    * Region of the data source
    */
   region?: string | undefined;
-  credentials?: ImportContentCredentials | undefined;
+  credentials?: DataSourceCredentials | undefined;
 };
 
 export const Operation = {
@@ -79,63 +80,6 @@ export namespace ImportContentType$ {
 }
 
 /** @internal */
-export const ImportContentCredentials$inboundSchema: z.ZodType<
-  ImportContentCredentials,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  accessKey: z.string().optional(),
-  secretKey: z.string().optional(),
-});
-
-/** @internal */
-export type ImportContentCredentials$Outbound = {
-  accessKey?: string | undefined;
-  secretKey?: string | undefined;
-};
-
-/** @internal */
-export const ImportContentCredentials$outboundSchema: z.ZodType<
-  ImportContentCredentials$Outbound,
-  z.ZodTypeDef,
-  ImportContentCredentials
-> = z.object({
-  accessKey: z.string().optional(),
-  secretKey: z.string().optional(),
-});
-
-/**
- * @internal
- * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
- */
-export namespace ImportContentCredentials$ {
-  /** @deprecated use `ImportContentCredentials$inboundSchema` instead. */
-  export const inboundSchema = ImportContentCredentials$inboundSchema;
-  /** @deprecated use `ImportContentCredentials$outboundSchema` instead. */
-  export const outboundSchema = ImportContentCredentials$outboundSchema;
-  /** @deprecated use `ImportContentCredentials$Outbound` instead. */
-  export type Outbound = ImportContentCredentials$Outbound;
-}
-
-export function importContentCredentialsToJSON(
-  importContentCredentials: ImportContentCredentials,
-): string {
-  return JSON.stringify(
-    ImportContentCredentials$outboundSchema.parse(importContentCredentials),
-  );
-}
-
-export function importContentCredentialsFromJSON(
-  jsonString: string,
-): SafeParseResult<ImportContentCredentials, SDKValidationError> {
-  return safeParse(
-    jsonString,
-    (x) => ImportContentCredentials$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'ImportContentCredentials' from JSON`,
-  );
-}
-
-/** @internal */
 export const ImportContentDataSource$inboundSchema: z.ZodType<
   ImportContentDataSource,
   z.ZodTypeDef,
@@ -144,7 +88,7 @@ export const ImportContentDataSource$inboundSchema: z.ZodType<
   type: ImportContentType$inboundSchema,
   path: z.string(),
   region: z.string().optional(),
-  credentials: z.lazy(() => ImportContentCredentials$inboundSchema).optional(),
+  credentials: DataSourceCredentials$inboundSchema.optional(),
 });
 
 /** @internal */
@@ -152,7 +96,7 @@ export type ImportContentDataSource$Outbound = {
   type: string;
   path: string;
   region?: string | undefined;
-  credentials?: ImportContentCredentials$Outbound | undefined;
+  credentials?: DataSourceCredentials$Outbound | undefined;
 };
 
 /** @internal */
@@ -164,7 +108,7 @@ export const ImportContentDataSource$outboundSchema: z.ZodType<
   type: ImportContentType$outboundSchema,
   path: z.string(),
   region: z.string().optional(),
-  credentials: z.lazy(() => ImportContentCredentials$outboundSchema).optional(),
+  credentials: DataSourceCredentials$outboundSchema.optional(),
 });
 
 /**

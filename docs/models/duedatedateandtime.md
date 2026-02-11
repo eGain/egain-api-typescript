@@ -8,7 +8,7 @@ The end date for the Article.
 import { DueDateDateAndTime } from "@egain/egain-api-typescript/models";
 
 let value: DueDateDateAndTime = {
-  date: new Date("2023-06-13T23:14:45.901Z"),
+  date: new Date("2024-06-12T23:14:45.901Z"),
 };
 ```
 

@@ -35,6 +35,7 @@ let value: SearchResults = {
           snippet: "The following Banking FAQs...",
           keywordSnippet: "The following Banking FAQs...",
           relevanceScore: 0.7,
+          normalizedScore: 0.9,
         },
       ],
       additionalSnippetCount: 1,
@@ -47,6 +48,7 @@ let value: SearchResults = {
         articleTypeId: 243500000023393,
       },
       relevanceScore: 0.8,
+      normalizedScore: 0.9,
     },
   ],
 };

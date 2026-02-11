@@ -8,7 +8,7 @@ Date the Tag Category was created.
 import { CreatedDateAndTime } from "@egain/egain-api-typescript/models";
 
 let value: CreatedDateAndTime = {
-  date: new Date("2023-10-30T11:01:49.391Z"),
+  date: new Date("2024-10-29T11:01:49.391Z"),
 };
 ```
 

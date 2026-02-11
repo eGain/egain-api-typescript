@@ -141,6 +141,9 @@ export type ArticleWithEditions = {
   createdBy: CreatedBy;
   modifiedBy?: ModifiedBy | undefined;
   ownedBy?: OwnedBy | undefined;
+  /**
+   * The date on which the Article was created. The timezone of the date will be in UTC.
+   */
   createdDate?: string | undefined;
   /**
    * A list of custom attributes.
@@ -171,7 +174,7 @@ export type ArticleWithEditions = {
    */
   isSubscribed?: boolean | undefined;
   /**
-   * The date on which the Article was last modified.
+   * The date on which the Article was last modified. The timezone of the date will be in UTC.
    */
   modifiedDate?: string | undefined;
   /**

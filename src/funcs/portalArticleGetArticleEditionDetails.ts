@@ -31,7 +31,7 @@ import { Result } from "../types/fp.js";
  *
  * @remarks
  * ## Overview
- *   * This API allows a user to retrieve an article with all its editions.
+ *   * This API retrieves the details of an article edition.
  */
 export function portalArticleGetArticleEditionDetails(
   client: EgainCore,

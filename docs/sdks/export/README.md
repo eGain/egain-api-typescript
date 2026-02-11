@@ -11,13 +11,16 @@
 ## exportContent
 
 ## Overview
-   The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket or SFTP server path.
+   The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket.
    It returns a URL with a Job ID to enable tracking the status of this asynchronous operation.  
    Each export job can send multiple JSON files, depending on the total number of items to process. 
    More than one bulk export can take place, as needed, one per portal.
 
 ## Permission
-  * Only a client application can invoke this API.   
+  * Only a client application can invoke this API.  
+  
+## License
+  * This API requires a site license (SKU: EG-CL-RTKA-PT).  
 
 
 ### Example Usage
@@ -32,20 +35,23 @@ const egain = new Egain({
 
 async function run() {
   const result = await egain.portal.export.exportContent({
-    portalID: "PROD-1000",
-    language: {
-      code: "en-US",
-    },
-    resourceTypes: [
-      "articles",
-    ],
-    dataDestination: {
-      destinationType: "AWS S3 bucket",
-      path: "s3://amzn-s3-demo-bucket/mydeptfolder",
-      region: "us-west-2",
-      credentials: {
-        accessKey: "s3-access-user",
-        secretKey: "s3-access-secret",
+    acceptLanguage: "en-US",
+    knowledgeExport: {
+      portalID: "PROD-1000",
+      language: {
+        code: "en-US",
+      },
+      resourceTypes: [
+        "articles",
+      ],
+      dataDestination: {
+        destinationType: "AWS S3 bucket",
+        path: "s3://amzn-s3-demo-bucket/mydeptfolder",
+        region: "us-west-2",
+        credentials: {
+          accessKey: "s3-access-key",
+          secretKey: "s3-access-secret",
+        },
       },
     },
   });
@@ -72,20 +78,23 @@ const egain = new EgainCore({
 
 async function run() {
   const res = await portalExportExportContent(egain, {
-    portalID: "PROD-1000",
-    language: {
-      code: "en-US",
-    },
-    resourceTypes: [
-      "articles",
-    ],
-    dataDestination: {
-      destinationType: "AWS S3 bucket",
-      path: "s3://amzn-s3-demo-bucket/mydeptfolder",
-      region: "us-west-2",
-      credentials: {
-        accessKey: "s3-access-user",
-        secretKey: "s3-access-secret",
+    acceptLanguage: "en-US",
+    knowledgeExport: {
+      portalID: "PROD-1000",
+      language: {
+        code: "en-US",
+      },
+      resourceTypes: [
+        "articles",
+      ],
+      dataDestination: {
+        destinationType: "AWS S3 bucket",
+        path: "s3://amzn-s3-demo-bucket/mydeptfolder",
+        region: "us-west-2",
+        credentials: {
+          accessKey: "s3-access-key",
+          secretKey: "s3-access-secret",
+        },
       },
     },
   });
@@ -104,7 +113,7 @@ run();
 
 | Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [models.KnowledgeExport](../../models/knowledgeexport.md)                                                                                                                      | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `request`                                                                                                                                                                      | [operations.ExportContentRequest](../../models/operations/exportcontentrequest.md)                                                                                             | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
 | `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
 | `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
 | `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
@@ -140,6 +149,9 @@ run();
 
 ## Permission
   * Only a client application can invoke this API.  
+
+## License
+  * This API requires a site license (SKU: EG-CL-RTKA-PT).           
 
 
 ### Example Usage

@@ -120,6 +120,7 @@ async function run() {
     department: "service",
     filterText: "master",
     shortUrlTemplate: "silver",
+    order: "asc",
   });
 
   console.log(result);
@@ -149,6 +150,7 @@ async function run() {
     department: "service",
     filterText: "master",
     shortUrlTemplate: "silver",
+    order: "asc",
   });
   if (res.ok) {
     const { value: result } = res;

@@ -146,7 +146,7 @@ export type ArticleAISearchResult = {
    */
   additionalSnippetCount?: number | undefined;
   /**
-   * Contextual Summary generated as part of metadata for embedding.
+   * Contextual Summary generated as part of metadata for the chunk content.
    */
   contextualSummary?: string | undefined;
   /**
@@ -170,9 +170,17 @@ export type ArticleAISearchResult = {
    */
   articleTypeAttributes?: ArticleTypeAttributes | undefined;
   /**
-   * Generated confidence score (0.0-1.0) for the snippet's relevance to the query.
+   * Query-specific relevance score (0.0-1.0) that reflects how well the result matches the user query. This score is only available when a re-ranker is enabled and represents a direct relevance comparison between the query and the returned snippet.
+   *
+   * @remarks
    */
-  relevanceScore: number;
+  relevanceScore?: number | undefined;
+  /**
+   * Relative ranking score (0.0-1.0) normalized across all returned results, based on a combination of BM25 and semantic similarity scores. This score indicates how a result ranks compared to others in the same response, not its absolute relevance to the query. As a result, a high score does not necessarily imply strong query relevance.
+   *
+   * @remarks
+   */
+  normalizedScore: number;
 };
 
 /** @internal */
@@ -385,7 +393,8 @@ export const ArticleAISearchResult$inboundSchema: z.ZodType<
   tagCategories: z.array(SchemasTags$inboundSchema).optional(),
   articleTypeAttributes: z.lazy(() => ArticleTypeAttributes$inboundSchema)
     .optional(),
-  relevanceScore: z.number(),
+  relevanceScore: z.number().optional(),
+  normalizedScore: z.number(),
 });
 
 /** @internal */
@@ -408,7 +417,8 @@ export type ArticleAISearchResult$Outbound = {
   topicBreadcrumb: Array<AITopicBreadcrumb$Outbound>;
   tagCategories?: Array<SchemasTags$Outbound> | undefined;
   articleTypeAttributes?: ArticleTypeAttributes$Outbound | undefined;
-  relevanceScore: number;
+  relevanceScore?: number | undefined;
+  normalizedScore: number;
 };
 
 /** @internal */
@@ -436,7 +446,8 @@ export const ArticleAISearchResult$outboundSchema: z.ZodType<
   tagCategories: z.array(SchemasTags$outboundSchema).optional(),
   articleTypeAttributes: z.lazy(() => ArticleTypeAttributes$outboundSchema)
     .optional(),
-  relevanceScore: z.number(),
+  relevanceScore: z.number().optional(),
+  normalizedScore: z.number(),
 });
 
 /**

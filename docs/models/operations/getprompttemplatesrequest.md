@@ -1,0 +1,25 @@
+# GetPromptTemplatesRequest
+
+## Example Usage
+
+```typescript
+import { GetPromptTemplatesRequest } from "@egain/egain-api-typescript/models/operations";
+
+let value: GetPromptTemplatesRequest = {
+  acceptLanguage: "en-US",
+  department: "Service",
+  languageCode: "en-US",
+  name: "Generate email",
+  useFor: "knowledge",
+};
+```
+
+## Fields
+
+| Field                                                                                                                           | Type                                                                                                                            | Required                                                                                                                        | Description                                                                                                                     | Example                                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `acceptLanguage`                                                                                                                | [models.AcceptLanguage](../../models/acceptlanguage.md)                                                                         | :heavy_check_mark:                                                                                                              | The Language locale accepted by the client (used for locale specific fields in resource representation and in error responses). | en-US                                                                                                                           |
+| `department`                                                                                                                    | *string*                                                                                                                        | :heavy_check_mark:                                                                                                              | Name of the department. Must be a valid department name.                                                                        | Service                                                                                                                         |
+| `languageCode`                                                                                                                  | [operations.GetPromptTemplatesLanguageCode](../../models/operations/getprompttemplateslanguagecode.md)                          | :heavy_check_mark:                                                                                                              | The language used while writing the prompt templates.                                                                           | en-US                                                                                                                           |
+| `name`                                                                                                                          | *string*                                                                                                                        | :heavy_minus_sign:                                                                                                              | Fetch only templates with this exact name.                                                                                      | Generate email                                                                                                                  |
+| `useFor`                                                                                                                        | [operations.UseFor](../../models/operations/usefor.md)                                                                          | :heavy_minus_sign:                                                                                                              | Filter prompt templates based on console.                                                                                       | knowledge                                                                                                                       |

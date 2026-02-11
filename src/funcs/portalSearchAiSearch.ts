@@ -18,6 +18,7 @@ import {
   RequestTimeoutError,
   UnexpectedClientError,
 } from "../models/errors/httpclienterrors.js";
+import * as errors from "../models/errors/index.js";
 import { ResponseValidationError } from "../models/errors/responsevalidationerror.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import * as models from "../models/index.js";
@@ -26,10 +27,10 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Get the best search results for a user query
+ * Hybrid Search
  *
  * @remarks
- * The Search API is a hybrid search service that combines semantic understanding with keyword precision to deliver fast, contextual, and relevant results from your enterprise knowledge base. It enables secure, role-aware access to articles, FAQs, and documentation across customer, agent, and employee interfaces. Each query returns a ranked list of results with snippets, metadata, and relevance scores. <br>**This endpoint is only available for Self Service environments.**
+ * The Search API is a hybrid search service that combines semantic understanding with keyword precision to deliver fast, contextual, and relevant results from your enterprise knowledge base. It enables secure, role-aware access to articles, FAQs, and documentation across customer, agent, and employee interfaces. Each query returns a ranked list of results with snippets, metadata, and relevance scores.
  */
 export function portalSearchAiSearch(
   client: EgainCore,
@@ -37,7 +38,8 @@ export function portalSearchAiSearch(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.AISearchResponse,
+    models.AISearchResponse | undefined,
+    | errors.WSErrorCommon
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -62,7 +64,8 @@ async function $do(
 ): Promise<
   [
     Result<
-      models.AISearchResponse,
+      models.AISearchResponse | undefined,
+      | errors.WSErrorCommon
       | EgainError
       | ResponseValidationError
       | ConnectionError
@@ -100,6 +103,8 @@ async function $do(
     "$filter[topicIds]": payload.filterTopicIds,
     "$filter[userProfileID]": payload.filterUserProfileID,
     "$lang": payload.language,
+    "$pagenum": payload.pagenum,
+    "$pagesize": payload.pagesize,
     "articleCustomAdditionalAttributes":
       payload.articleCustomAdditionalAttributes,
     "q": payload.q,
@@ -146,7 +151,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["400", "4XX", "500", "5XX"],
+    errorCodes: ["400", "401", "403", "404", "406", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -155,8 +160,13 @@ async function $do(
   }
   const response = doResult.value;
 
+  const responseFields = {
+    HttpMeta: { Response: response, Request: req },
+  };
+
   const [result] = await M.match<
-    models.AISearchResponse,
+    models.AISearchResponse | undefined,
+    | errors.WSErrorCommon
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -166,10 +176,13 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, models.AISearchResponse$inboundSchema),
-    M.fail([400, "4XX"]),
-    M.fail([500, "5XX"]),
-  )(response, req);
+    M.json(200, models.AISearchResponse$inboundSchema.optional()),
+    M.nil(204, models.AISearchResponse$inboundSchema.optional()),
+    M.jsonErr([400, 401, 403, 404, 406], errors.WSErrorCommon$inboundSchema),
+    M.jsonErr(500, errors.WSErrorCommon$inboundSchema),
+    M.fail("4XX"),
+    M.fail("5XX"),
+  )(response, req, { extraFields: responseFields });
   if (!result.ok) {
     return [result, { status: "complete", request: req, response }];
   }

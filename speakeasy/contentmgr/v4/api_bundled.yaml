@@ -1,0 +1,2237 @@
+openapi: 3.0.0
+info:
+  title: Knowledge Content Manager APIs
+  version: ''
+  description: |
+    ### Overview
+    The Knowledge Content Manager API provides comprehensive capabilities for importing, validating, and managing knowledge content within the eGain platform. This API enables organizations to efficiently bulk-import content from external sources, validate content before import, and monitor import operations in real-time.
+
+    ### Key Features
+    - **Bulk Content Import**: Import large volumes of content from Amazon S3 buckets
+    - **Content Validation**: Pre-import validation to ensure content quality and compliance
+    - **Job Management**: Track and manage import operations with detailed status monitoring
+    - **Scheduling**: Schedule imports for off-peak hours to minimize system impact
+    - **Real-time Monitoring**: Monitor import progress and access detailed logs
+
+    ### Use Cases
+    - Migrating content from legacy knowledge management systems
+    - Regular content updates from external content providers
+    - Content validation before production deployment
+
+    ### License Requirements
+    Logged in user must have Knowledge + AI license.
+
+    ### Support
+    For technical support and questions, contact the eGain support team.
+  contact:
+    name: API Support
+    email: apisupport@egain.com
+    url: https://apidev.egain.com
+servers:
+  - url: https://${API_DOMAIN}/knowledge/contentmgr/v4
+    description: Production Server
+tags:
+  - name: Content Import
+    description: |
+      Content import and validation operations for bulk knowledge content management.
+
+      These APIs enable you to:
+      - Import content from Data Sources
+      - Validate content structure and format before import
+      - Monitor import progress and access detailed logs
+      - Schedule imports for optimal timing
+      - Cancel ongoing operations when needed
+
+      **Supported Data Sources:**
+      - Amazon S3 buckets
+      - SFTP Servers
+
+
+      **Supported Content Formats:**
+      - Content needs to be in this format: [Guide to Data Import Format](https://apidev.egain.com/developer-portal/guides/ingestion/data-import-format-guide/)
+paths:
+  /prompts/prompttemplates:
+    get:
+      summary: Get Prompt Templates
+      description: Retrieve prompt templates filtered by department and language.
+      operationId: getPromptTemplates
+      tags:
+        - Prompt
+      security:
+        - oAuthUser:
+            - ${SCOPE_PREFIX}knowledge.contentmgr.read
+        - oAuthClient:
+            - ${SCOPE_PREFIX}.default
+      parameters:
+        - $ref: '#/components/parameters/acceptLanguage'
+        - name: department
+          in: query
+          description: Name of the department. Must be a valid department name.
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 64
+            pattern: ^[^~`!#$%\^*()=\[\],;'"|<>\/?+{}]+$
+          example: Service
+        - name: languageCode
+          in: query
+          description: The language used while writing the prompt templates.
+          required: true
+          schema:
+            type: string
+            enum:
+              - en-US
+              - fr-FR
+              - en-GB
+              - es-ES
+              - it-IT
+              - nl-NL
+              - da-DA
+              - sv-SE
+              - pt-PT
+              - fi-FI
+              - no-NB
+              - no-NN
+              - ja-JA
+              - de-DE
+              - pt-BR
+              - zh-CN
+              - zh-TW
+              - ko-KO
+              - ru-RU
+              - el-EL
+              - tr-TR
+              - pl-PL
+              - cs-CS
+              - sk-SK
+              - hu-HU
+              - sr-SR
+              - ar-SA
+              - hr-HR
+              - ro-RO
+              - th-TH
+              - xx-XX
+          example: en-US
+        - name: name
+          in: query
+          description: Fetch only templates with this exact name.
+          required: false
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^[\w\W]*$
+          example: Generate email
+        - name: useFor
+          in: query
+          description: Filter prompt templates based on console.
+          required: false
+          schema:
+            type: string
+            enum:
+              - advisor
+              - knowledge
+              - custom
+          example: knowledge
+      responses:
+        '200':
+          description: Successful response with list of prompt templates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  promptTemplates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PromptTemplate'
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /prompts/prompttemplates/{promptID}:
+    get:
+      summary: Get Prompt Template By ID
+      description: Retrieve a prompt template filtered by department and language.
+      operationId: getPromptTemplateById
+      tags:
+        - Prompt
+      security:
+        - oAuthUser:
+            - ${SCOPE_PREFIX}knowledge.contentmgr.read
+        - oAuthClient:
+            - ${SCOPE_PREFIX}.default
+      parameters:
+        - $ref: '#/components/parameters/acceptLanguage'
+        - name: department
+          in: query
+          description: Name of the department. Must be a valid department name.
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 64
+            pattern: ^[^~`!#$%\^*()=\[\],;'"|<>\/?+{}]+$
+          example: Service
+        - name: languageCode
+          in: query
+          description: The language used while writing the prompt templates.
+          required: true
+          schema:
+            type: string
+            enum:
+              - en-US
+              - fr-FR
+              - en-GB
+              - es-ES
+              - it-IT
+              - nl-NL
+              - da-DA
+              - sv-SE
+              - pt-PT
+              - fi-FI
+              - no-NB
+              - no-NN
+              - ja-JA
+              - de-DE
+              - pt-BR
+              - zh-CN
+              - zh-TW
+              - ko-KO
+              - ru-RU
+              - el-EL
+              - tr-TR
+              - pl-PL
+              - cs-CS
+              - sk-SK
+              - hu-HU
+              - sr-SR
+              - ar-SA
+              - hr-HR
+              - ro-RO
+              - th-TH
+              - xx-XX
+          example: en-US
+        - name: promptID
+          in: path
+          description: The promptID of the prompt template you want to fetch details for.
+          required: true
+          schema:
+            type: string
+            pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+            minLength: 7
+            maxLength: 20
+            example: PROD-4582
+      responses:
+        '200':
+          description: Successful response with list of prompt templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptTemplate'
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /import/content:
+    post:
+      description: |
+        # Import Content
+
+        ## Overview
+        This API initiates a bulk content import operation from Data Sources. It creates an asynchronous import job that processes content in the background, allowing you to import large volumes of content without blocking your application.
+
+        ## Pre-requisties
+        1. Content in Data Source needs to be in this format: [Guide to Data Import Format](https://apidev.egain.com/developer-portal/guides/ingestion/data-import-format-guide/)
+
+        ## How It Works
+        1. **Job Creation**: The API creates an import job and returns a unique job ID
+        2. **Content Processing**: Content is processed asynchronously in the background
+        3. **Status Monitoring**: Use the job ID to monitor progress via the Status API
+        4. **Completion**: Job completes when all content is processed or errors occur
+
+        **Note:** After a successful import, please allow for a brief delay before the content is fully available for use. The system's search service synchronizes all new and updated content every 30 minutes.
+
+        ## Supported Operations
+        - **Import**: Add new content to the knowledge base
+        - **Update**: Modify existing content
+
+        ## Data Source Types
+        - AWS S3 bucket
+        - Shared file path
+
+        ## Best Practices
+        - **Scheduling**: Use scheduleTime for off-peak imports to minimize system impact.  Please note that jobs can only be scheduled for a maximum of 7 days from the current date and time.
+        - **Monitoring**: Regularly check job status and logs for any issues
+        - **Error Handling**: Review failed items and retry with corrections
+      summary: Create Import Job
+      operationId: createImportJob
+      x-hideTryItPanel: true
+      tags:
+        - Content Import
+      security:
+        - oAuthClient:
+            - ${SCOPE_PREFIX}.default
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportContent'
+            examples:
+              Import content in the Department:
+                summary: Basic S3 import
+                description: Import content from an S3 bucket with scheduled execution
+                value:
+                  dataSource:
+                    type: AWS S3 bucket
+                    path: s3://mybucket/myfolder/
+                    region: us-east-1
+                    credentials:
+                      accessKey: AKIAIOSFODNN7EXAMPLE
+                      secretKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+                  operation: import
+                  scheduleTime:
+                    date: '2024-03-01T10:00:00.000Z'
+              Update existing content:
+                summary: Content update operation from SFTP
+                description: Update existing content with new information
+                value:
+                  dataSource:
+                    type: Shared file path
+                    path: sftp://server.com/content/updates/
+                    credentials:
+                      username: contentuser
+                      password: securepassword
+                  operation: reimport
+                  scheduleTime:
+                    date: '2024-03-01T02:00:00.000Z'
+        required: true
+      responses:
+        '202':
+          description: |
+            ## Import Job Accepted
+
+            The import job has been successfully created and queued for processing. The job will begin execution according to the specified schedule or immediately if no schedule is provided.
+
+            **Next Steps:**
+            1. Use the returned job ID to monitor progress via the Status API
+            2. Check job logs for any validation warnings or errors
+            3. Monitor job completion and review results
+
+            **Expected Processing Time:**
+            - Small jobs (< 1,000 items): 5-15 minutes
+            - Medium jobs (1,000-10,000 items): 15-60 minutes
+            - Large jobs (> 10,000 items): 1-4 hours (depending on content complexity)
+          headers:
+            location:
+              schema:
+                type: string
+                example: knowledge/contentmgr/v4/import/content/7A84B875-6F75-4C7B-B137-0632B62DB0BD/status
+              description: |
+                **Location Header**
+
+                This header contains the URL to check the status of your import job. The job ID (7A84B875-6F75-4C7B-B137-0632B62DB0BD in this example) is your unique identifier for tracking this operation.
+
+                **Usage:**
+                ```bash
+                GET knowledge/contentmgr/v4/import/content/7A84B875-6F75-4C7B-B137-0632B62DB0BD/status
+                ```
+        '400':
+          $ref: '#/components/responses/BadImportContentRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/403_scope_not_assigned'
+        '406':
+          $ref: '#/components/responses/responses-NotAcceptable'
+        '412':
+          $ref: '#/components/responses/412_precondition_failed'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /import/system/hooks:
+    get:
+      summary: Get global validation hooks
+      x-internal: true
+      operationId: getGlobalValidationHooks
+      tags:
+        - Content Import
+      description: |
+        Retrieve all global validation hooks. Only the current version of each hook is returned.
+      security:
+        - oAuthUser:
+            - ${SCOPE_PREFIX}knowledge.contentmgr.manage
+      parameters:
+        - $ref: '#/components/parameters/HookTypeParam'
+      responses:
+        '200':
+          description: List of validation hooks.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hooks'
+              example:
+                hooks:
+                  - id: 10050
+                    name: Dept-Tag-Validator
+                    type: import_post_validation_hook
+                    fileObject:
+                      id: 3fa85f64-5717-4562-b3fc-2c963f66afa4
+                      createdDate: '2024-03-15T10:30:00.000Z'
+                      createdBy:
+                        id: '500'
+                        userName: jdoe
+                        firstName: John
+                        lastName: Doe
+                      modifiedDate: '2024-03-20T14:15:00.000Z'
+                      modifiedBy:
+                        id: '501'
+                        userName: asmith
+                        firstName: Alice
+                        lastName: Smith
+                      version:
+                        id: 2
+                        current: true
+                      file:
+                        name: check_dept_tags_v2.js
+                        content: dmFyIGl0ZW0gPSBjb250ZXh0Lml0ZW07
+                        contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/system/hooks/10050/version/2
+                  - id: 10051
+                    name: Filename-Sanitizer
+                    type: import_pre_validation_hook
+                    fileObject:
+                      id: 9b2c3d4e-5717-4562-b3fc-2c963f66afa2
+                      createdDate: '2024-03-10T09:00:00.000Z'
+                      createdBy:
+                        id: '500'
+                        userName: jdoe
+                        firstName: John
+                        lastName: Doe
+                      modifiedDate: '2024-03-10T09:00:00.000Z'
+                      modifiedBy:
+                        id: '500'
+                        userName: jdoe
+                        firstName: John
+                        lastName: Doe
+                      version:
+                        id: 1
+                        current: true
+                      file:
+                        name: clean_filenames.js
+                        content: ZnVuY3Rpb24gdmFsaWRhdGUuLi4=
+                        contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/system/hooks/10051/version/1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      summary: Create global validation hook
+      x-internal: true
+      operationId: createGlobalValidationHook
+      tags:
+        - Content Import
+      description: |
+        Create a custom JavaScript global validation hook.
+
+        **Requirements:**
+        - `fileObject.file.content` must be a Base64 encoded JavaScript string.
+      security:
+        - oAuthUser:
+            - ${SCOPE_PREFIX}knowledge.contentmgr.manage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Hook'
+            examples:
+              Post-Validation Script:
+                value:
+                  type: import_post_validation_hook
+                  fileObject:
+                    file:
+                      name: check_dept_tags.js
+                      content: dmFyIGl0ZW0gPSBjb250ZXh0Lml0ZW02
+      responses:
+        '201':
+          description: Hook created.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /import/config/hooks:
+    get:
+      summary: Get validation hooks
+      x-internal: true
+      x-hideTryItPanel: true
+      operationId: getValidationHooks
+      tags:
+        - Content Import
+      description: |
+        Retrieve all validation hooks configured for the current environment. Only the current version of each hook is returned.
+      security:
+        - oAuthUser:
+            - ${SCOPE_PREFIX}knowledge.contentmgr.manage
+      parameters:
+        - $ref: '#/components/parameters/HookTypeParam'
+      responses:
+        '200':
+          description: List of validation hooks.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hooks'
+              example:
+                hooks:
+                  - id: 10050
+                    name: Dept-Tag-Validator
+                    type: import_post_validation_hook
+                    fileObject:
+                      id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      createdDate: '2024-03-15T10:30:00.000Z'
+                      createdBy:
+                        id: '500'
+                        userName: jdoe
+                        firstName: John
+                        lastName: Doe
+                      modifiedDate: '2024-03-20T14:15:00.000Z'
+                      modifiedBy:
+                        id: '501'
+                        userName: asmith
+                        firstName: Alice
+                        lastName: Smith
+                      version:
+                        id: 2
+                        current: true
+                      file:
+                        name: check_dept_tags_v2.js
+                        content: dmFyIGl0ZW0gPSBjb250ZXh0Lml0ZW07
+                        contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/config/hooks/10050/version/2
+                  - id: 10051
+                    name: Filename-Sanitizer
+                    type: import_pre_validation_hook
+                    fileObject:
+                      id: 9b2c3d4e-5717-4562-b3fc-2c963f66afa6
+                      createdDate: '2024-03-10T09:00:00.000Z'
+                      createdBy:
+                        id: '500'
+                        userName: jdoe
+                        firstName: John
+                        lastName: Doe
+                      modifiedDate: '2024-03-10T09:00:00.000Z'
+                      modifiedBy:
+                        id: '500'
+                        userName: jdoe
+                        firstName: John
+                        lastName: Doe
+                      version:
+                        id: 1
+                        current: true
+                      file:
+                        name: clean_filenames.js
+                        content: ZnVuY3Rpb24gdmFsaWRhdGUuLi4=
+                        contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/config/hooks/10051/version/1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      summary: Create validation hook
+      x-internal: true
+      x-hideTryItPanel: true
+      operationId: createValidationHook
+      tags:
+        - Content Import
+      description: |
+        Create a custom JavaScript validation hook.
+
+        **Requirements:**
+        - `fileObject.file.content` must be a Base64 encoded JavaScript string.
+      security:
+        - oAuthUser:
+            - ${SCOPE_PREFIX}knowledge.contentmgr.manage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Hook'
+            examples:
+              Post-Validation Script:
+                value:
+                  type: import_post_validation_hook
+                  fileObject:
+                    file:
+                      name: check_dept_tags.js
+                      content: dmFyIGl0ZW0gPSBjb250ZXh0Lml0ZW07
+      responses:
+        '201':
+          description: Hook created.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /import/system/hooks/{hookID}/version:
+    get:
+      summary: Get all versions for a global validation hook
+      operationId: getGlobalValidationHookVersions
+      x-internal: true
+      tags:
+        - Content Import
+      description: Retrieve a history of all versions uploaded for a specific global validation hook.
+      security:
+        - oAuthUser:
+            - ${SCOPE_PREFIX}knowledge.contentmgr.manage
+      parameters:
+        - $ref: '#/components/parameters/hookID'
+      responses:
+        '200':
+          description: List of hook versions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileObjects'
+              example:
+                - id: 3fa85f64-5717-4562-b3fc-2c963f66afa4
+                  createdDate: '2024-03-15T10:30:00.000Z'
+                  createdBy:
+                    id: '500'
+                    userName: jdoe
+                    firstName: John
+                    lastName: Doe
+                  modifiedDate: '2024-03-20T14:15:00.000Z'
+                  modifiedBy:
+                    id: '501'
+                    userName: asmith
+                    firstName: Alice
+                    lastName: Smith
+                  version:
+                    id: 2
+                    current: true
+                  file:
+                    name: check_dept_tags_v2.js
+                    content: dmFyIGl0ZW0gPSBjb250ZXh0Lml0ZW07
+                    contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/system/hooks/10050/version/2
+                - id: 1a2b3c4d-5717-4562-b3fc-2c963f66afa6
+                  createdDate: '2024-03-15T10:30:00.000Z'
+                  createdBy:
+                    id: '500'
+                    userName: jdoe
+                    firstName: John
+                    lastName: Doe
+                  modifiedDate: '2024-03-15T10:30:00.000Z'
+                  modifiedBy:
+                    id: '500'
+                    userName: jdoe
+                    firstName: John
+                    lastName: Doe
+                  version:
+                    id: 1
+                    current: false
+                  file:
+                    name: check_dept_tags.js
+                    content: ZnVuY3Rpb24gb2xkLi4u
+                    contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/system/hooks/10050/version/1
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      summary: Update global validation hook version
+      x-internal: true
+      operationId: createGlobalValidationHookVersion
+      tags:
+        - Content Import
+      description: Upload a new version of the JavaScript logic for an existing global hook.
+      security:
+        - oAuthUser:
+            - ${SCOPE_PREFIX}knowledge.contentmgr.manage
+      parameters:
+        - $ref: '#/components/parameters/hookID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileObject'
+      responses:
+        '201':
+          description: Hook version created.
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /import/config/hooks/{hookID}/version:
+    get:
+      summary: Get all versions for a validation hook
+      operationId: getValidationHookVersions
+      x-internal: true
+      x-hideTryItPanel: true
+      tags:
+        - Content Import
+      description: Retrieve a history of all versions uploaded for a specific validation hook.
+      security:
+        - oAuthUser:
+            - ${SCOPE_PREFIX}knowledge.contentmgr.manage
+      parameters:
+        - $ref: '#/components/parameters/hookID'
+      responses:
+        '200':
+          description: List of hook versions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileObjects'
+              example:
+                - id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  createdDate: '2024-03-15T10:30:00.000Z'
+                  createdBy:
+                    id: '500'
+                    userName: jdoe
+                    firstName: John
+                    lastName: Doe
+                  modifiedDate: '2024-03-20T14:15:00.000Z'
+                  modifiedBy:
+                    id: '501'
+                    userName: asmith
+                    firstName: Alice
+                    lastName: Smith
+                  version:
+                    id: 2
+                    current: true
+                  file:
+                    name: check_dept_tags_v2.js
+                    content: dmFyIGl0ZW0gPSBjb250ZXh0Lml0ZW07
+                    contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/config/hooks/10050/version/2
+                - id: 1a2b3c4d-5717-4562-b3fc-2c963f66afa6
+                  createdDate: '2024-03-15T10:30:00.000Z'
+                  createdBy:
+                    id: '500'
+                    userName: jdoe
+                    firstName: John
+                    lastName: Doe
+                  modifiedDate: '2024-03-15T10:30:00.000Z'
+                  modifiedBy:
+                    id: '500'
+                    userName: jdoe
+                    firstName: John
+                    lastName: Doe
+                  version:
+                    id: 1
+                    current: false
+                  file:
+                    name: check_dept_tags.js
+                    content: ZnVuY3Rpb24gb2xkLi4u
+                    contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/config/hooks/10050/version/1
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      summary: Update validation hook version
+      x-internal: true
+      x-hideTryItPanel: true
+      operationId: createValidationHookVersion
+      tags:
+        - Content Import
+      description: Upload a new version of the JavaScript logic for an existing hook.
+      security:
+        - oAuthUser:
+            - ${SCOPE_PREFIX}knowledge.contentmgr.manage
+      parameters:
+        - $ref: '#/components/parameters/hookID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileObject'
+      responses:
+        '201':
+          description: Hook version created.
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /import/system/hooks/{hookID}/version/{versionID}:
+    get:
+      summary: Get global validation hook version details
+      x-internal: true
+      operationId: getGlobalValidationHookVersion
+      tags:
+        - Content Import
+      description: Get details and content URL for a specific version of a global hook.
+      security:
+        - oAuthUser:
+            - ${SCOPE_PREFIX}knowledge.contentmgr.manage
+      parameters:
+        - $ref: '#/components/parameters/hookID'
+        - $ref: '#/components/parameters/versionID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileObject'
+              example:
+                id: 1a2b3c4d-5717-4562-b3fc-2c963f66afa4
+                createdDate: '2024-03-15T10:30:00.000Z'
+                createdBy:
+                  id: '500'
+                  userName: jdoe
+                  firstName: John
+                  lastName: Doe
+                version:
+                  id: 1
+                  current: false
+                file:
+                  name: check_dept_tags.js
+                  content: ZnVuY3Rpb24gb2xkLi4u
+                  contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/system/hooks/10050/version/1
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /import/config/hooks/{hookID}/version/{versionID}:
+    get:
+      summary: Get validation hook version details
+      x-internal: true
+      x-hideTryItPanel: true
+      operationId: getValidationHookVersion
+      tags:
+        - Content Import
+      description: Get details and content URL for a specific version of a hook.
+      security:
+        - oAuthUser:
+            - ${SCOPE_PREFIX}knowledge.contentmgr.manage
+      parameters:
+        - $ref: '#/components/parameters/hookID'
+        - $ref: '#/components/parameters/versionID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileObject'
+              example:
+                id: 1a2b3c4d-5717-4562-b3fc-2c963f66afa6
+                createdDate: '2024-03-15T10:30:00.000Z'
+                createdBy:
+                  id: '500'
+                  userName: jdoe
+                  firstName: John
+                  lastName: Doe
+                version:
+                  id: 1
+                  current: false
+                file:
+                  name: check_dept_tags.js
+                  content: ZnVuY3Rpb24gb2xkLi4u
+                  contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/config/hooks/10050/version/1
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /import/content/{job_id}/status:
+    get:
+      description: |
+        # Get Import Job Status
+
+        ## Overview
+        This API provides real-time status information for content import and validation operations. Use this endpoint to monitor job progress, check completion status, and access detailed logs and error information.
+
+        ## Status Values
+        - **Scheduled**: Job is queued and waiting for scheduled execution time
+        - **In Progress**: Job is actively processing content
+        - **Completed**: Job finished successfully
+        - **Failed**: Job encountered errors and could not complete
+        - **Cancelled**: Job was manually cancelled by user
+
+        ## Response Information
+        - **Current Status**: Real-time job status
+        - **Progress Metrics**: Items processed, total items, completion percentage
+        - **Log Files**: Location of detailed operation logs
+        - **Error Details**: Specific errors encountered during processing
+        - **Timing Information**: Start time, estimated completion, actual completion
+
+        ## Log File Access
+        Log files contain detailed information about:
+        - Content processing steps
+        - Validation results
+        - Error details with context
+      summary: Get Job Status
+      operationId: getImportStatus
+      x-hideTryItPanel: true
+      security:
+        - oAuthClient:
+            - ${SCOPE_PREFIX}.default
+      parameters:
+        - $ref: '#/components/parameters/jobId'
+      responses:
+        '200':
+          description: |
+            ## Job Status Retrieved Successfully
+
+            The current status and progress information for the specified import or validation job.
+
+            **Response Details:**
+            - **Status**: Current job state (Scheduled, In Progress, Completed, etc.)
+            - **Job Type**: Current job's type (Import or Validation)
+            - **Progress**: Number of items processed vs. total items
+            - **Logs**: Location of detailed operation logs
+            - **Timing**: Start time and estimated completion
+            - **Errors**: Any validation or processing errors encountered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportStatus'
+              examples:
+                Job in Progress:
+                  summary: Active import job
+                  description: Shows an import job that is currently processing content
+                  value:
+                    status: In Progress
+                    jobType: Import
+                    progress:
+                      processed: 1250
+                      total: 5000
+                      percentage: 25
+                    logFileLocation: s3://mybucket/logs/import-logs-7A84B875-6F75-4C7B-B137-0632B62DB0BD.txt
+                    startTime: '2024-03-01T10:00:00.000Z'
+                    estimatedCompletion: '2024-03-01T11:30:00.000Z'
+                    currentOperation: Processing content items
+                Completed Import Job:
+                  summary: Successfully completed import job
+                  description: Shows a import job that has finished processing
+                  value:
+                    status: Successful
+                    jobType: Import
+                    progress:
+                      processed: 5000
+                      total: 5000
+                      percentage: 100
+                    logFileLocation: s3://mybucket/logs/import-logs-7A84B875-6F75-4C7B-B137-0632B62DB0BD.txt
+                    startTime: '2024-03-01T10:00:00.000Z'
+                    completionTime: '2024-03-01T11:15:00.000Z'
+                    results:
+                      successful: 4985
+                      warnings: 10
+                      errors: 5
+                Completed Validation Job:
+                  summary: Successfully completed validation  job
+                  description: Shows a validation job that has finished processing
+                  value:
+                    status: Successful
+                    jobType: Validation
+                    progress:
+                      processed: 5000
+                      total: 5000
+                      percentage: 100
+                    logFileLocation: s3://mybucket/logs/import-logs-7A84B875-6F75-4C7B-B137-0632B62DB0BD.txt
+                    startTime: '2024-03-01T10:00:00.000Z'
+                    completionTime: '2024-03-01T11:15:00.000Z'
+                    results:
+                      successful: 4985
+                      warnings: 10
+                      errors: 5
+                Failed Job:
+                  summary: Job that encountered errors
+                  description: Shows a job that failed during processing
+                  value:
+                    status: Failed
+                    jobType: Import
+                    progress:
+                      processed: 1250
+                      total: 5000
+                      percentage: 25
+                    logFileLocation: s3://mybucket/logs/import-logs-7A84B875-6F75-4C7B-B137-0632B62DB0BD.txt
+                    startTime: '2024-03-01T10:00:00.000Z'
+                    failureTime: '2024-03-01T10:45:00.000Z'
+                    error: Database connection timeout after processing 1250 items
+                    retryable: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/responses-NotAcceptable'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+        - Content Import
+  /import/content/validate:
+    post:
+      description: |
+        # Validate Import Content
+
+        ## Overview
+        This API enables users to validate content structure, format, and compliance before importing it into the production knowledge base. Validation is a non-destructive operation that checks content without making any changes to your existing data.
+
+        ## What Validation Checks
+        - **Content Structure**: Verifies required fields and data types
+        - **Format Compliance**: Ensures content meets platform requirements
+        - **Language Support**: Validates content against supported languages
+        - **Metadata Mapping**: Checks field mappings and transformations
+        - **Business Rules**: Validates against department-specific rules
+
+        ## Validation Benefits
+        - **Risk Mitigation**: Identify issues before affecting production data
+        - **Quality Assurance**: Ensure content meets organizational standards
+        - **Cost Savings**: Avoid failed imports that waste processing time
+        - **Compliance**: Meet regulatory and internal content requirements
+
+        ## Validation Process
+        1. **Content Analysis**: System analyzes content structure and format
+        2. **Rule Validation**: Applies business rules and validation logic
+        3. **Quality Assessment**: Evaluates content quality and completeness
+        4. **Report Generation**: Creates detailed validation report
+        5. **Issue Categorization**: Classifies issues by severity and type
+
+        ## Common Validation Issues
+        - **Missing Required Fields**: Title, description, category, etc.
+        - **Invalid Data Types**: Incorrect field formats (dates, numbers, etc.)
+        - **Language Mismatches**: Content language not supported by department
+
+        ## Best Practices
+        - **Always Validate First**: Run validation before any import operation
+        - **Review Reports**: Carefully examine validation results and warnings
+        - **Fix Issues**: Address validation errors before proceeding with import
+        - **Test Small Batches**: Validate with small content samples first
+        - **Iterate**: Use validation feedback to improve content quality
+      summary: Create Validation Job
+      operationId: createImportValidationJob
+      x-hideTryItPanel: true
+      tags:
+        - Content Import
+      security:
+        - oAuthClient:
+            - ${SCOPE_PREFIX}.default
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateImportContent'
+            examples:
+              S3 content validation:
+                summary: Validate S3 content
+                description: Validate content from an S3 bucket before import
+                value:
+                  dataSource:
+                    type: AWS S3 bucket
+                    path: s3://mybucket/myfolder/
+                    region: us-east-1
+                    credentials:
+                      accessKey: AKIAIOSFODNN7EXAMPLE
+                      secretKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+              SFTP content validation:
+                summary: Validate SFTP content
+                description: Validate content from an SFTP before import
+                value:
+                  dataSource:
+                    type: Shared file path
+                    path: s3://mybucket/myfolder/
+                    credentials:
+                      username: contentuser
+                      password: securepassword
+        required: true
+      responses:
+        '202':
+          description: |
+            ## Validation Job Accepted
+
+            The content validation job has been successfully created and queued for processing. The system will analyze your content structure, format, and compliance without making any changes to your existing data.
+
+            **Validation Process:**
+            1. **Content Analysis**: System examines content structure and format
+            2. **Rule Validation**: Applies business rules and validation logic
+            3. **Quality Assessment**: Evaluates content quality and completeness
+            4. **Report Generation**: Creates detailed validation report with issues and recommendations
+
+            **Expected Processing Time:**
+            - Small content sets (< 1,000 items): 2-10 minutes
+            - Medium content sets (1,000-10,000 items): 10-30 minutes
+            - Large content sets (> 10,000 items): 30-90 minutes
+
+            **Next Steps:**
+            1. Use the returned job ID to monitor validation progress
+            2. Review validation results and address any issues
+            3. Proceed with import only after validation passes
+          headers:
+            location:
+              schema:
+                type: string
+                example: knowledge/contentmgr/v4/import/content/7A84B875-6F75-4C7B-B137-0632B62DB0BD/status
+              description: |
+                **Location Header**
+
+                This header contains the URL to check the status of your validation job. The job ID (7A84B875-6F75-4C7B-B137-0632B62DB0BD in this example) is your unique identifier for tracking this operation.
+
+                **Usage:**
+                ```bash
+                GET knowledge/contentmgr/v4/import/content/7A84B875-6F75-4C7B-B137-0632B62DB0BD/status
+                ```
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/403_scope_not_assigned'
+        '406':
+          $ref: '#/components/responses/responses-NotAcceptable'
+        '412':
+          $ref: '#/components/responses/412_precondition_failed'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /import/content/{job_id}/cancel:
+    post:
+      description: |
+        # Cancel Import or Validation Job
+
+        ## Overview
+        This API allows users to cancel import or validation operations that are currently in progress or scheduled for future execution. Cancellation is immediate for scheduled jobs and graceful for running jobs.
+
+        ## Cancellation Behavior
+        - **Scheduled Jobs**: Immediate cancellation, no processing occurs
+        - **In Progress Jobs**: Graceful shutdown, current item completes, no new items start
+        - **Completed Jobs**: Cannot be cancelled (returns error)
+        - **Failed Jobs**: Cannot be cancelled (already stopped)
+
+        ## When to Cancel
+        - **Content Issues**: Discover problems with source content
+        - **Timing Changes**: Need to reschedule for different time
+        - **Resource Constraints**: System resources are needed elsewhere
+        - **User Request**: Manual cancellation by authorized users
+        - **System Maintenance**: Planned maintenance windows
+
+        ## Cancellation Process
+        1. **Request Received**: System receives cancellation request
+        2. **Status Check**: Verifies current job status
+        3. **Graceful Shutdown**: For running jobs, completes current item
+        4. **Resource Cleanup**: Releases allocated system resources
+        5. **Status Update**: Marks job as cancelled
+        6. **Notification**: Updates job status and logs
+
+        ## Post-Cancellation
+        - **Job Status**: Changes to "Cancelled"
+        - **Partial Results**: Any completed items remain in system
+        - **Logs**: Cancellation reason and timing recorded
+        - **Resources**: System resources freed for other operations
+
+        ## Best Practices
+        - **Monitor Jobs**: Regularly check job status to identify candidates for cancellation
+        - **Plan Cancellations**: Schedule cancellations during low-usage periods
+        - **Resource Planning**: Consider resource impact before cancelling large jobs
+      summary: Cancel Job
+      operationId: cancelImport
+      x-hideTryItPanel: true
+      security:
+        - oAuthClient:
+            - ${SCOPE_PREFIX}.default
+      parameters:
+        - $ref: '#/components/parameters/jobId'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/responses-NotAcceptable'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      tags:
+        - Content Import
+  /import/content/health:
+    get:
+      description: |
+        # Service Health Check
+
+        ## Overview
+        This API provides comprehensive health status information for the Import Content service. It's designed for infrastructure monitoring, load balancer health checks, and operational monitoring to ensure service availability and performance.
+
+        ## Health Check Features
+        - **Service Status**: Overall service health (healthy/unhealthy)
+        - **Version Information**: Current API version and build details
+
+        ## Monitoring Use Cases
+        - **Load Balancers**: Automatic health checks for traffic routing
+        - **Alerting Systems**: Automated notifications for service issues
+
+        ## Health Status Values
+        - **Healthy**: Service is operating normally
+        - **Unhealthy**: Service is experiencing critical issues
+        - **Maintenance**: Service is under planned maintenance
+
+        ## Response Components
+        - **Status**: Current health state
+        - **Timestamp**: When health check was performed
+        - **Version**: API version information
+        - **Uptime**: Service uptime since last restart
+
+        ## Monitoring Best Practices
+        - **Check Frequency**: Monitor every 1-2 minutes for production
+        - **Response Time**: Track health check response times
+
+        ## Permissions
+        | Actor | Permission |
+        | ------- | --------|
+        | System |<ul><li>No authentication required for basic health checks.</li><li>This endpoint is designed for infrastructure monitoring.</li><li>Rate limiting applies to prevent abuse.</li></ul>|
+      summary: Check service health status
+      operationId: getHealth
+      x-internal: true
+      security:
+        - oAuthClient:
+            - ${SCOPE_PREFIX}.default
+      tags:
+        - Health Check
+      responses:
+        '200':
+          description: |
+            ## Service is Healthy
+
+            The Import Content service is operating normally with all components functioning as expected.
+
+            **Health Status Details:**
+            - **Overall Status**: Service is healthy and ready to process requests
+
+            **Response Information:**
+            - **Status**: Current health state (healthy, degraded, unhealthy)
+            - **Timestamp**: When health check was performed
+            - **Version**: Current API version
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                    enum:
+                      - healthy
+                      - degraded
+                      - unhealthy
+                      - maintenance
+                    description: |
+                      **Health Status**
+
+                      The overall health status of the service. Possible values:
+                      - **healthy**: Service is operating normally
+                      - **degraded**: Service is functional but with performance issues
+                      - **unhealthy**: Service is experiencing critical issues
+                      - **maintenance**: Service is under planned maintenance
+                  timestamp:
+                    format: date-time
+                    pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
+                    example: '2024-03-01T10:00:00.000Z'
+                    description: |
+                      **Health Check Timestamp**
+
+                      The exact date and time when this health check was performed. This is useful for:
+                      - Tracking health check frequency
+                      - Correlating with other system events
+                      - Monitoring health check response times
+                      - Historical health trend analysis
+                  version:
+                    type: string
+                    example: 4.0.0
+                    maxLength: 20
+                    description: |
+                      **API Version**
+
+                      The current version of the Import Content API. This helps with:
+                      - Version compatibility checking
+                      - Feature availability verification
+                      - Upgrade planning and coordination
+                      - Support and troubleshooting
+                  uptime:
+                    type: string
+                    maxLength: 20
+                    example: 2d 5h 30m 15s
+                    description: |
+                      **Service Uptime**
+
+                      The total time the service has been running since the last restart. This metric is useful for:
+                      - Service stability monitoring
+                      - Maintenance scheduling
+                      - Performance trend analysis
+                      - Reliability assessment
+              examples:
+                Healthy Service:
+                  summary: Service operating normally
+                  description: Shows a healthy service with all components operational
+                  value:
+                    status: healthy
+                    timestamp: '2024-01-15T10:30:00.000Z'
+                    version: 4.0.0
+                    uptime: 2d 5h 30m 15s
+        '503':
+          description: |
+            ## Service is Unhealthy
+
+            The Import Content service is experiencing critical issues and may not be able to process requests properly.
+
+            **Health Status Details:**
+            - **Overall Status**: Service is unhealthy and may not function correctly
+
+            **Response Information:**
+            - **Status**: Current health state (unhealthy)
+            - **Timestamp**: When health check was performed
+            - **Version**: Current API version
+            - **Issues**: List of detected health problems
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                    enum:
+                      - healthy
+                      - degraded
+                      - unhealthy
+                      - maintenance
+                    description: |
+                      **Health Status**
+
+                      The overall health status of the service. Possible values:
+                      - **healthy**: Service is operating normally
+                      - **degraded**: Service is functional but with performance issues
+                      - **unhealthy**: Service is experiencing critical issues
+                      - **maintenance**: Service is under planned maintenance
+                  timestamp:
+                    format: date-time
+                    pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
+                    example: '2024-03-01T10:00:00.000Z'
+                    description: |
+                      **Health Check Timestamp**
+
+                      The exact date and time when this health check was performed. This is useful for:
+                      - Tracking health check frequency
+                      - Correlating with other system events
+                      - Monitoring health check response times
+                      - Historical health trend analysis
+                  version:
+                    type: string
+                    example: 4.0.0
+                    maxLength: 20
+                    description: |
+                      **API Version**
+
+                      The current version of the Import Content API. This helps with:
+                      - Version compatibility checking
+                      - Feature availability verification
+                      - Upgrade planning and coordination
+                      - Support and troubleshooting
+                  issues:
+                    type: array
+                    description: |
+                      **Issues**: 
+                        
+                      List of detected health problems
+                    items:
+                      type: string
+                      maxLength: 1024
+                  components:
+                    type: object
+                    description: |
+                      **Comonents**: 
+
+                      Health status of import service componenets
+                    properties:
+                      database:
+                        description: Health status of database component.
+                        type: string
+                        enum:
+                          - healthy
+                          - degraded
+                          - unhealthy
+                          - maintenance
+                      fileSystem:
+                        type: string
+                        description: Health status of file system component.
+                        enum:
+                          - healthy
+                          - degraded
+                          - unhealthy
+                          - maintenance
+                      externalServices:
+                        type: string
+                        description: Health status of external services components.
+                        enum:
+                          - healthy
+                          - degraded
+                          - unhealthy
+                          - maintenance
+                      processingEngine:
+                        type: string
+                        description: Health status of processing engine component.
+                        enum:
+                          - healthy
+                          - degraded
+                          - unhealthy
+                          - maintenance
+                      storage:
+                        type: string
+                        description: Health status of storage component.
+                        enum:
+                          - healthy
+                          - degraded
+                          - unhealthy
+                          - maintenance
+              examples:
+                Unhealthy Service:
+                  summary: Service with critical issues
+                  description: Shows a service experiencing multiple health problems
+                  value:
+                    status: unhealthy
+                    timestamp: '2024-01-15T10:30:00.000Z'
+                    version: 4.0.0
+                    issues:
+                      - Database connection failed
+                      - External service timeout
+                      - Storage system unavailable
+                    components:
+                      database: unhealthy
+                      fileSystem: healthy
+                      externalServices: unhealthy
+                      processingEngine: degraded
+                      storage: unhealthy
+components:
+  securitySchemes:
+    oAuthUser:
+      type: oauth2
+      description: |
+        **OAuth 2.0 Authentication**
+
+        Authenticate as a user (agent) using the Authorization Code flow with PKCE (Proof Key for Code Exchange). This provides secure, standards-based authentication for accessing the Knowledge Content Manager APIs.
+
+        **Authentication Flow:**
+        1. **Authorization Request**: Redirect user to authorization URL
+        2. **User Consent**: User grants permission to access their account
+        3. **Authorization Code**: Server returns authorization code
+        4. **Token Exchange**: Exchange code for access token
+        5. **API Access**: Use access token for API requests
+
+        **Required Scopes:**
+        - `knowledge.contentmgr.manage`: Full access to content management operations
+
+        **Security Features:**
+        - PKCE prevents authorization code interception attacks
+        - Access tokens are short-lived for security
+        - Refresh tokens enable long-term access
+        - Secure token storage and transmission
+
+        **Best Practices:**
+        - Always use HTTPS for token transmission
+        - Store tokens securely (not in localStorage)
+        - Implement proper token refresh logic
+        - Monitor token usage and revoke when needed
+      flows:
+        authorizationCode:
+          authorizationUrl: https://${LOGIN_DOMAIN}/${GATEWAY_ID}/${USER_SIGNIN_POLICY_NAME}/oauth2/v2.0/authorize
+          tokenUrl: https://${LOGIN_DOMAIN}/${GATEWAY_ID}/${USER_SIGNIN_POLICY_NAME}/oauth2/v2.0/token
+          scopes:
+            ${SCOPE_PREFIX}knowledge.contentmgr.read: Allows read access to the eGain Knowledge Authoring APIs.
+            ${SCOPE_PREFIX}knowledge.contentmgr.manage: Allows full access to the eGain Knowledge Authoring APIs.
+    oAuthCustomer:
+      type: oauth2
+      description: Authenticate as a customer using code flow with PKCE.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://${LOGIN_DOMAIN}/${GATEWAY_ID}/${CUSTOMER_SIGNIN_POLICY_NAME}/oauth2/v2.0/authorize
+          tokenUrl: https://${LOGIN_DOMAIN}/${GATEWAY_ID}/${CUSTOMER_SIGNIN_POLICY_NAME}/oauth2/v2.0/token
+          scopes:
+            ${SCOPE_PREFIX}knowledge.contentmgr.read: Allows read access to the eGain AI Services APIs.
+            ${SCOPE_PREFIX}knowledge.contentmgr.manage: Allows full access to the eGain Knowledge AI Services APIs.
+    oAuthAnonymousCustomer:
+      type: oauth2
+      description: Authenticate as an anonymous customer.
+      flows:
+        clientCredentials:
+          tokenUrl: https://${LOGIN_DOMAIN}/internal/oauth2/v2.0/anonymous/token?user_type=customer
+          scopes:
+            ${SCOPE_PREFIX}knowledge.contentmgr.read: Allows read access to the eGain Knowledge AI Services APIs.
+            ${SCOPE_PREFIX}knowledge.contentmgr.manage: Allows full access to the eGain Knowledge AI Services APIs.
+    oAuthClient:
+      type: oauth2
+      description: Authenticate as a client (Server to Server).
+      flows:
+        clientCredentials:
+          tokenUrl: https://${LOGIN_DOMAIN}/global/${GATEWAY_ID}/oauth2/v2.0/token
+          scopes:
+            ${SCOPE_PREFIX}.default: Default scope
+  parameters:
+    hookID:
+      name: hookID
+      in: path
+      description: Integer ID of the Hook resource.
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 9999999999
+    versionID:
+      name: versionID
+      in: path
+      description: The sequential version number of the hook (e.g., 1, 2, 3).
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 9999999999
+    HookTypeParam:
+      name: type
+      in: query
+      description: Filter by hook type.
+      schema:
+        type: string
+        enum:
+          - import_pre_validation_hook
+          - import_post_validation_hook
+    acceptLanguage:
+      name: Accept-Language
+      in: header
+      description: The Language locale accepted by the client (used for locale specific fields in resource representation and in error responses).
+      required: true
+      schema:
+        type: string
+        enum:
+          - en-US
+          - es-ES
+          - fr-FR
+          - it-IT
+          - de-DE
+          - nl-NL
+          - pt-BR
+          - pt-PT
+          - da-DK
+          - ru-RU
+          - fr-CA
+          - zh-CN
+          - ja-JP
+          - ko-KR
+          - sv-SE
+        example: en-US
+    jobId:
+      name: job_id
+      in: path
+      description: |
+        **Job ID Parameter**
+
+        The unique identifier for the import or validation job. This ID was returned when the job was created via the Import or Validate API.
+
+        **Format:** UUID v4 (e.g., 7A84B875-6F75-4C7B-B137-0632B62DB0BD)
+
+        **Example Usage:**
+        ```bash
+        GET /import/content/7A84B875-6F75-4C7B-B137-0632B62DB0BD/status
+        ```
+      required: true
+      schema:
+        type: string
+        example: 7A84B875-6F75-4C7B-B137-0632B62DB0BD
+        pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+  schemas:
+    Hooks:
+      type: object
+      properties:
+        hooks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Hook'
+    Hook:
+      type: object
+      required:
+        - type
+        - fileObject
+      properties:
+        hookID:
+          type: integer
+          description: ID of hook
+          minimum: 1
+          maximum: 9999999999
+        name:
+          description: Name of the hook.
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^[\w\-\s]+$
+        type:
+          type: string
+          enum:
+            - import_pre_validation_hook
+            - import_post_validation_hook
+        fileObject:
+          $ref: '#/components/schemas/FileObject'
+    FileObjects:
+      type: array
+      items:
+        $ref: '#/components/schemas/FileObject'
+      minItems: 0
+      maxItems: 20
+    FileObject:
+      type: object
+      properties:
+        fileID:
+          type: string
+          description: ID of Hook File
+          format: uuid
+        createdDate:
+          $ref: '#/components/schemas/createdDate'
+        createdBy:
+          $ref: '#/components/schemas/createdBy'
+        version:
+          type: object
+          properties:
+            versionID:
+              type: integer
+              description: ID of Hook File version
+              minimum: 1
+              maximum: 9999999999
+            isCurrent:
+              type: boolean
+        file:
+          type: object
+          required:
+            - name
+            - content
+          properties:
+            name:
+              type: string
+              description: Filename (e.g., script.js).
+              minLength: 1
+              maxLength: 255
+              pattern: ^[\w\-\.]+\.js$
+            content:
+              type: string
+              description: Base64 encoded JavaScript content.
+              pattern: ^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$
+              maxLength: 1500000
+            contentUrl:
+              type: string
+              format: uri
+              minLength: 0
+              maxLength: 2000
+              pattern: ^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$|^$
+    PromptTemplates:
+      type: object
+      properties:
+        promptTemplate:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptTemplate'
+    PromptTemplate:
+      type: object
+      required:
+        - name
+        - id
+        - description
+        - active
+        - useFor
+        - appliesTo
+        - instruction
+        - outputFormat
+        - createdOn
+        - modifiedDate
+        - createdBy
+        - reviewStatus
+        - isSystemCreated
+        - fieldToUpdate
+      properties:
+        name:
+          type: string
+          example: Generate Title
+          description: Name of the prompt template
+          maxLength: 256
+          pattern: ^[\w\W]*$
+        id:
+          type: string
+          example: PROD-26471
+          pattern: ^[a-zA-Z0-9]{2,4}-\d{4,15}$
+          minLength: 7
+          maxLength: 20
+          description: ID of the prompt template from the AI console
+        description:
+          type: string
+          example: Generate article title based on article content
+          minLength: 0
+          maxLength: 256
+          pattern: ^[\w\W]*$
+        active:
+          type: boolean
+          example: true
+          description: A boolean showing whether a prompt is active or inactive.
+        useFor:
+          type: string
+          description: 'Specifies which console the prompt applies to: ''knowledge'', ''advisor'', or ''custom'' (for prompts used outside any console).'
+          enum:
+            - knowledge
+            - advisor
+            - custom
+        appliesTo:
+          type: string
+          description: The 'channel' for this prompt. If the `useFor` is set to 'knowledge' then article is used. If `useFor` is set to 'advisor', then either 'chat' or 'email' can be used.
+          enum:
+            - article
+            - chat
+            - email
+        instruction:
+          type: string
+          example: I want you to generate...
+          minLength: 1
+          maxLength: 12000
+          description: The prompt instructions.
+          pattern: ^(?=.*\S).+$
+        outputFormat:
+          type: string
+          example: html
+          enum:
+            - html
+            - text
+          description: The output format for the generated output.
+        createdOn:
+          type: string
+          format: date-time
+          example: '2024-04-01T08:00:00Z'
+          minLength: 20
+          maxLength: 25
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$
+          description: Date and time when the prompt template was created.
+        modifiedDate:
+          type: string
+          format: date-time
+          example: '2024-04-30T17:30:00Z'
+          minLength: 20
+          maxLength: 25
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$
+          description: Date and time when the prompt was last updated.
+        createdBy:
+          $ref: '#/components/schemas/createdBy'
+        reviewStatus:
+          type: string
+          enum:
+            - published
+          example: published
+          description: Review status of the prompt.
+        isSystemCreated:
+          type: boolean
+          example: false
+          description: A boolean showing whether the prompt template came out of the box or is a custom prompt.
+        fieldToUpdate:
+          type: string
+          description: |
+            This will return the specified field to update once a user inserts the generated content. This value can be one of the following:
+
+            - title
+            - content
+            - keyword
+            - description
+            - summary
+            - replyarea
+            - notes
+            - subject
+            - classification
+
+            It can also return a custom attribute which will follow the following convention:
+
+            `custom.<attributeType>.<customAttributeName>`
+          pattern: ^(title|content|keyword|description|summary|replyarea|notes|subject|classification|custom\.\w+\.[a-zA-Z_][a-zA-Z0-9_ ]{0,29})$
+          minLength: 5
+          maxLength: 64
+          example: custom.contactPerson.cust1
+        displayAt:
+          type: array
+          items:
+            type: string
+            enum:
+              - article.content-area
+              - article.metadata
+    createdBy:
+      type: object
+      properties:
+        id:
+          description: The ID of the user that created this resource.
+          type: string
+          pattern: ^[1-9]\d*$
+          minLength: 1
+          maxLength: 8
+        userName:
+          type: string
+          description: The resource creator's username.
+          pattern: ^(?=(.*[a-zA-Z0-9_&@.\-]){2,})[a-zA-Z0-9_&@.\s\-]+$
+          minLength: 2
+          maxLength: 255
+        firstName:
+          type: string
+          description: The resource creator's first name.
+          pattern: ^(?!\s*$)(?!.*[~`!#$%\^*=\[\];"|<>\/?+\{\}]).*$
+          minLength: 1
+          maxLength: 255
+        middleName:
+          type: string
+          description: The resource creator's middle name.
+          pattern: ^(?!.*[~`!#$%\^*=\[\];"|<>\/?+\{\}])(\s*\S.*|)$
+          minLength: 0
+          maxLength: 255
+        lastName:
+          type: string
+          description: The resource creator's last name.
+          pattern: ^(?!\s*$)(?!.*[~`!#$%\^*=\[\];"|<>\/?+\{\}]).*$
+          minLength: 1
+          maxLength: 255
+    WSErrorCommon:
+      type: object
+      title: Error Response
+      required:
+        - code
+        - developerMessage
+      properties:
+        code:
+          title: Code Identifier
+          description: |
+            A string that follows the pattern *{integer}-{integer}*.
+
+            The first *{integer}* is the http status code.  This code as a whole is unique.
+            * For example, error codes "400-101" and "404-101" are distinctly different.
+          type: string
+        developerMessage:
+          title: Developer Message
+          description: A summary of the error.
+          type: string
+          minLength: 0
+          maxLength: 2048
+        details:
+          title: Response Details
+          type: array
+          items:
+            type: object
+            required:
+              - key
+            properties:
+              key:
+                title: Key
+                type: string
+                minLength: 0
+                maxLength: 255
+              value:
+                title: Value
+                type: string
+                minLength: 0
+                maxLength: 255
+          minItems: 0
+          maxItems: 30
+        userMessage:
+          title: User Message
+          description: |
+            UI friendly messages are only supported by some APIs.  
+              * The client must explicitly request UI friendly messages by passing the *X-egain-error-message=yes* header.
+          type: string
+          minLength: 0
+          maxLength: 1024
+    DataSourceCredentials:
+      type: object
+      properties:
+        accessKey:
+          type: string
+          maxLength: 1024
+          description: Access key for S3 credentials datasource. Provide along with Secret Key.
+        secretKey:
+          type: string
+          maxLength: 1024
+          description: Secret key for S3 credentials datasource. Provide along with Access Key.
+        username:
+          type: string
+          maxLength: 1024
+          description: Username for SFTP credentials datasource. Provide along with Password.
+        password:
+          type: string
+          maxLength: 1024
+          description: Password for SFTP credentials datasource. Provide along with Username.
+    ImportContent:
+      type: object
+      properties:
+        dataSource:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Type of data source
+              enum:
+                - AWS S3 bucket
+                - Shared file path
+            path:
+              type: string
+              description: Path of the data source
+              format: uri
+              maxLength: 1024
+            region:
+              description: Region of the data source
+              type: string
+              maxLength: 20
+            credentials:
+              $ref: '#/components/schemas/DataSourceCredentials'
+          required:
+            - type
+            - path
+        operation:
+          type: string
+          enum:
+            - import
+            - reimport
+        scheduleTime:
+          type: object
+          properties:
+            date:
+              type: string
+              format: date-time
+              pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
+              example: '2024-03-01T10:00:00.000Z'
+          required:
+            - date
+      required:
+        - dataSource
+        - operation
+    schemas-WSErrorCommon:
+      type: object
+      title: Error Response
+      required:
+        - code
+        - developerMessage
+      properties:
+        code:
+          title: Code Identifier
+          description: |
+            String that follow the pattern {integer}-{integer}. 
+              * The first part is http status code.  The code is unique as a whole. Nothing common between 400-101 and 404-101
+          allOf:
+            - type: string
+        developerMessage:
+          title: Developer Message
+          description: Response explaining what happened
+          allOf:
+            - type: string
+              minLength: 0
+              maxLength: 255
+        details:
+          title: Response Details
+          allOf:
+            - type: array
+              items:
+                type: object
+                required:
+                  - key
+                properties:
+                  key:
+                    title: Key
+                    allOf:
+                      - type: string
+                        minLength: 0
+                        maxLength: 255
+                  value:
+                    title: Value
+                    allOf:
+                      - type: string
+                        minLength: 0
+                        maxLength: 255
+              minItems: 0
+              maxItems: 30
+        userMessage:
+          title: User Message
+          description: |
+            UI friendly message only supported by some API.  
+              * Client must request explicitly by passing X-egain-error-message=yes header
+          allOf:
+            - type: string
+              minLength: 0
+              maxLength: 1024
+    createdDate:
+      type: string
+      format: DateAndTime
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$
+      minLength: 20
+      maxLength: 25
+      description: The date on which the resource was last modified.
+    ImportStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the job.
+          enum:
+            - Scheduled
+            - In Progress
+            - Successful
+            - Failed
+            - Cancelled
+        jobType:
+          type: string
+          enum:
+            - Import
+            - Validation
+        progress:
+          type: object
+          description: Progress of the job.
+          properties:
+            processed:
+              type: number
+              description: Number of items processed.
+              minimum: 0
+              maximum: 100000
+            total:
+              type: number
+              description: Number of total items to process.
+              minimum: 0
+              maximum: 100000
+            percentage:
+              type: number
+              description: Percentage of total items that have been processed.
+              minimum: 0
+              maximum: 100
+        logFileLocation:
+          type: string
+          description: Location of the job log file.
+          maxLength: 1024
+        startTime:
+          type: string
+          description: Start time of job.
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
+          example: '2024-03-01T10:00:00.000Z'
+        estimatedCompletion:
+          type: string
+          description: Estimated completion time of job.
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
+          example: '2024-03-01T10:00:00.000Z'
+        currentOperation:
+          type: string
+          description: Current operation of job being processed.
+          maxLength: 1024
+        completionTime:
+          type: string
+          format: date-time
+          description: Completion time of job.
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
+          example: '2024-03-01T10:00:00.000Z'
+        failureTime:
+          type: string
+          description: Failure time of job.
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
+          example: '2024-03-01T10:00:00.000Z'
+        results:
+          type: object
+          description: Result of job.
+          properties:
+            succesfull:
+              type: number
+              description: Number of item succesfully processed by job.
+              minimum: 0
+              maximum: 100000
+            warnings:
+              type: number
+              description: Number of warnings encountered during job.
+              minimum: 0
+              maximum: 100000
+            errors:
+              description: Number of errors encountered during job.
+              type: number
+              minimum: 0
+              maximum: 100000
+        error:
+          type: string
+          description: Error of job.
+          maxLength: 1024
+        retryable:
+          description: Indicates if job is retryable.
+          type: boolean
+      required:
+        - status
+        - jobType
+    ValidateImportContent:
+      type: object
+      properties:
+        dataSource:
+          type: object
+          properties:
+            type:
+              type: string
+              description: Type of data source
+              enum:
+                - AWS S3 bucket
+                - Shared file path
+            path:
+              type: string
+              description: Path of the data source
+              format: uri
+            region:
+              description: Region of the data source
+              type: string
+            credentials:
+              $ref: '#/components/schemas/DataSourceCredentials'
+          required:
+            - type
+            - path
+      required:
+        - dataSource
+  responses:
+    NoContent:
+      description: No content
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WSErrorCommon'
+          examples:
+            Unsupported Parameters:
+              $ref: '#/components/examples/UnsupportedParameters'
+            Invalid Value:
+              $ref: '#/components/examples/InvalidValue'
+            Missing required query parameter:
+              $ref: '#/components/examples/MissingParameter'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WSErrorCommon'
+          examples:
+            Unauthorized:
+              $ref: '#/components/examples/Unauthorized'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WSErrorCommon'
+          examples:
+            Forbidden:
+              $ref: '#/components/examples/Forbidden'
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WSErrorCommon'
+          examples:
+            Not found:
+              $ref: '#/components/examples/NotFound'
+    NotAcceptable:
+      description: Not Acceptable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WSErrorCommon'
+          examples:
+            Invalid Accept-Language:
+              $ref: '#/components/examples/InvalidAcceptLanguage'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WSErrorCommon'
+          examples:
+            Internal Server Error:
+              $ref: '#/components/examples/InternalServerError'
+    BadImportContentRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WSErrorCommon'
+          examples:
+            LimitExceeded Value:
+              $ref: '#/components/examples/LimitExceeded'
+            Invalid Value:
+              $ref: '#/components/examples/InvalidValue'
+    403_scope_not_assigned:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-WSErrorCommon'
+          examples:
+            Required Scope Missing:
+              $ref: '#/components/examples/Scope_Not_Assigned'
+    responses-NotAcceptable:
+      description: Not acceptable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-WSErrorCommon'
+          examples:
+            Not Acceptable:
+              $ref: '#/components/examples/NotAcceptable'
+    412_precondition_failed:
+      description: Preconditions failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/schemas-WSErrorCommon'
+          examples:
+            precondition failed:
+              $ref: '#/components/examples/precondition_failed'
+  examples:
+    UnsupportedParameters:
+      value:
+        code: 400-101
+        developerMessage: 'Unsupported query parameter(s) supplied: ''<query_parameter>''.'
+    InvalidValue:
+      value:
+        code: 400-152
+        developerMessage: Invalid value is provided in the request body for the following attribute:'<attribute_name>'.
+    MissingParameter:
+      value:
+        code: 400-112
+        developerMessage: 'Required query parameter(s) is missing. The following parameters are required: ''<query_parameter>''.'
+    Unauthorized:
+      value:
+        code: 401-101
+        developerMessage: Invalid or expired 'Authorization' header provided. New login is required.
+    Forbidden:
+      value:
+        code: 403-178
+        developerMessage: 'User is not allowed to perform the following action: <action_name>.'
+    NotFound:
+      value:
+        code: 404-100
+        developerMessage: 'The following IDs supplied in the URI path were not found: ''<resource_id>''.'
+    InvalidAcceptLanguage:
+      value:
+        code: 406-100
+        developerMessage: Invalid 'Accept-Language' header value provided.
+    InternalServerError:
+      value:
+        code: 500-100
+        developerMessage: System is unable to process this request. Please contact your administrator.
+    LimitExceeded:
+      value:
+        code: 400-10424
+        developerMessage: Limit exceeded. The allowed limit for '{0}' is '{1}'.
+    Scope_Not_Assigned:
+      description: |
+        User doesn't have required scope to call this API. Refer API description to know which scope needs to be assigned to user.
+      value:
+        code: 403-197
+        developerMessage: Not authorized to perform the action.
+    NotAcceptable:
+      value:
+        code: 406-100
+        developerMessage: Invalid 'Accept-Language' header value provided.
+    precondition_failed:
+      value:
+        code: 412-100
+        developerMessage: Pre condition failed
+x-sla-file: ./sla.yaml

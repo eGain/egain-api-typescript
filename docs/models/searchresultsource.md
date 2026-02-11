@@ -7,7 +7,7 @@ The repository or system where the content originated (e.g., eGain Article, eGai
 ```typescript
 import { SearchResultSource } from "@egain/egain-api-typescript/models";
 
-let value: SearchResultSource = "eGain Article";
+let value: SearchResultSource = "eGain Attachment";
 ```
 
 ## Values

@@ -3,7 +3,7 @@
  */
 
 import { EgainCore } from "../core.js";
-import { encodeJSON } from "../lib/encodings.js";
+import { encodeJSON, encodeSimple } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
 import { safeParse } from "../lib/schemas.js";
@@ -21,7 +21,6 @@ import {
 import * as errors from "../models/errors/index.js";
 import { ResponseValidationError } from "../models/errors/responsevalidationerror.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
-import * as models from "../models/index.js";
 import * as operations from "../models/operations/index.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
@@ -31,17 +30,20 @@ import { Result } from "../types/fp.js";
  *
  * @remarks
  * ## Overview
- *    The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket or SFTP server path.
+ *    The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket.
  *    It returns a URL with a Job ID to enable tracking the status of this asynchronous operation.
  *    Each export job can send multiple JSON files, depending on the total number of items to process.
  *    More than one bulk export can take place, as needed, one per portal.
  *
  * ## Permission
  *   * Only a client application can invoke this API.
+ *
+ * ## License
+ *   * This API requires a site license (SKU: EG-CL-RTKA-PT).
  */
 export function portalExportExportContent(
   client: EgainCore,
-  request: models.KnowledgeExport,
+  request: operations.ExportContentRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
@@ -66,7 +68,7 @@ export function portalExportExportContent(
 
 async function $do(
   client: EgainCore,
-  request: models.KnowledgeExport,
+  request: operations.ExportContentRequest,
   options?: RequestOptions,
 ): Promise<
   [
@@ -87,20 +89,25 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => models.KnowledgeExport$outboundSchema.parse(value),
+    (value) => operations.ExportContentRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload, { explode: true });
+  const body = encodeJSON("body", payload.KnowledgeExport, { explode: true });
 
   const path = pathToFunc("/content/export")();
 
   const headers = new Headers(compactMap({
     "Content-Type": "application/json",
     Accept: "application/json",
+    "Accept-Language": encodeSimple(
+      "Accept-Language",
+      payload["Accept-Language"],
+      { explode: false, charEncoding: "none" },
+    ),
   }));
 
   const secConfig = await extractSecurity(client._options.accessToken);

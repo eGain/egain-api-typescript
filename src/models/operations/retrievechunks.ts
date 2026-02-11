@@ -11,14 +11,14 @@ import * as models from "../index.js";
 
 export const RetrieveChunksServerList = [
   /**
-   * aiservices
+   * Production Server
    */
   "https://api.aidev.egain.cloud/core/aiservices/v4",
 ] as const;
 
 export type RetrieveChunksRequest = {
   /**
-   * The search query string. The string must be escaped as required by the URL syntax rules.
+   * The search query string.
    */
   q: string;
   /**
@@ -27,14 +27,19 @@ export type RetrieveChunksRequest = {
   portalID: string;
   filterUserProfileID?: string | undefined;
   /**
-   * The language that describes the details of a resource. Resources available in different languages may differ from each other. <br><br> If lang is not passed, then the portal's default language is used.
+   * The language that describes the details of a resource. Resources available in different languages may differ from each other.
    */
-  language: models.LanguageCodeParameter;
+  language: models.RequiredLanguageCode;
   /**
    * An object where each key is a **Category Tag ID** (numeric string),
    *
    * @remarks
    * and each value is an array of **Tag IDs** for that category.
+   *  **Note**:
+   *   - The '$filter[tags]' query parameter JSON value should be url encoded.
+   *   - Some developer tools for invoking APIs may not url encode the '$filter[tags]' query parameter JSON value by default. Ensure that only url encoded values are used.
+   *   - Example of JSON value: {"BASE-40845":["BASE-40849","BASE-40853"]}
+   *   - Example of URL encoded value: %7B%22BASE-40845%22%3A%5B%22BASE-40849%22%2C%22BASE-40853%22%5D%7D
    */
   filterTags?: { [k: string]: Array<string> } | undefined;
   /**
@@ -53,7 +58,7 @@ export const RetrieveChunksRequest$inboundSchema: z.ZodType<
   q: z.string(),
   portalID: z.string(),
   filterUserProfileID: z.string().optional(),
-  language: models.LanguageCodeParameter$inboundSchema,
+  language: models.RequiredLanguageCode$inboundSchema,
   filterTags: z.record(z.array(z.string())).optional(),
   filterTopicIds: z.array(z.string()).optional(),
   RetrieveRequest: models.RetrieveRequest$inboundSchema.optional(),
@@ -83,7 +88,7 @@ export const RetrieveChunksRequest$outboundSchema: z.ZodType<
   q: z.string(),
   portalID: z.string(),
   filterUserProfileID: z.string().optional(),
-  language: models.LanguageCodeParameter$outboundSchema,
+  language: models.RequiredLanguageCode$outboundSchema,
   filterTags: z.record(z.array(z.string())).optional(),
   filterTopicIds: z.array(z.string()).optional(),
   retrieveRequest: models.RetrieveRequest$outboundSchema.optional(),

@@ -34,6 +34,7 @@ let value: AISearchResponse = {
             snippet: "The following Banking FAQs...",
             keywordSnippet: "The following Banking FAQs...",
             relevanceScore: 0.7,
+            normalizedScore: 0.9,
           },
         ],
         additionalSnippetCount: 1,
@@ -46,6 +47,7 @@ let value: AISearchResponse = {
           articleTypeId: 243500000023393,
         },
         relevanceScore: 0.8,
+        normalizedScore: 0.9,
       },
     ],
   },
@@ -54,6 +56,7 @@ let value: AISearchResponse = {
 
 ## Fields
 
-| Field                                              | Type                                               | Required                                           | Description                                        |
-| -------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------- |
-| `searchResults`                                    | [models.SearchResults](../models/searchresults.md) | :heavy_check_mark:                                 | Top search results with relevance scores           |
+| Field                                                      | Type                                                       | Required                                                   | Description                                                |
+| ---------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- |
+| `searchResults`                                            | [models.SearchResults](../models/searchresults.md)         | :heavy_check_mark:                                         | Top search results with relevance scores                   |
+| `paginationInfo`                                           | [models.AISPaginationInfo](../models/aispaginationinfo.md) | :heavy_minus_sign:                                         | N/A                                                        |

@@ -7,7 +7,7 @@ Format of the source document (HTML, DOCX, PPTX, or PDF).
 ```typescript
 import { ReferenceResponseDocType } from "@egain/egain-api-typescript/models";
 
-let value: ReferenceResponseDocType = "DOCX";
+let value: ReferenceResponseDocType = "PDF";
 ```
 
 ## Values

@@ -8,7 +8,6 @@ import { Articlelists } from "./articlelists.js";
 import { Attachment } from "./attachment.js";
 import { Bookmark } from "./bookmark.js";
 import { Connectorssearchevents } from "./connectorssearchevents.js";
-import { Escalation } from "./escalation.js";
 import { Export } from "./export.js";
 import { Federatedsearchevent } from "./federatedsearchevent.js";
 import { General } from "./general.js";
@@ -87,11 +86,6 @@ export class Portal extends ClientSDK {
     return (this._federatedsearchevent ??= new Federatedsearchevent(
       this._options,
     ));
-  }
-
-  private _escalation?: Escalation;
-  get escalation(): Escalation {
-    return (this._escalation ??= new Escalation(this._options));
   }
 
   private _connectorssearchevents?: Connectorssearchevents;

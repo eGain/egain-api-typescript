@@ -28,7 +28,7 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Cancel an import or validation job
+ * Cancel Job
  *
  * @remarks
  * # Cancel Import or Validation Job
@@ -67,11 +67,6 @@ import { Result } from "../types/fp.js";
  * - **Monitor Jobs**: Regularly check job status to identify candidates for cancellation
  * - **Plan Cancellations**: Schedule cancellations during low-usage periods
  * - **Resource Planning**: Consider resource impact before cancelling large jobs
- *
- * ## Permissions
- * | Actor | Permission |
- * | ------- | --------|
- * | User |<li>User must be a department user.</li><li>Content can only be validated for user's home department.</li><li>User must have 'Author' role.</li><li>The job must have been created by the logged in user, or the logged in user must have 'Edit' permissions on the user who created the job.</li></ul>|
  */
 export function contentImportCancelImport(
   client: EgainCore,
@@ -81,6 +76,7 @@ export function contentImportCancelImport(
   Result<
     void,
     | errors.WSErrorCommon
+    | errors.SchemasWSErrorCommon
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -107,6 +103,7 @@ async function $do(
     Result<
       void,
       | errors.WSErrorCommon
+      | errors.SchemasWSErrorCommon
       | EgainError
       | ResponseValidationError
       | ConnectionError
@@ -198,6 +195,7 @@ async function $do(
   const [result] = await M.match<
     void,
     | errors.WSErrorCommon
+    | errors.SchemasWSErrorCommon
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -208,7 +206,8 @@ async function $do(
     | SDKValidationError
   >(
     M.nil(204, z.void()),
-    M.jsonErr([401, 403, 404, 406], errors.WSErrorCommon$inboundSchema),
+    M.jsonErr([401, 403, 404], errors.WSErrorCommon$inboundSchema),
+    M.jsonErr(406, errors.SchemasWSErrorCommon$inboundSchema),
     M.jsonErr(500, errors.WSErrorCommon$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

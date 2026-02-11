@@ -19,7 +19,7 @@ export type GetArticleEditionDetailsRequest = {
    */
   articleID: string;
   /**
-   * Publish View Id of the article on which operation is performed.
+   * The ID of a Publish View Id.<br><br>A Publish View Id ID is composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
    */
   publishViewId: string;
   /**

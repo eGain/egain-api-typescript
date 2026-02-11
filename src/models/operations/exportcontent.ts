@@ -7,10 +7,86 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
+import * as models from "../index.js";
+
+export type ExportContentRequest = {
+  /**
+   * The Language locale accepted by the client (used for locale specific fields in resource representation and in error responses).
+   */
+  acceptLanguage: models.AcceptLanguage;
+  knowledgeExport: models.KnowledgeExport;
+};
 
 export type ExportContentResponse = {
   headers: { [k: string]: Array<string> };
 };
+
+/** @internal */
+export const ExportContentRequest$inboundSchema: z.ZodType<
+  ExportContentRequest,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  "Accept-Language": models.AcceptLanguage$inboundSchema,
+  KnowledgeExport: models.KnowledgeExport$inboundSchema,
+}).transform((v) => {
+  return remap$(v, {
+    "Accept-Language": "acceptLanguage",
+    "KnowledgeExport": "knowledgeExport",
+  });
+});
+
+/** @internal */
+export type ExportContentRequest$Outbound = {
+  "Accept-Language": string;
+  KnowledgeExport: models.KnowledgeExport$Outbound;
+};
+
+/** @internal */
+export const ExportContentRequest$outboundSchema: z.ZodType<
+  ExportContentRequest$Outbound,
+  z.ZodTypeDef,
+  ExportContentRequest
+> = z.object({
+  acceptLanguage: models.AcceptLanguage$outboundSchema,
+  knowledgeExport: models.KnowledgeExport$outboundSchema,
+}).transform((v) => {
+  return remap$(v, {
+    acceptLanguage: "Accept-Language",
+    knowledgeExport: "KnowledgeExport",
+  });
+});
+
+/**
+ * @internal
+ * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
+ */
+export namespace ExportContentRequest$ {
+  /** @deprecated use `ExportContentRequest$inboundSchema` instead. */
+  export const inboundSchema = ExportContentRequest$inboundSchema;
+  /** @deprecated use `ExportContentRequest$outboundSchema` instead. */
+  export const outboundSchema = ExportContentRequest$outboundSchema;
+  /** @deprecated use `ExportContentRequest$Outbound` instead. */
+  export type Outbound = ExportContentRequest$Outbound;
+}
+
+export function exportContentRequestToJSON(
+  exportContentRequest: ExportContentRequest,
+): string {
+  return JSON.stringify(
+    ExportContentRequest$outboundSchema.parse(exportContentRequest),
+  );
+}
+
+export function exportContentRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<ExportContentRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => ExportContentRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ExportContentRequest' from JSON`,
+  );
+}
 
 /** @internal */
 export const ExportContentResponse$inboundSchema: z.ZodType<

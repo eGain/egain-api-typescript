@@ -8,7 +8,7 @@ The start date for the Article.
 import { StartDateDateAndTime } from "@egain/egain-api-typescript/models";
 
 let value: StartDateDateAndTime = {
-  date: new Date("2025-11-16T08:50:02.141Z"),
+  date: new Date("2026-11-16T08:50:02.141Z"),
 };
 ```
 

@@ -15,16 +15,19 @@ export class Export extends ClientSDK {
    *
    * @remarks
    * ## Overview
-   *    The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket or SFTP server path.
+   *    The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket.
    *    It returns a URL with a Job ID to enable tracking the status of this asynchronous operation.
    *    Each export job can send multiple JSON files, depending on the total number of items to process.
    *    More than one bulk export can take place, as needed, one per portal.
    *
    * ## Permission
    *   * Only a client application can invoke this API.
+   *
+   * ## License
+   *   * This API requires a site license (SKU: EG-CL-RTKA-PT).
    */
   async exportContent(
-    request: models.KnowledgeExport,
+    request: operations.ExportContentRequest,
     options?: RequestOptions,
   ): Promise<operations.ExportContentResponse | undefined> {
     return unwrapAsync(portalExportExportContent(
@@ -55,6 +58,9 @@ export class Export extends ClientSDK {
    *
    * ## Permission
    *   * Only a client application can invoke this API.
+   *
+   * ## License
+   *   * This API requires a site license (SKU: EG-CL-RTKA-PT).
    */
   async exportStatus(
     request: operations.ExportStatusRequest,

@@ -38,7 +38,11 @@ export type AnswersRequest = {
    */
   eventId?: string | undefined;
   /**
-   * ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
+   * Session ID passed by the client for this specific API call or event.
+   */
+  clientSessionId?: string | undefined;
+  /**
+   * eGain Session ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
    */
   sessionId?: string | undefined;
 };
@@ -129,6 +133,7 @@ export const AnswersRequest$inboundSchema: z.ZodType<
 > = z.object({
   channel: z.lazy(() => AnswersRequestChannel$inboundSchema).optional(),
   eventId: z.string().optional(),
+  clientSessionId: z.string().optional(),
   sessionId: z.string().optional(),
 });
 
@@ -136,6 +141,7 @@ export const AnswersRequest$inboundSchema: z.ZodType<
 export type AnswersRequest$Outbound = {
   channel?: AnswersRequestChannel$Outbound | undefined;
   eventId?: string | undefined;
+  clientSessionId?: string | undefined;
   sessionId?: string | undefined;
 };
 
@@ -147,6 +153,7 @@ export const AnswersRequest$outboundSchema: z.ZodType<
 > = z.object({
   channel: z.lazy(() => AnswersRequestChannel$outboundSchema).optional(),
   eventId: z.string().optional(),
+  clientSessionId: z.string().optional(),
   sessionId: z.string().optional(),
 });
 

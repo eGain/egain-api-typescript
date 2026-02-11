@@ -109,6 +109,7 @@ async function $do(
       "$pagenum": payload.pagenum,
       "$pagesize": payload.pagesize,
       "level": payload.level,
+      "searchProfileId": payload.searchProfileId,
     }),
   );
 

@@ -28,7 +28,7 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Get the current status of an import or validation job
+ * Get Job Status
  *
  * @remarks
  * # Get Import Job Status
@@ -55,11 +55,6 @@ import { Result } from "../types/fp.js";
  * - Content processing steps
  * - Validation results
  * - Error details with context
- *
- * ## Permissions
- * | Actor | Permission |
- * | ------- | --------|
- * | User |<ul><li>User must be a department user.</li><li>User must have 'Author' role.</li><li>The job must have been created by the logged in user, or the logged in user must have 'View' permissions on the user who created the job.</li></ul>|
  */
 export function contentImportGetImportStatus(
   client: EgainCore,
@@ -69,6 +64,7 @@ export function contentImportGetImportStatus(
   Result<
     models.ImportStatus,
     | errors.WSErrorCommon
+    | errors.SchemasWSErrorCommon
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -95,6 +91,7 @@ async function $do(
     Result<
       models.ImportStatus,
       | errors.WSErrorCommon
+      | errors.SchemasWSErrorCommon
       | EgainError
       | ResponseValidationError
       | ConnectionError
@@ -186,6 +183,7 @@ async function $do(
   const [result] = await M.match<
     models.ImportStatus,
     | errors.WSErrorCommon
+    | errors.SchemasWSErrorCommon
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -196,7 +194,8 @@ async function $do(
     | SDKValidationError
   >(
     M.json(200, models.ImportStatus$inboundSchema),
-    M.jsonErr([400, 401, 403, 404, 406], errors.WSErrorCommon$inboundSchema),
+    M.jsonErr([400, 401, 403, 404], errors.WSErrorCommon$inboundSchema),
+    M.jsonErr(406, errors.SchemasWSErrorCommon$inboundSchema),
     M.jsonErr(500, errors.WSErrorCommon$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

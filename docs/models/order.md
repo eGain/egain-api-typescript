@@ -5,7 +5,7 @@
 ```typescript
 import { Order } from "@egain/egain-api-typescript/models";
 
-let value: Order = "desc";
+let value: Order = "asc";
 ```
 
 ## Values

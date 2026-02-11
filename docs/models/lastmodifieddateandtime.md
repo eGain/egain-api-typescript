@@ -8,7 +8,7 @@ Date of last modification.
 import { LastModifiedDateAndTime } from "@egain/egain-api-typescript/models";
 
 let value: LastModifiedDateAndTime = {
-  date: new Date("2024-11-06T11:38:31.229Z"),
+  date: new Date("2025-11-06T11:38:31.229Z"),
 };
 ```
 

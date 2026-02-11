@@ -6,11 +6,17 @@ import { ClientSDK } from "../lib/sdks.js";
 import { Aiservices } from "./aiservices.js";
 import { Content } from "./content.js";
 import { Portal } from "./portal.js";
+import { Prompt } from "./prompt.js";
 
 export class Egain extends ClientSDK {
   private _aiservices?: Aiservices;
   get aiservices(): Aiservices {
     return (this._aiservices ??= new Aiservices(this._options));
+  }
+
+  private _prompt?: Prompt;
+  get prompt(): Prompt {
+    return (this._prompt ??= new Prompt(this._options));
   }
 
   private _content?: Content;

@@ -4,6 +4,7 @@
 
 export * from "./egaindefaulterror.js";
 export * from "./egainerror.js";
+export * from "./executeprompt.js";
 export * from "./httpclienterrors.js";
 export * from "./responsevalidationerror.js";
 export * from "./schemaswserrorcommon.js";

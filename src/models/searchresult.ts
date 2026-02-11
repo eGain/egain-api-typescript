@@ -6,13 +6,13 @@ import * as z from "zod";
 import { safeParse } from "../lib/schemas.js";
 import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
-import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 import {
-  TopicBreadcrumb,
-  TopicBreadcrumb$inboundSchema,
-  TopicBreadcrumb$Outbound,
-  TopicBreadcrumb$outboundSchema,
-} from "./topicbreadcrumb.js";
+  AITopicBreadcrumb,
+  AITopicBreadcrumb$inboundSchema,
+  AITopicBreadcrumb$Outbound,
+  AITopicBreadcrumb$outboundSchema,
+} from "./aitopicbreadcrumb.js";
+import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 /**
  * Format of the source document (HTML, DOCX, PPTX, or PDF).
@@ -74,12 +74,24 @@ export type SearchResult = {
    * Retrieved text returned for the query. This may be a **chunk of an article** or the **entire article content** if the content is small enough.
    */
   snippet: string;
+  /**
+   * Contextual Summary generated as part of metadata for the chunk content.
+   */
+  contextualSummary?: string | undefined;
   snippetType?: SnippetType | undefined;
   /**
-   * Generated confidence score (0.0-1.0) for the snippet's relevance to the query.
+   * Query-specific relevance score (0.0-1.0) that reflects how well the result matches the user query. This score is only available when a re-ranker is enabled and represents a direct relevance comparison between the query and the returned snippet.
+   *
+   * @remarks
    */
-  relevanceScore: number;
-  topicBreadcrumb?: Array<TopicBreadcrumb> | undefined;
+  relevanceScore?: number | undefined;
+  /**
+   * Relative ranking score (0.0-1.0) normalized across all returned results, based on a combination of BM25 and semantic similarity scores. This score indicates how a result ranks compared to others in the same response, not its absolute relevance to the query. As a result, a high score does not necessarily imply strong query relevance.
+   *
+   * @remarks
+   */
+  normalizedScore: number;
+  topicBreadcrumb?: Array<AITopicBreadcrumb> | undefined;
 };
 
 /** @internal */
@@ -155,9 +167,11 @@ export const SearchResult$inboundSchema: z.ZodType<
   docType: SearchResultDocType$inboundSchema,
   source: SearchResultSource$inboundSchema,
   snippet: z.string(),
+  contextualSummary: z.string().optional(),
   snippetType: SnippetType$inboundSchema.optional(),
-  relevanceScore: z.number(),
-  topicBreadcrumb: z.array(TopicBreadcrumb$inboundSchema).optional(),
+  relevanceScore: z.number().optional(),
+  normalizedScore: z.number(),
+  topicBreadcrumb: z.array(AITopicBreadcrumb$inboundSchema).optional(),
 });
 
 /** @internal */
@@ -168,9 +182,11 @@ export type SearchResult$Outbound = {
   docType: string;
   source: string;
   snippet: string;
+  contextualSummary?: string | undefined;
   snippetType?: string | undefined;
-  relevanceScore: number;
-  topicBreadcrumb?: Array<TopicBreadcrumb$Outbound> | undefined;
+  relevanceScore?: number | undefined;
+  normalizedScore: number;
+  topicBreadcrumb?: Array<AITopicBreadcrumb$Outbound> | undefined;
 };
 
 /** @internal */
@@ -185,9 +201,11 @@ export const SearchResult$outboundSchema: z.ZodType<
   docType: SearchResultDocType$outboundSchema,
   source: SearchResultSource$outboundSchema,
   snippet: z.string(),
+  contextualSummary: z.string().optional(),
   snippetType: SnippetType$outboundSchema.optional(),
-  relevanceScore: z.number(),
-  topicBreadcrumb: z.array(TopicBreadcrumb$outboundSchema).optional(),
+  relevanceScore: z.number().optional(),
+  normalizedScore: z.number(),
+  topicBreadcrumb: z.array(AITopicBreadcrumb$outboundSchema).optional(),
 });
 
 /**

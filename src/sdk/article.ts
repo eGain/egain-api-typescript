@@ -34,6 +34,7 @@ export class Article extends ClientSDK {
    * @remarks
    * ## Overview
    *   * The Get Article by ID API allows a user to retrieve an Article using its ID.
+   *     * It requires a Portal ID, which a user can retrieve by calling the Get All Portals API.
    *     * Additional Article attributes and contextual views can be specified in the query parameters.
    *
    *   * This API returns structured authoring attributes of Issue, Environment, Cause and Confidence Level when the following conditions are met:
@@ -90,7 +91,7 @@ export class Article extends ClientSDK {
    *
    * @remarks
    * ## Overview
-   *   * This API allows a user to retrieve an article with all its editions.
+   *   * This API retrieves the details of an article edition.
    */
   async getArticleEditionDetails(
     request: operations.GetArticleEditionDetailsRequest,

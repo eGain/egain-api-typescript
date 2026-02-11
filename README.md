@@ -63,7 +63,6 @@ For more information about the API: [Full SDK Documentation](https://github.com/
   * [Authentication](#authentication)
   * [Available Resources and Operations](#available-resources-and-operations)
   * [Standalone functions](#standalone-functions)
-  * [File uploads](#file-uploads)
   * [Retries](#retries)
   * [Error Handling](#error-handling)
   * [Server Selection](#server-selection)
@@ -128,9 +127,9 @@ const egain = new Egain({
 
 async function run() {
   const result = await egain.aiservices.retrieve.retrieveChunks({
-    q: "fair lending",
+    q: "What is a loan?",
     portalID: "PROD-1000",
-    filterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-1030",
     language: "en-US",
     filterTags: {
       "PROD-1234": [
@@ -145,6 +144,9 @@ async function run() {
       channel: {
         name: "Eight Bank Website",
       },
+      eventId: "6154589f-b43f-4471-b2c7-92c6c888a664",
+      clientSessionId: "6154589f-b43f-4471-b2c7-92c6c888a643",
+      sessionId: "6154589f-b43f-4471-b2c7-92c6c888a689",
     },
   });
 
@@ -176,24 +178,12 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.aiservices.retrieve.retrieveChunks({
-    q: "fair lending",
-    portalID: "PROD-1000",
-    filterUserProfileID: "PROD-3210",
-    language: "en-US",
-    filterTags: {
-      "PROD-1234": [
-        "PROD-2000",
-        "PROD-2003",
-      ],
-      "PROD-2005": [
-        "PROD-2007",
-      ],
-    },
-    retrieveRequest: {
-      channel: {
-        name: "Eight Bank Website",
-      },
+  const result = await egain.aiservices.prompt.executePrompt({
+    promptId: "<id>",
+    executePrompt: {
+      department: "Service",
+      languageCode: "en-US",
+      clientSessionId: "123e4567-e89b-12d3-a456-426614174000",
     },
   });
 
@@ -213,7 +203,11 @@ run();
 
 #### [aiservices.answers](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/answers/README.md)
 
-* [getBestAnswer](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/answers/README.md#getbestanswer) - Get the best answer for a user query
+* [getBestAnswer](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/answers/README.md#getbestanswer) - Generate an Answer
+
+#### [aiservices.prompt](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/aiservicesprompt/README.md)
+
+* [executePrompt](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/aiservicesprompt/README.md#executeprompt) - Execute a predefined prompt
 
 #### [aiservices.retrieve](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/retrieve/README.md)
 
@@ -221,10 +215,10 @@ run();
 
 #### [content.import](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md)
 
-* [createImportJob](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportjob) - Import content from external sources by creating an import job
-* [getImportStatus](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#getimportstatus) - Get the current status of an import or validation job
-* [createImportValidationJob](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportvalidationjob) - Validate content structure and format before import by creating an import validation job
-* [cancelImport](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#cancelimport) - Cancel an import or validation job
+* [createImportJob](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportjob) - Create Import Job
+* [getImportStatus](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#getimportstatus) - Get Job Status
+* [createImportValidationJob](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportvalidationjob) - Create Validation Job
+* [cancelImport](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#cancelimport) - Cancel Job
 
 #### [portal.article](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md)
 
@@ -257,7 +251,6 @@ run();
 #### [portal.attachment](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/attachment/README.md)
 
 * [createSignedURL](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/attachment/README.md#createsignedurl) - Generate Signed URL to Upload API
-* [uploadAttachment](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/attachment/README.md#uploadattachment) - Upload Attachment
 
 #### [portal.bookmark](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/bookmark/README.md)
 
@@ -269,13 +262,6 @@ run();
 
 * [createSearchResultEventForConnectors](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/connectorssearchevents/README.md#createsearchresulteventforconnectors) - Event for Search Using Connectors
 * [createViewedSearchResultsEventForConnectors](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/connectorssearchevents/README.md#createviewedsearchresultseventforconnectors) - Event for Viewed Search Results Using Connectors
-
-#### [portal.escalation](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/escalation/README.md)
-
-* [startCustomerEscalation](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/escalation/README.md#startcustomerescalation) - Start Customer Escalation
-* [searchPriorToEscalation](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/escalation/README.md#searchpriortoescalation) - Search Prior To Customer Escalation
-* [completeCustomerEscalation](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/escalation/README.md#completecustomerescalation) - Complete Customer Escalation
-* [avertCustomerEscalation](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/escalation/README.md#avertcustomerescalation) - Avert Customer Escalation
 
 #### [portal.export](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/export/README.md)
 
@@ -315,7 +301,7 @@ run();
 
 #### [portal.search](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/search/README.md)
 
-* [aiSearch](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/search/README.md#aisearch) - Get the best search results for a user query
+* [aiSearch](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/search/README.md#aisearch) - Hybrid Search
 
 #### [portal.suggestion](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md)
 
@@ -349,6 +335,11 @@ run();
 * [getAllUserProfiles](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/userprofile/README.md#getalluserprofiles) - Get All User Profiles Assigned to User
 * [selectUserProfile](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/userprofile/README.md#selectuserprofile) - Select User Profile
 
+### [prompt](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/prompt/README.md)
+
+* [getPromptTemplates](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/prompt/README.md#getprompttemplates) - Get Prompt Templates
+* [getPromptTemplateById](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/prompt/README.md#getprompttemplatebyid) - Get Prompt Template By ID
+
 </details>
 <!-- End Available Resources and Operations [operations] -->
 
@@ -367,12 +358,13 @@ To read more about standalone functions, check [FUNCTIONS.md](https://github.com
 
 <summary>Available standalone functions</summary>
 
-- [`aiservicesAnswersGetBestAnswer`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/answers/README.md#getbestanswer) - Get the best answer for a user query
+- [`aiservicesAnswersGetBestAnswer`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/answers/README.md#getbestanswer) - Generate an Answer
+- [`aiservicesPromptExecutePrompt`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/aiservicesprompt/README.md#executeprompt) - Execute a predefined prompt
 - [`aiservicesRetrieveRetrieveChunks`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/retrieve/README.md#retrievechunks) - Retrieve Chunks
-- [`contentImportCancelImport`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#cancelimport) - Cancel an import or validation job
-- [`contentImportCreateImportJob`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportjob) - Import content from external sources by creating an import job
-- [`contentImportCreateImportValidationJob`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportvalidationjob) - Validate content structure and format before import by creating an import validation job
-- [`contentImportGetImportStatus`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#getimportstatus) - Get the current status of an import or validation job
+- [`contentImportCancelImport`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#cancelimport) - Cancel Job
+- [`contentImportCreateImportJob`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportjob) - Create Import Job
+- [`contentImportCreateImportValidationJob`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportvalidationjob) - Create Validation Job
+- [`contentImportGetImportStatus`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#getimportstatus) - Get Job Status
 - [`portalArticleAddAsReference`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#addasreference) - Add as Reference
 - [`portalArticleAddToReply`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#addtoreply) - Add Article to Reply
 - [`portalArticleComplyArticle`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#complyarticle) - Comply With an Article
@@ -396,16 +388,11 @@ To read more about standalone functions, check [FUNCTIONS.md](https://github.com
 - [`portalArticleSubscribeArticle`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#subscribearticle) - Subscribe to an Article
 - [`portalArticleUnsubscribeArticle`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#unsubscribearticle) - Unsubscribe to an Article
 - [`portalAttachmentCreateSignedURL`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/attachment/README.md#createsignedurl) - Generate Signed URL to Upload API
-- [`portalAttachmentUploadAttachment`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/attachment/README.md#uploadattachment) - Upload Attachment
 - [`portalBookmarkAddbookmark`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/bookmark/README.md#addbookmark) - Add a Bookmark
 - [`portalBookmarkDeletebookmark`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/bookmark/README.md#deletebookmark) - Delete a Bookmark
 - [`portalBookmarkGetbookmark`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/bookmark/README.md#getbookmark) - Get All Bookmarks for a Portal
 - [`portalConnectorssearcheventsCreateSearchResultEventForConnectors`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/connectorssearchevents/README.md#createsearchresulteventforconnectors) - Event for Search Using Connectors
 - [`portalConnectorssearcheventsCreateViewedSearchResultsEventForConnectors`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/connectorssearchevents/README.md#createviewedsearchresultseventforconnectors) - Event for Viewed Search Results Using Connectors
-- [`portalEscalationAvertCustomerEscalation`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/escalation/README.md#avertcustomerescalation) - Avert Customer Escalation
-- [`portalEscalationCompleteCustomerEscalation`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/escalation/README.md#completecustomerescalation) - Complete Customer Escalation
-- [`portalEscalationSearchPriorToEscalation`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/escalation/README.md#searchpriortoescalation) - Search Prior To Customer Escalation
-- [`portalEscalationStartCustomerEscalation`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/escalation/README.md#startcustomerescalation) - Start Customer Escalation
 - [`portalExportExportContent`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/export/README.md#exportcontent) - Export Knowledge
 - [`portalExportExportStatus`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/export/README.md#exportstatus) - Get Export Job Status
 - [`portalFederatedsearcheventCreateFederatedSearchResultEvent`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/federatedsearchevent/README.md#createfederatedsearchresultevent) - Event For Viewed Federated Search Result
@@ -427,7 +414,7 @@ To read more about standalone functions, check [FUNCTIONS.md](https://github.com
 - [`portalGuidedhelpStartGHSearch`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/guidedhelp/README.md#startghsearch) - Start a Guided Help Search
 - [`portalGuidedhelpStepGHSearch`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/guidedhelp/README.md#stepghsearch) - Perform a Step in a Guided Help Search
 - [`portalPopulararticlesGetpopulararticles`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/populararticles/README.md#getpopulararticles) - Get Popular Articles
-- [`portalSearchAiSearch`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/search/README.md#aisearch) - Get the best search results for a user query
+- [`portalSearchAiSearch`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/search/README.md#aisearch) - Hybrid Search
 - [`portalSuggestionDeleteSuggestion`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md#deletesuggestion) - Delete a Suggestion
 - [`portalSuggestionGetRelatedArticlesForSuggestion`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md#getrelatedarticlesforsuggestion) - Get Related Articles for Suggestion
 - [`portalSuggestionGetSuggestion`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md#getsuggestion) - Get Suggestion by ID
@@ -445,44 +432,11 @@ To read more about standalone functions, check [FUNCTIONS.md](https://github.com
 - [`portalUsermilestonesGetUserMilestones`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/usermilestones/README.md#getusermilestones) - Get User Milestones
 - [`portalUserprofileGetAllUserProfiles`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/userprofile/README.md#getalluserprofiles) - Get All User Profiles Assigned to User
 - [`portalUserprofileSelectUserProfile`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/userprofile/README.md#selectuserprofile) - Select User Profile
+- [`promptGetPromptTemplateById`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/prompt/README.md#getprompttemplatebyid) - Get Prompt Template By ID
+- [`promptGetPromptTemplates`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/prompt/README.md#getprompttemplates) - Get Prompt Templates
 
 </details>
 <!-- End Standalone functions [standalone-funcs] -->
-
-<!-- Start File uploads [file-upload] -->
-## File uploads
-
-Certain SDK methods accept files as part of a multi-part request. It is possible and typically recommended to upload files as a stream rather than reading the entire contents into memory. This avoids excessive memory consumption and potentially crashing with out-of-memory errors when working with very large files. The following example demonstrates how to attach a file stream to a request.
-
-> [!TIP]
->
-> Depending on your JavaScript runtime, there are convenient utilities that return a handle to a file without reading the entire contents into memory:
->
-> - **Node.js v20+:** Since v20, Node.js comes with a native `openAsBlob` function in [`node:fs`](https://nodejs.org/docs/latest-v20.x/api/fs.html#fsopenasblobpath-options).
-> - **Bun:** The native [`Bun.file`](https://bun.sh/docs/api/file-io#reading-files-bun-file) function produces a file handle that can be used for streaming file uploads.
-> - **Browsers:** All supported browsers return an instance to a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File) when reading the value from an `<input type="file">` element.
-> - **Node.js v18:** A file stream can be created using the `fileFrom` helper from [`fetch-blob/from.js`](https://www.npmjs.com/package/fetch-blob).
-
-```typescript
-import { Egain } from "@egain/egain-api-typescript";
-import { openAsBlob } from "node:fs";
-
-const egain = new Egain({
-  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
-});
-
-async function run() {
-  await egain.portal.attachment.uploadAttachment({
-    acceptLanguage: "en-US",
-    signature: "<value>",
-    requestBody: await openAsBlob("example.file"),
-  });
-}
-
-run();
-
-```
-<!-- End File uploads [file-upload] -->
 
 <!-- Start Retries [retries] -->
 ## Retries
@@ -498,24 +452,12 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.aiservices.retrieve.retrieveChunks({
-    q: "fair lending",
-    portalID: "PROD-1000",
-    filterUserProfileID: "PROD-3210",
-    language: "en-US",
-    filterTags: {
-      "PROD-1234": [
-        "PROD-2000",
-        "PROD-2003",
-      ],
-      "PROD-2005": [
-        "PROD-2007",
-      ],
-    },
-    retrieveRequest: {
-      channel: {
-        name: "Eight Bank Website",
-      },
+  const result = await egain.aiservices.prompt.executePrompt({
+    promptId: "<id>",
+    executePrompt: {
+      department: "Service",
+      languageCode: "en-US",
+      clientSessionId: "123e4567-e89b-12d3-a456-426614174000",
     },
   }, {
     retries: {
@@ -556,24 +498,12 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.aiservices.retrieve.retrieveChunks({
-    q: "fair lending",
-    portalID: "PROD-1000",
-    filterUserProfileID: "PROD-3210",
-    language: "en-US",
-    filterTags: {
-      "PROD-1234": [
-        "PROD-2000",
-        "PROD-2003",
-      ],
-      "PROD-2005": [
-        "PROD-2007",
-      ],
-    },
-    retrieveRequest: {
-      channel: {
-        name: "Eight Bank Website",
-      },
+  const result = await egain.aiservices.prompt.executePrompt({
+    promptId: "<id>",
+    executePrompt: {
+      department: "Service",
+      languageCode: "en-US",
+      clientSessionId: "123e4567-e89b-12d3-a456-426614174000",
     },
   });
 
@@ -588,7 +518,7 @@ run();
 <!-- Start Error Handling [errors] -->
 ## Error Handling
 
-[`EgainError`](./src/models/errors/egainerror.ts) is the base class for all HTTP error responses. It has the following properties:
+[`EgainError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/egainerror.ts) is the base class for all HTTP error responses. It has the following properties:
 
 | Property            | Type       | Description                                                                             |
 | ------------------- | ---------- | --------------------------------------------------------------------------------------- |
@@ -610,16 +540,12 @@ const egain = new Egain({
 
 async function run() {
   try {
-    const result = await egain.content.import.createImportJob({
-      dataSource: {
-        type: "AWS S3 bucket",
-        path: "s3://mybucket/myfolder/",
-        region: "us-east-1",
-        credentials: {},
-      },
-      operation: "import",
-      scheduleTime: {
-        date: new Date("2024-03-01T10:00:00.000Z"),
+    const result = await egain.aiservices.prompt.executePrompt({
+      promptId: "<id>",
+      executePrompt: {
+        department: "Service",
+        languageCode: "en-US",
+        clientSessionId: "123e4567-e89b-12d3-a456-426614174000",
       },
     });
 
@@ -633,11 +559,9 @@ async function run() {
       console.log(error.headers);
 
       // Depending on the method different errors may be thrown
-      if (error instanceof errors.WSErrorCommon) {
-        console.log(error.data$.code); // string
+      if (error instanceof errors.BadRequestError) {
+        console.log(error.data$.code); // number
         console.log(error.data$.developerMessage); // string
-        console.log(error.data$.details); // WSErrorCommonDetail[]
-        console.log(error.data$.userMessage); // string
       }
     }
   }
@@ -649,24 +573,25 @@ run();
 
 ### Error Classes
 **Primary errors:**
-* [`EgainError`](./src/models/errors/egainerror.ts): The base class for HTTP error responses.
-  * [`WSErrorCommon`](./src/models/errors/wserrorcommon.ts): Bad Request. *
+* [`EgainError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/egainerror.ts): The base class for HTTP error responses.
+  * [`WSErrorCommon`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/wserrorcommon.ts): Bad Request. *
 
-<details><summary>Less common errors (7)</summary>
+<details><summary>Less common errors (8)</summary>
 
 <br />
 
 **Network errors:**
-* [`ConnectionError`](./src/models/errors/httpclienterrors.ts): HTTP client was unable to make a request to a server.
-* [`RequestTimeoutError`](./src/models/errors/httpclienterrors.ts): HTTP request timed out due to an AbortSignal signal.
-* [`RequestAbortedError`](./src/models/errors/httpclienterrors.ts): HTTP request was aborted by the client.
-* [`InvalidRequestError`](./src/models/errors/httpclienterrors.ts): Any input used to create a request is invalid.
-* [`UnexpectedClientError`](./src/models/errors/httpclienterrors.ts): Unrecognised or unexpected error.
+* [`ConnectionError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/httpclienterrors.ts): HTTP client was unable to make a request to a server.
+* [`RequestTimeoutError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/httpclienterrors.ts): HTTP request timed out due to an AbortSignal signal.
+* [`RequestAbortedError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/httpclienterrors.ts): HTTP request was aborted by the client.
+* [`InvalidRequestError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/httpclienterrors.ts): Any input used to create a request is invalid.
+* [`UnexpectedClientError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/httpclienterrors.ts): Unrecognised or unexpected error.
 
 
-**Inherit from [`EgainError`](./src/models/errors/egainerror.ts)**:
-* [`SchemasWSErrorCommon`](./src/models/errors/schemaswserrorcommon.ts): Preconditions failed. Status code `412`. Applicable to 2 of 78 methods.*
-* [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
+**Inherit from [`EgainError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/egainerror.ts)**:
+* [`SchemasWSErrorCommon`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/schemaswserrorcommon.ts): Not acceptable. Applicable to 4 of 76 methods.*
+* [`BadRequestError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/badrequesterror.ts): Bad Request. Status code `400`. Applicable to 1 of 76 methods.*
+* [`ResponseValidationError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>
 
@@ -688,24 +613,12 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.aiservices.retrieve.retrieveChunks({
-    q: "fair lending",
-    portalID: "PROD-1000",
-    filterUserProfileID: "PROD-3210",
-    language: "en-US",
-    filterTags: {
-      "PROD-1234": [
-        "PROD-2000",
-        "PROD-2003",
-      ],
-      "PROD-2005": [
-        "PROD-2007",
-      ],
-    },
-    retrieveRequest: {
-      channel: {
-        name: "Eight Bank Website",
-      },
+  const result = await egain.aiservices.prompt.executePrompt({
+    promptId: "<id>",
+    executePrompt: {
+      department: "Service",
+      languageCode: "en-US",
+      clientSessionId: "123e4567-e89b-12d3-a456-426614174000",
     },
   });
 
@@ -727,24 +640,12 @@ const egain = new Egain({
 });
 
 async function run() {
-  const result = await egain.aiservices.retrieve.retrieveChunks({
-    q: "fair lending",
-    portalID: "PROD-1000",
-    filterUserProfileID: "PROD-3210",
-    language: "en-US",
-    filterTags: {
-      "PROD-1234": [
-        "PROD-2000",
-        "PROD-2003",
-      ],
-      "PROD-2005": [
-        "PROD-2007",
-      ],
-    },
-    retrieveRequest: {
-      channel: {
-        name: "Eight Bank Website",
-      },
+  const result = await egain.aiservices.prompt.executePrompt({
+    promptId: "<id>",
+    executePrompt: {
+      department: "Service",
+      languageCode: "en-US",
+      clientSessionId: "123e4567-e89b-12d3-a456-426614174000",
     },
   }, {
     serverURL: "https://api.aidev.egain.cloud/core/aiservices/v4",

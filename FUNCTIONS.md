@@ -30,9 +30,9 @@ const egain = new EgainCore({
 
 async function run() {
   const res = await aiservicesRetrieveRetrieveChunks(egain, {
-    q: "fair lending",
+    q: "What is a loan?",
     portalID: "PROD-1000",
-    filterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-1030",
     language: "en-US",
     filterTags: {
       "PROD-1234": [
@@ -47,6 +47,9 @@ async function run() {
       channel: {
         name: "Eight Bank Website",
       },
+      eventId: "6154589f-b43f-4471-b2c7-92c6c888a664",
+      clientSessionId: "6154589f-b43f-4471-b2c7-92c6c888a643",
+      sessionId: "6154589f-b43f-4471-b2c7-92c6c888a689",
     },
   });
   if (res.ok) {

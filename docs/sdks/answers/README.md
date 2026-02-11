@@ -5,7 +5,7 @@
 
 ### Available Operations
 
-* [getBestAnswer](#getbestanswer) - Get the best answer for a user query
+* [getBestAnswer](#getbestanswer) - Generate an Answer
 
 ## getBestAnswer
 
@@ -13,7 +13,7 @@ The **Answers API** allows enterprises to deliver fast, accurate, and contextual
   - **Certified Answers**: Direct snippets retrieved from enterprise-authored content.
   - **Generative Answers**: Natural language responses synthesized by a large language model (LLM).
 
-Every response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments. <br>**This endpoint is only available for Self Service environments.**
+Every response includes supporting search results, references, and confidence scores—ensuring transparency, trust, and traceability. The API is built for secure, scalable integration across enterprise environments.
 
 
 ### Example Usage
@@ -28,9 +28,9 @@ const egain = new Egain({
 
 async function run() {
   const result = await egain.aiservices.answers.getBestAnswer({
-    q: "fair lending",
+    q: "What is a loan?",
     portalID: "PROD-1000",
-    filterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-1030",
     language: "en-US",
     filterTags: {
       "PROD-1234": [
@@ -40,6 +40,14 @@ async function run() {
       "PROD-2005": [
         "PROD-2007",
       ],
+    },
+    answersRequest: {
+      channel: {
+        name: "Eight Bank Website",
+      },
+      eventId: "6154589f-b43f-4471-b2c7-92c6c888a664",
+      clientSessionId: "6154589f-b43f-4471-b2c7-92c6c888a643",
+      sessionId: "6154589f-b43f-4471-b2c7-92c6c888a689",
     },
   });
 
@@ -65,9 +73,9 @@ const egain = new EgainCore({
 
 async function run() {
   const res = await aiservicesAnswersGetBestAnswer(egain, {
-    q: "fair lending",
+    q: "What is a loan?",
     portalID: "PROD-1000",
-    filterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-1030",
     language: "en-US",
     filterTags: {
       "PROD-1234": [
@@ -77,6 +85,14 @@ async function run() {
       "PROD-2005": [
         "PROD-2007",
       ],
+    },
+    answersRequest: {
+      channel: {
+        name: "Eight Bank Website",
+      },
+      eventId: "6154589f-b43f-4471-b2c7-92c6c888a664",
+      clientSessionId: "6154589f-b43f-4471-b2c7-92c6c888a643",
+      sessionId: "6154589f-b43f-4471-b2c7-92c6c888a689",
     },
   });
   if (res.ok) {

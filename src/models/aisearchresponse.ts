@@ -6,6 +6,12 @@ import * as z from "zod";
 import { safeParse } from "../lib/schemas.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import {
+  AISPaginationInfo,
+  AISPaginationInfo$inboundSchema,
+  AISPaginationInfo$Outbound,
+  AISPaginationInfo$outboundSchema,
+} from "./aispaginationinfo.js";
+import {
   ArticleAISearchResult,
   ArticleAISearchResult$inboundSchema,
   ArticleAISearchResult$Outbound,
@@ -25,6 +31,7 @@ export type AISearchResponse = {
    * Top search results with relevance scores
    */
   searchResults: SearchResults;
+  paginationInfo?: AISPaginationInfo | undefined;
 };
 
 /** @internal */
@@ -84,11 +91,13 @@ export const AISearchResponse$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   searchResults: z.lazy(() => SearchResults$inboundSchema),
+  paginationInfo: AISPaginationInfo$inboundSchema.optional(),
 });
 
 /** @internal */
 export type AISearchResponse$Outbound = {
   searchResults: SearchResults$Outbound;
+  paginationInfo?: AISPaginationInfo$Outbound | undefined;
 };
 
 /** @internal */
@@ -98,6 +107,7 @@ export const AISearchResponse$outboundSchema: z.ZodType<
   AISearchResponse
 > = z.object({
   searchResults: z.lazy(() => SearchResults$outboundSchema),
+  paginationInfo: AISPaginationInfo$outboundSchema.optional(),
 });
 
 /**

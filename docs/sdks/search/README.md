@@ -5,11 +5,11 @@
 
 ### Available Operations
 
-* [aiSearch](#aisearch) - Get the best search results for a user query
+* [aiSearch](#aisearch) - Hybrid Search
 
 ## aiSearch
 
-The Search API is a hybrid search service that combines semantic understanding with keyword precision to deliver fast, contextual, and relevant results from your enterprise knowledge base. It enables secure, role-aware access to articles, FAQs, and documentation across customer, agent, and employee interfaces. Each query returns a ranked list of results with snippets, metadata, and relevance scores. <br>**This endpoint is only available for Self Service environments.**
+The Search API is a hybrid search service that combines semantic understanding with keyword precision to deliver fast, contextual, and relevant results from your enterprise knowledge base. It enables secure, role-aware access to articles, FAQs, and documentation across customer, agent, and employee interfaces. Each query returns a ranked list of results with snippets, metadata, and relevance scores.
 
 
 ### Example Usage
@@ -24,9 +24,9 @@ const egain = new Egain({
 
 async function run() {
   const result = await egain.portal.search.aiSearch({
-    q: "fair lending",
+    q: "What is a loan?",
     portalID: "PROD-1000",
-    filterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-1030",
     language: "en-US",
     filterTags: {
       "PROD-1234": [
@@ -64,9 +64,9 @@ const egain = new EgainCore({
 
 async function run() {
   const res = await portalSearchAiSearch(egain, {
-    q: "fair lending",
+    q: "What is a loan?",
     portalID: "PROD-1000",
-    filterUserProfileID: "PROD-3210",
+    filterUserProfileID: "PROD-1030",
     language: "en-US",
     filterTags: {
       "PROD-1234": [
@@ -109,4 +109,6 @@ run();
 
 | Error Type               | Status Code              | Content Type             |
 | ------------------------ | ------------------------ | ------------------------ |
+| errors.WSErrorCommon     | 400, 401, 403, 404, 406  | application/json         |
+| errors.WSErrorCommon     | 500                      | application/json         |
 | errors.EgainDefaultError | 4XX, 5XX                 | \*/\*                    |

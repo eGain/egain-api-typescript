@@ -47,6 +47,9 @@ import { Result } from "../types/fp.js";
  *
  * ## Permission
  *   * Only a client application can invoke this API.
+ *
+ * ## License
+ *   * This API requires a site license (SKU: EG-CL-RTKA-PT).
  */
 export function portalExportExportStatus(
   client: EgainCore,

@@ -56,10 +56,22 @@ export const CreateSuggestionCode = {
   DaDK: "da-DK",
   SvSE: "sv-SE",
   RURU: "ru-RU",
-  FrCA: "fr-CA",
   ZhCN: "zh-CN",
   JaJP: "ja-JP",
   KoKR: "ko-KR",
+  DeAT: "de-AT",
+  THTH: "th-TH",
+  ViVN: "vi-VN",
+  IDID: "id-ID",
+  MsMY: "ms-MY",
+  FilPH: "fil-PH",
+  FrCA: "fr-CA",
+  HiIN: "hi-IN",
+  UkUA: "uk-UA",
+  BGBG: "bg-BG",
+  SKSK: "sk-SK",
+  SlSI: "sl-SI",
+  SrRS: "sr-RS",
 } as const;
 /**
  * The code of the language.

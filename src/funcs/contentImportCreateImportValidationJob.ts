@@ -28,7 +28,7 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Validate content structure and format before import by creating an import validation job
+ * Create Validation Job
  *
  * @remarks
  * # Validate Import Content
@@ -67,11 +67,6 @@ import { Result } from "../types/fp.js";
  * - **Fix Issues**: Address validation errors before proceeding with import
  * - **Test Small Batches**: Validate with small content samples first
  * - **Iterate**: Use validation feedback to improve content quality
- *
- * ## Permissions
- * | Actor | Permission |
- * | ------- | --------|
- * | User |<ul><li>User must be a department user.</li><li>User must have 'Author' role.</li><li>Content can only be imported if the user has all the required languages assigned.</li></ul>|
  */
 export function contentImportCreateImportValidationJob(
   client: EgainCore,
@@ -211,8 +206,8 @@ async function $do(
       operations.CreateImportValidationJobResponse$inboundSchema.optional(),
       { hdrs: true },
     ),
-    M.jsonErr([400, 401, 403, 406], errors.WSErrorCommon$inboundSchema),
-    M.jsonErr(412, errors.SchemasWSErrorCommon$inboundSchema),
+    M.jsonErr([400, 401, 403], errors.WSErrorCommon$inboundSchema),
+    M.jsonErr([406, 412], errors.SchemasWSErrorCommon$inboundSchema),
     M.jsonErr(500, errors.WSErrorCommon$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

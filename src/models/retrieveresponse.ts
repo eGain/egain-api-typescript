@@ -50,7 +50,9 @@ export type RetrieveResponseAnswer = {
    */
   answerType: RetrieveResponseAnswerType;
   /**
-   * Confidence score (0.0-1.0) reflecting how well the answer matches the query.
+   * Query-specific relevance score (0.0-1.0) that reflects how well the result matches the user query. It represents a direct relevance comparison between the query and the returned snippet.
+   *
+   * @remarks
    */
   relevanceScore: number;
 };
@@ -93,7 +95,11 @@ export type RetrieveResponse = {
    */
   eventId?: string | undefined;
   /**
-   * ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
+   * Session ID passed by the client for this specific API call or event.
+   */
+  clientSessionId?: string | undefined;
+  /**
+   * eGain Session ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
    */
   sessionId: string;
 };
@@ -270,6 +276,7 @@ export const RetrieveResponse$inboundSchema: z.ZodType<
   searchResults: z.array(SearchResult$inboundSchema),
   channel: z.lazy(() => RetrieveResponseChannel$inboundSchema).optional(),
   eventId: z.string().optional(),
+  clientSessionId: z.string().optional(),
   sessionId: z.string(),
 });
 
@@ -279,6 +286,7 @@ export type RetrieveResponse$Outbound = {
   searchResults: Array<SearchResult$Outbound>;
   channel?: RetrieveResponseChannel$Outbound | undefined;
   eventId?: string | undefined;
+  clientSessionId?: string | undefined;
   sessionId: string;
 };
 
@@ -292,6 +300,7 @@ export const RetrieveResponse$outboundSchema: z.ZodType<
   searchResults: z.array(SearchResult$outboundSchema),
   channel: z.lazy(() => RetrieveResponseChannel$outboundSchema).optional(),
   eventId: z.string().optional(),
+  clientSessionId: z.string().optional(),
   sessionId: z.string(),
 });
 

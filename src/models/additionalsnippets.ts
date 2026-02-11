@@ -52,7 +52,11 @@ export type AdditionalSnippets = {
   /**
    * Generated confidence score (0.0-1.0) for the snippet's relevance to the query.
    */
-  relevanceScore: number;
+  relevanceScore?: number | undefined;
+  /**
+   * Score (0.0-1.0) normalized across all results, where the top result is 1.0 and the lowest is 0.0.
+   */
+  normalizedScore: number;
 };
 
 /** @internal */
@@ -88,7 +92,8 @@ export const AdditionalSnippets$inboundSchema: z.ZodType<
   docName: z.string().optional(),
   snippet: z.string(),
   keywordSnippet: z.string().optional(),
-  relevanceScore: z.number(),
+  relevanceScore: z.number().optional(),
+  normalizedScore: z.number(),
 });
 
 /** @internal */
@@ -99,7 +104,8 @@ export type AdditionalSnippets$Outbound = {
   docName?: string | undefined;
   snippet: string;
   keywordSnippet?: string | undefined;
-  relevanceScore: number;
+  relevanceScore?: number | undefined;
+  normalizedScore: number;
 };
 
 /** @internal */
@@ -114,7 +120,8 @@ export const AdditionalSnippets$outboundSchema: z.ZodType<
   docName: z.string().optional(),
   snippet: z.string(),
   keywordSnippet: z.string().optional(),
-  relevanceScore: z.number(),
+  relevanceScore: z.number().optional(),
+  normalizedScore: z.number(),
 });
 
 /**

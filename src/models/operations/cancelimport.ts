@@ -10,9 +10,9 @@ import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export const CancelImportServerList = [
   /**
-   * Production Server - Try it Out does not function
+   * Production Server
    */
-  "http://nop",
+  "https://api.aidev.egain.cloud//knowledge/contentmgr/v4",
 ] as const;
 
 export type CancelImportRequest = {

@@ -13,5 +13,5 @@ let value: DestinationType = "AWS S3 bucket";
 ## Values
 
 ```typescript
-"AWS S3 bucket" | "Shared file path"
+"AWS S3 bucket"
 ```

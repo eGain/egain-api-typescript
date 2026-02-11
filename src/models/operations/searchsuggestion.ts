@@ -42,7 +42,7 @@ export type SearchSuggestionRequest = {
    */
   sort?: models.SortIdName | undefined;
   /**
-   * Common query parameter $order.
+   * Common query parameter $order.<br>_Default value_: asc
    */
   order?: models.Order | undefined;
   /**

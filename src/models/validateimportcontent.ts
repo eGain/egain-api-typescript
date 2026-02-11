@@ -6,6 +6,12 @@ import * as z from "zod";
 import { safeParse } from "../lib/schemas.js";
 import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
+import {
+  DataSourceCredentials,
+  DataSourceCredentials$inboundSchema,
+  DataSourceCredentials$Outbound,
+  DataSourceCredentials$outboundSchema,
+} from "./datasourcecredentials.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 /**
@@ -22,11 +28,6 @@ export type ValidateImportContentType = ClosedEnum<
   typeof ValidateImportContentType
 >;
 
-export type ValidateImportContentCredentials = {
-  accessKey?: string | undefined;
-  secretKey?: string | undefined;
-};
-
 export type ValidateImportContentDataSource = {
   /**
    * Type of data source
@@ -40,7 +41,7 @@ export type ValidateImportContentDataSource = {
    * Region of the data source
    */
   region?: string | undefined;
-  credentials?: ValidateImportContentCredentials | undefined;
+  credentials?: DataSourceCredentials | undefined;
 };
 
 export type ValidateImportContent = {
@@ -69,65 +70,6 @@ export namespace ValidateImportContentType$ {
 }
 
 /** @internal */
-export const ValidateImportContentCredentials$inboundSchema: z.ZodType<
-  ValidateImportContentCredentials,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  accessKey: z.string().optional(),
-  secretKey: z.string().optional(),
-});
-
-/** @internal */
-export type ValidateImportContentCredentials$Outbound = {
-  accessKey?: string | undefined;
-  secretKey?: string | undefined;
-};
-
-/** @internal */
-export const ValidateImportContentCredentials$outboundSchema: z.ZodType<
-  ValidateImportContentCredentials$Outbound,
-  z.ZodTypeDef,
-  ValidateImportContentCredentials
-> = z.object({
-  accessKey: z.string().optional(),
-  secretKey: z.string().optional(),
-});
-
-/**
- * @internal
- * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
- */
-export namespace ValidateImportContentCredentials$ {
-  /** @deprecated use `ValidateImportContentCredentials$inboundSchema` instead. */
-  export const inboundSchema = ValidateImportContentCredentials$inboundSchema;
-  /** @deprecated use `ValidateImportContentCredentials$outboundSchema` instead. */
-  export const outboundSchema = ValidateImportContentCredentials$outboundSchema;
-  /** @deprecated use `ValidateImportContentCredentials$Outbound` instead. */
-  export type Outbound = ValidateImportContentCredentials$Outbound;
-}
-
-export function validateImportContentCredentialsToJSON(
-  validateImportContentCredentials: ValidateImportContentCredentials,
-): string {
-  return JSON.stringify(
-    ValidateImportContentCredentials$outboundSchema.parse(
-      validateImportContentCredentials,
-    ),
-  );
-}
-
-export function validateImportContentCredentialsFromJSON(
-  jsonString: string,
-): SafeParseResult<ValidateImportContentCredentials, SDKValidationError> {
-  return safeParse(
-    jsonString,
-    (x) => ValidateImportContentCredentials$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'ValidateImportContentCredentials' from JSON`,
-  );
-}
-
-/** @internal */
 export const ValidateImportContentDataSource$inboundSchema: z.ZodType<
   ValidateImportContentDataSource,
   z.ZodTypeDef,
@@ -136,8 +78,7 @@ export const ValidateImportContentDataSource$inboundSchema: z.ZodType<
   type: ValidateImportContentType$inboundSchema,
   path: z.string(),
   region: z.string().optional(),
-  credentials: z.lazy(() => ValidateImportContentCredentials$inboundSchema)
-    .optional(),
+  credentials: DataSourceCredentials$inboundSchema.optional(),
 });
 
 /** @internal */
@@ -145,7 +86,7 @@ export type ValidateImportContentDataSource$Outbound = {
   type: string;
   path: string;
   region?: string | undefined;
-  credentials?: ValidateImportContentCredentials$Outbound | undefined;
+  credentials?: DataSourceCredentials$Outbound | undefined;
 };
 
 /** @internal */
@@ -157,8 +98,7 @@ export const ValidateImportContentDataSource$outboundSchema: z.ZodType<
   type: ValidateImportContentType$outboundSchema,
   path: z.string(),
   region: z.string().optional(),
-  credentials: z.lazy(() => ValidateImportContentCredentials$outboundSchema)
-    .optional(),
+  credentials: DataSourceCredentials$outboundSchema.optional(),
 });
 
 /**

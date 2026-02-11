@@ -3,7 +3,6 @@
  */
 
 import { portalAttachmentCreateSignedURL } from "../funcs/portalAttachmentCreateSignedURL.js";
-import { portalAttachmentUploadAttachment } from "../funcs/portalAttachmentUploadAttachment.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as models from "../models/index.js";
 import * as operations from "../models/operations/index.js";
@@ -22,25 +21,6 @@ export class Attachment extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.Attachment> {
     return unwrapAsync(portalAttachmentCreateSignedURL(
-      this,
-      request,
-      options,
-    ));
-  }
-
-  /**
-   * Upload Attachment
-   *
-   * @remarks
-   * ## Overview
-   *    The Upload Attachment API uses the signed URL produced by the Generate Signed URL to Upload API to upload an attachment.
-   *    The Make a Suggestion API uses this API to upload attachments.
-   */
-  async uploadAttachment(
-    request: operations.UploadAttachmentRequest,
-    options?: RequestOptions,
-  ): Promise<void> {
-    return unwrapAsync(portalAttachmentUploadAttachment(
       this,
       request,
       options,

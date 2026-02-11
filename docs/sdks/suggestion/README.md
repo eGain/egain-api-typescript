@@ -234,6 +234,8 @@ async function run() {
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
     filterStatus: "suggested",
+    sort: "id",
+    order: "asc",
   });
 
   console.log(result);
@@ -261,6 +263,8 @@ async function run() {
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
     filterStatus: "suggested",
+    sort: "id",
+    order: "asc",
   });
   if (res.ok) {
     const { value: result } = res;

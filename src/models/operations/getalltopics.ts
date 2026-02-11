@@ -19,6 +19,10 @@ export type GetalltopicsRequest = {
    */
   portalID: string;
   /**
+   * Search Profile ID
+   */
+  searchProfileId?: string | undefined;
+  /**
    * Depth of the topic hierarchy to be returned in the response.
    */
   level?: number | undefined;
@@ -72,6 +76,7 @@ export const GetalltopicsRequest$inboundSchema: z.ZodType<
 > = z.object({
   "Accept-Language": models.AcceptLanguage$inboundSchema,
   portalID: z.string(),
+  searchProfileId: z.string().optional(),
   level: z.number().int().optional(),
   language: models.LanguageQueryParameter$inboundSchema.optional(),
   topicAdditionalAttributes: z.array(
@@ -90,6 +95,7 @@ export const GetalltopicsRequest$inboundSchema: z.ZodType<
 export type GetalltopicsRequest$Outbound = {
   "Accept-Language": string;
   portalID: string;
+  searchProfileId?: string | undefined;
   level?: number | undefined;
   language?: string | undefined;
   topicAdditionalAttributes?: Array<string> | undefined;
@@ -106,6 +112,7 @@ export const GetalltopicsRequest$outboundSchema: z.ZodType<
 > = z.object({
   acceptLanguage: models.AcceptLanguage$outboundSchema,
   portalID: z.string(),
+  searchProfileId: z.string().optional(),
   level: z.number().int().optional(),
   language: models.LanguageQueryParameter$outboundSchema.optional(),
   topicAdditionalAttributes: z.array(

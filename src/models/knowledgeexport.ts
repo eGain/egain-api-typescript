@@ -68,14 +68,13 @@ export type ResourceType = ClosedEnum<typeof ResourceType>;
  */
 export const DestinationType = {
   AWSS3Bucket: "AWS S3 bucket",
-  SharedFilePath: "Shared file path",
 } as const;
 /**
  * Type of data destination
  */
 export type DestinationType = ClosedEnum<typeof DestinationType>;
 
-export type KnowledgeExportCredentials = {
+export type Credentials = {
   accessKey?: string | undefined;
   secretKey?: string | undefined;
 };
@@ -86,14 +85,14 @@ export type DataDestination = {
    */
   destinationType: DestinationType;
   /**
-   * Path of the data destination
+   * Path of the data destination. For S3 bucket, it can be root or a folder.
    */
   path: string;
   /**
    * Region of the data destination
    */
   region?: string | undefined;
-  credentials?: KnowledgeExportCredentials | undefined;
+  credentials?: Credentials | undefined;
 };
 
 export type KnowledgeExport = {
@@ -110,12 +109,14 @@ export type KnowledgeExport = {
    */
   language: KnowledgeExportLanguage;
   /**
-   * Types of Knowledge Hub resources to export. Multiple values can be specified using a comma-separated list. Details of a single portal are exported.
+   * Types of Knowledge Hub resources to export. Multiple values can be specified using a comma-separated list: {articles, topics, portals, all}.
    *
    * @remarks
+   * Details of a single portal are exported.
    * Articles whose state is Published are returned.
-   * | Portal Attribute Name | Description
-   * | ------------------------------- | -----------
+   *
+   * Portal Attribute Name | Description
+   * ------------------------------- | -----------
    * | id | The ID of the Portal in Readable format.
    * | alternateId | The system-generated ID of the Portal in long format.
    * | name  | The name of the Portal.
@@ -158,6 +159,7 @@ export type KnowledgeExport = {
    * | averageRating | Average rating of the Article.
    * | timesRated | Number or times the Article was rated.
    * | availabilityDate | The date the Article is set to be available.
+   * | modifiedDate | The date that the Article was last modified on.
    * | articleMacro | The macro of the Article.
    * | content | path to the Article content in .html format.
    * | customAttributes | One or more comma-separated names for Article custom attributes defined by the user to be returned.
@@ -305,8 +307,8 @@ export namespace DestinationType$ {
 }
 
 /** @internal */
-export const KnowledgeExportCredentials$inboundSchema: z.ZodType<
-  KnowledgeExportCredentials,
+export const Credentials$inboundSchema: z.ZodType<
+  Credentials,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -315,16 +317,16 @@ export const KnowledgeExportCredentials$inboundSchema: z.ZodType<
 });
 
 /** @internal */
-export type KnowledgeExportCredentials$Outbound = {
+export type Credentials$Outbound = {
   accessKey?: string | undefined;
   secretKey?: string | undefined;
 };
 
 /** @internal */
-export const KnowledgeExportCredentials$outboundSchema: z.ZodType<
-  KnowledgeExportCredentials$Outbound,
+export const Credentials$outboundSchema: z.ZodType<
+  Credentials$Outbound,
   z.ZodTypeDef,
-  KnowledgeExportCredentials
+  Credentials
 > = z.object({
   accessKey: z.string().optional(),
   secretKey: z.string().optional(),
@@ -334,30 +336,26 @@ export const KnowledgeExportCredentials$outboundSchema: z.ZodType<
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace KnowledgeExportCredentials$ {
-  /** @deprecated use `KnowledgeExportCredentials$inboundSchema` instead. */
-  export const inboundSchema = KnowledgeExportCredentials$inboundSchema;
-  /** @deprecated use `KnowledgeExportCredentials$outboundSchema` instead. */
-  export const outboundSchema = KnowledgeExportCredentials$outboundSchema;
-  /** @deprecated use `KnowledgeExportCredentials$Outbound` instead. */
-  export type Outbound = KnowledgeExportCredentials$Outbound;
+export namespace Credentials$ {
+  /** @deprecated use `Credentials$inboundSchema` instead. */
+  export const inboundSchema = Credentials$inboundSchema;
+  /** @deprecated use `Credentials$outboundSchema` instead. */
+  export const outboundSchema = Credentials$outboundSchema;
+  /** @deprecated use `Credentials$Outbound` instead. */
+  export type Outbound = Credentials$Outbound;
 }
 
-export function knowledgeExportCredentialsToJSON(
-  knowledgeExportCredentials: KnowledgeExportCredentials,
-): string {
-  return JSON.stringify(
-    KnowledgeExportCredentials$outboundSchema.parse(knowledgeExportCredentials),
-  );
+export function credentialsToJSON(credentials: Credentials): string {
+  return JSON.stringify(Credentials$outboundSchema.parse(credentials));
 }
 
-export function knowledgeExportCredentialsFromJSON(
+export function credentialsFromJSON(
   jsonString: string,
-): SafeParseResult<KnowledgeExportCredentials, SDKValidationError> {
+): SafeParseResult<Credentials, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => KnowledgeExportCredentials$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'KnowledgeExportCredentials' from JSON`,
+    (x) => Credentials$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Credentials' from JSON`,
   );
 }
 
@@ -370,8 +368,7 @@ export const DataDestination$inboundSchema: z.ZodType<
   destinationType: DestinationType$inboundSchema,
   path: z.string(),
   region: z.string().optional(),
-  credentials: z.lazy(() => KnowledgeExportCredentials$inboundSchema)
-    .optional(),
+  credentials: z.lazy(() => Credentials$inboundSchema).optional(),
 });
 
 /** @internal */
@@ -379,7 +376,7 @@ export type DataDestination$Outbound = {
   destinationType: string;
   path: string;
   region?: string | undefined;
-  credentials?: KnowledgeExportCredentials$Outbound | undefined;
+  credentials?: Credentials$Outbound | undefined;
 };
 
 /** @internal */
@@ -391,8 +388,7 @@ export const DataDestination$outboundSchema: z.ZodType<
   destinationType: DestinationType$outboundSchema,
   path: z.string(),
   region: z.string().optional(),
-  credentials: z.lazy(() => KnowledgeExportCredentials$outboundSchema)
-    .optional(),
+  credentials: z.lazy(() => Credentials$outboundSchema).optional(),
 });
 
 /**

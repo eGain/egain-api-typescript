@@ -8,7 +8,7 @@ The knowledge base language in which the Suggestion was created.
 import { SuggestionLanguage } from "@egain/egain-api-typescript/models";
 
 let value: SuggestionLanguage = {
-  code: "en-GB",
+  code: "es-ES",
 };
 ```
 

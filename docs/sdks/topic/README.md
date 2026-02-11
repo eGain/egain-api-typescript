@@ -299,6 +299,7 @@ async function run() {
   const result = await egain.portal.topic.getalltopics({
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
+    searchProfileId: "959500000204621",
     level: -1,
     language: "en-US",
     topicAdditionalAttributes: [
@@ -331,6 +332,7 @@ async function run() {
   const res = await portalTopicGetalltopics(egain, {
     acceptLanguage: "en-US",
     portalID: "PROD-1000",
+    searchProfileId: "959500000204621",
     level: -1,
     language: "en-US",
     topicAdditionalAttributes: [

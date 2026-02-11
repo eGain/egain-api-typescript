@@ -1,6 +1,6 @@
 # SchemasWSErrorCommon
 
-Preconditions failed
+Not acceptable
 
 ## Example Usage
 

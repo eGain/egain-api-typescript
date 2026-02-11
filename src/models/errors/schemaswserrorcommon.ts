@@ -7,7 +7,7 @@ import * as models from "../index.js";
 import { EgainError } from "./egainerror.js";
 
 /**
- * Preconditions failed
+ * Not acceptable
  */
 export type SchemasWSErrorCommonData = {
   /**
@@ -32,7 +32,7 @@ export type SchemasWSErrorCommonData = {
 };
 
 /**
- * Preconditions failed
+ * Not acceptable
  */
 export class SchemasWSErrorCommon extends EgainError {
   /**

@@ -5,7 +5,7 @@
 ```typescript
 import { SnippetType } from "@egain/egain-api-typescript/models";
 
-let value: SnippetType = "chunks";
+let value: SnippetType = "articleContent";
 ```
 
 ## Values

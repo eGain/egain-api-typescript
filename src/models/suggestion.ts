@@ -62,10 +62,22 @@ export const SuggestionCode = {
   DaDK: "da-DK",
   SvSE: "sv-SE",
   RURU: "ru-RU",
-  FrCA: "fr-CA",
   ZhCN: "zh-CN",
   JaJP: "ja-JP",
   KoKR: "ko-KR",
+  DeAT: "de-AT",
+  THTH: "th-TH",
+  ViVN: "vi-VN",
+  IDID: "id-ID",
+  MsMY: "ms-MY",
+  FilPH: "fil-PH",
+  FrCA: "fr-CA",
+  HiIN: "hi-IN",
+  UkUA: "uk-UA",
+  BGBG: "bg-BG",
+  SKSK: "sk-SK",
+  SlSI: "sl-SI",
+  SrRS: "sr-RS",
 } as const;
 /**
  * The language that describes the details of the resource. Resources available in different languages may differ from each other.
@@ -89,6 +101,17 @@ export const Label = {
   Chinese: "Chinese",
   Japanese: "Japanese",
   Korean: "Korean",
+  Thai: "Thai",
+  Vietnamese: "Vietnamese",
+  Indonesian: "Indonesian",
+  Malay: "Malay",
+  Filipino: "Filipino",
+  Hindi: "Hindi",
+  Ukrainian: "Ukrainian",
+  Bulgarian: "Bulgarian",
+  Slovak: "Slovak",
+  Slovene: "Slovene",
+  Serbian: "Serbian",
 } as const;
 /**
  * The name of the language.

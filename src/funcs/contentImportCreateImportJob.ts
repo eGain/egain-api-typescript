@@ -28,7 +28,7 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Import content from external sources by creating an import job
+ * Create Import Job
  *
  * @remarks
  * # Import Content
@@ -45,6 +45,8 @@ import { Result } from "../types/fp.js";
  * 3. **Status Monitoring**: Use the job ID to monitor progress via the Status API
  * 4. **Completion**: Job completes when all content is processed or errors occur
  *
+ * **Note:** After a successful import, please allow for a brief delay before the content is fully available for use. The system's search service synchronizes all new and updated content every 30 minutes.
+ *
  * ## Supported Operations
  * - **Import**: Add new content to the knowledge base
  * - **Update**: Modify existing content
@@ -54,14 +56,9 @@ import { Result } from "../types/fp.js";
  * - Shared file path
  *
  * ## Best Practices
- * - **Scheduling**: Use scheduleTime for off-peak imports to minimize system impact
+ * - **Scheduling**: Use scheduleTime for off-peak imports to minimize system impact.  Please note that jobs can only be scheduled for a maximum of 7 days from the current date and time.
  * - **Monitoring**: Regularly check job status and logs for any issues
  * - **Error Handling**: Review failed items and retry with corrections
- *
- * ## Permissions
- * | Actor | Permission |
- * | ------- | --------|
- * | User |<ul><li>User must be a department user.</li><li>Content can only be imported in user's home department.</li><li>User must have 'Author' role.</li><li>Content can only be imported if the user has all the required languages assigned.</li></ul>|
  */
 export function contentImportCreateImportJob(
   client: EgainCore,
@@ -197,8 +194,8 @@ async function $do(
     M.nil(202, operations.CreateImportJobResponse$inboundSchema.optional(), {
       hdrs: true,
     }),
-    M.jsonErr([400, 401, 403, 406], errors.WSErrorCommon$inboundSchema),
-    M.jsonErr(412, errors.SchemasWSErrorCommon$inboundSchema),
+    M.jsonErr([400, 401, 403], errors.WSErrorCommon$inboundSchema),
+    M.jsonErr([406, 412], errors.SchemasWSErrorCommon$inboundSchema),
     M.jsonErr(500, errors.WSErrorCommon$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

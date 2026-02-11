@@ -36,6 +36,17 @@ export const LanguageCodeParameter = {
   HRHR: "hr-HR",
   RORO: "ro-RO",
   THTH: "th-TH",
+  DeAT: "de-AT",
+  ViVN: "vi-VN",
+  IDID: "id-ID",
+  MsMY: "ms-MY",
+  FilPH: "fil-PH",
+  FrCA: "fr-CA",
+  HiIN: "hi-IN",
+  UkUA: "uk-UA",
+  BGBG: "bg-BG",
+  SlSI: "sl-SI",
+  SrRS: "sr-RS",
   XXXX: "xx-XX",
 } as const;
 export type LanguageCodeParameter = ClosedEnum<typeof LanguageCodeParameter>;

@@ -7,7 +7,7 @@ Source Type
 ```typescript
 import { ReferenceResponseSource } from "@egain/egain-api-typescript/models";
 
-let value: ReferenceResponseSource = "eGain Article";
+let value: ReferenceResponseSource = "eGain Attachment";
 ```
 
 ## Values

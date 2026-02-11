@@ -10,15 +10,15 @@ import { unwrapAsync } from "../types/fp.js";
 
 export class Search extends ClientSDK {
   /**
-   * Get the best search results for a user query
+   * Hybrid Search
    *
    * @remarks
-   * The Search API is a hybrid search service that combines semantic understanding with keyword precision to deliver fast, contextual, and relevant results from your enterprise knowledge base. It enables secure, role-aware access to articles, FAQs, and documentation across customer, agent, and employee interfaces. Each query returns a ranked list of results with snippets, metadata, and relevance scores. <br>**This endpoint is only available for Self Service environments.**
+   * The Search API is a hybrid search service that combines semantic understanding with keyword precision to deliver fast, contextual, and relevant results from your enterprise knowledge base. It enables secure, role-aware access to articles, FAQs, and documentation across customer, agent, and employee interfaces. Each query returns a ranked list of results with snippets, metadata, and relevance scores.
    */
   async aiSearch(
     request: operations.AiSearchRequest,
     options?: RequestOptions,
-  ): Promise<models.AISearchResponse> {
+  ): Promise<models.AISearchResponse | undefined> {
     return unwrapAsync(portalSearchAiSearch(
       this,
       request,

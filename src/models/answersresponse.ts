@@ -48,7 +48,9 @@ export type AnswersResponseAnswer = {
    */
   answerType: AnswersResponseAnswerType;
   /**
-   * Confidence score (0.0-1.0) reflecting how well the answer matches the query.
+   * Query-specific relevance score (0.0-1.0) indicating how well the result matches the user query. For Certified answers, the score represents a direct relevance comparison between the query and the returned snippet. For Generative answers, the score is assigned by the model after generation, based on how well the response is supported by the provided knowledge.
+   *
+   * @remarks
    */
   relevanceScore: number;
 };
@@ -84,13 +86,17 @@ export type AnswersResponse = {
   searchResults: Array<SearchResult>;
   channel?: AnswersResponseChannel | undefined;
   /**
-   * ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
-   */
-  sessionId: string;
-  /**
    * Unique ID for this specific API call or event.
    */
   eventId?: string | undefined;
+  /**
+   * Session ID passed by the client for this specific API call or event.
+   */
+  clientSessionId?: string | undefined;
+  /**
+   * eGain Session ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
+   */
+  sessionId: string;
 };
 
 /** @internal */
@@ -264,8 +270,9 @@ export const AnswersResponse$inboundSchema: z.ZodType<
   answer: z.lazy(() => AnswersResponseAnswer$inboundSchema),
   searchResults: z.array(SearchResult$inboundSchema),
   channel: z.lazy(() => AnswersResponseChannel$inboundSchema).optional(),
-  sessionId: z.string(),
   eventId: z.string().optional(),
+  clientSessionId: z.string().optional(),
+  sessionId: z.string(),
 });
 
 /** @internal */
@@ -273,8 +280,9 @@ export type AnswersResponse$Outbound = {
   answer: AnswersResponseAnswer$Outbound;
   searchResults: Array<SearchResult$Outbound>;
   channel?: AnswersResponseChannel$Outbound | undefined;
-  sessionId: string;
   eventId?: string | undefined;
+  clientSessionId?: string | undefined;
+  sessionId: string;
 };
 
 /** @internal */
@@ -286,8 +294,9 @@ export const AnswersResponse$outboundSchema: z.ZodType<
   answer: z.lazy(() => AnswersResponseAnswer$outboundSchema),
   searchResults: z.array(SearchResult$outboundSchema),
   channel: z.lazy(() => AnswersResponseChannel$outboundSchema).optional(),
-  sessionId: z.string(),
   eventId: z.string().optional(),
+  clientSessionId: z.string().optional(),
+  sessionId: z.string(),
 });
 
 /**

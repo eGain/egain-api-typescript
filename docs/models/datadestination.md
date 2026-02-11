@@ -10,7 +10,7 @@ let value: DataDestination = {
   path: "s3://amzn-s3-demo-bucket/mydeptfolder",
   region: "us-west-2",
   credentials: {
-    accessKey: "s3-access-user",
+    accessKey: "s3-access-key",
     secretKey: "s3-access-secret",
   },
 };
@@ -18,9 +18,9 @@ let value: DataDestination = {
 
 ## Fields
 
-| Field                                                                        | Type                                                                         | Required                                                                     | Description                                                                  | Example                                                                      |
-| ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `destinationType`                                                            | [models.DestinationType](../models/destinationtype.md)                       | :heavy_check_mark:                                                           | Type of data destination                                                     | AWS S3 bucket                                                                |
-| `path`                                                                       | *string*                                                                     | :heavy_check_mark:                                                           | Path of the data destination                                                 | s3://amzn-s3-demo-bucket/mydeptfolder                                        |
-| `region`                                                                     | *string*                                                                     | :heavy_minus_sign:                                                           | Region of the data destination                                               | us-west-2                                                                    |
-| `credentials`                                                                | [models.KnowledgeExportCredentials](../models/knowledgeexportcredentials.md) | :heavy_minus_sign:                                                           | N/A                                                                          |                                                                              |
+| Field                                                                    | Type                                                                     | Required                                                                 | Description                                                              | Example                                                                  |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| `destinationType`                                                        | [models.DestinationType](../models/destinationtype.md)                   | :heavy_check_mark:                                                       | Type of data destination                                                 | AWS S3 bucket                                                            |
+| `path`                                                                   | *string*                                                                 | :heavy_check_mark:                                                       | Path of the data destination. For S3 bucket, it can be root or a folder. | s3://amzn-s3-demo-bucket/mydeptfolder                                    |
+| `region`                                                                 | *string*                                                                 | :heavy_minus_sign:                                                       | Region of the data destination                                           | us-west-2                                                                |
+| `credentials`                                                            | [models.Credentials](../models/credentials.md)                           | :heavy_minus_sign:                                                       | N/A                                                                      |                                                                          |

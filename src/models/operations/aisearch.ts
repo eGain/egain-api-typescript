@@ -32,6 +32,11 @@ export type AiSearchRequest = {
    *
    * @remarks
    * and each value is an array of **Tag IDs** for that category.
+   *  **Note**:
+   *   - The '$filter[tags]' query parameter JSON value should be url encoded.
+   *   - Some developer tools for invoking APIs may not url encode the '$filter[tags]' query parameter JSON value by default. Ensure that only url encoded values are used.
+   *   - Example of JSON value: {"BASE-40845":["BASE-40849","BASE-40853"]}
+   *   - Example of URL encoded value: %7B%22BASE-40845%22%3A%5B%22BASE-40849%22%2C%22BASE-40853%22%5D%7D
    */
   filterTags?: { [k: string]: Array<string> } | undefined;
   /**
@@ -42,6 +47,14 @@ export type AiSearchRequest = {
    * One or more comma-separated names for article custom attributes defined by the user to be returned.
    */
   articleCustomAdditionalAttributes?: string | undefined;
+  /**
+   * Pagination parameter that specifies the page number of results to be returned. Used in conjunction with $pagesize.
+   */
+  pagenum?: number | undefined;
+  /**
+   * Pagination parameter that specifies the number of results per page. Used in conjunction with $pagenum.
+   */
+  pagesize?: number | undefined;
 };
 
 /** @internal */
@@ -57,6 +70,8 @@ export const AiSearchRequest$inboundSchema: z.ZodType<
   filterTags: z.record(z.array(z.string())).optional(),
   filterTopicIds: z.array(z.string()).optional(),
   articleCustomAdditionalAttributes: z.string().optional(),
+  pagenum: z.number().int().default(1),
+  pagesize: z.number().int().default(20),
 });
 
 /** @internal */
@@ -68,6 +83,8 @@ export type AiSearchRequest$Outbound = {
   filterTags?: { [k: string]: Array<string> } | undefined;
   filterTopicIds?: Array<string> | undefined;
   articleCustomAdditionalAttributes?: string | undefined;
+  pagenum: number;
+  pagesize: number;
 };
 
 /** @internal */
@@ -83,6 +100,8 @@ export const AiSearchRequest$outboundSchema: z.ZodType<
   filterTags: z.record(z.array(z.string())).optional(),
   filterTopicIds: z.array(z.string()).optional(),
   articleCustomAdditionalAttributes: z.string().optional(),
+  pagenum: z.number().int().default(1),
+  pagesize: z.number().int().default(20),
 });
 
 /**
