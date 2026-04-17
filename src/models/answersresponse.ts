@@ -86,10 +86,6 @@ export type AnswersResponse = {
   searchResults: Array<SearchResult>;
   channel?: AnswersResponseChannel | undefined;
   /**
-   * Unique ID for this specific API call or event.
-   */
-  eventId?: string | undefined;
-  /**
    * Session ID passed by the client for this specific API call or event.
    */
   clientSessionId?: string | undefined;
@@ -97,6 +93,10 @@ export type AnswersResponse = {
    * eGain Session ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
    */
   sessionId: string;
+  /**
+   * Unique ID for this specific API call or event.
+   */
+  eventId?: string | undefined;
 };
 
 /** @internal */
@@ -270,9 +270,9 @@ export const AnswersResponse$inboundSchema: z.ZodType<
   answer: z.lazy(() => AnswersResponseAnswer$inboundSchema),
   searchResults: z.array(SearchResult$inboundSchema),
   channel: z.lazy(() => AnswersResponseChannel$inboundSchema).optional(),
-  eventId: z.string().optional(),
   clientSessionId: z.string().optional(),
   sessionId: z.string(),
+  eventId: z.string().optional(),
 });
 
 /** @internal */
@@ -280,9 +280,9 @@ export type AnswersResponse$Outbound = {
   answer: AnswersResponseAnswer$Outbound;
   searchResults: Array<SearchResult$Outbound>;
   channel?: AnswersResponseChannel$Outbound | undefined;
-  eventId?: string | undefined;
   clientSessionId?: string | undefined;
   sessionId: string;
+  eventId?: string | undefined;
 };
 
 /** @internal */
@@ -294,9 +294,9 @@ export const AnswersResponse$outboundSchema: z.ZodType<
   answer: z.lazy(() => AnswersResponseAnswer$outboundSchema),
   searchResults: z.array(SearchResult$outboundSchema),
   channel: z.lazy(() => AnswersResponseChannel$outboundSchema).optional(),
-  eventId: z.string().optional(),
   clientSessionId: z.string().optional(),
   sessionId: z.string(),
+  eventId: z.string().optional(),
 });
 
 /**

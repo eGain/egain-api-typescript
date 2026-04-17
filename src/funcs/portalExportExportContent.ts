@@ -30,7 +30,7 @@ import { Result } from "../types/fp.js";
  *
  * @remarks
  * ## Overview
- *    The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket.
+ *    The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket or SFTP server path.
  *    It returns a URL with a Job ID to enable tracking the status of this asynchronous operation.
  *    Each export job can send multiple JSON files, depending on the total number of items to process.
  *    More than one bulk export can take place, as needed, one per portal.
@@ -146,7 +146,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["400", "401", "4XX", "500", "5XX"],
+    errorCodes: ["400", "401", "403", "404", "406", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -174,7 +174,7 @@ async function $do(
     M.nil(202, operations.ExportContentResponse$inboundSchema.optional(), {
       hdrs: true,
     }),
-    M.jsonErr([400, 401], errors.WSErrorCommon$inboundSchema),
+    M.jsonErr([400, 401, 403, 404, 406], errors.WSErrorCommon$inboundSchema),
     M.jsonErr(500, errors.WSErrorCommon$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

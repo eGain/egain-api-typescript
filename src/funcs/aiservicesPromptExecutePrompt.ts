@@ -100,9 +100,7 @@ async function $do(
     }),
   };
 
-  const path = pathToFunc("/promptmanager/execute/prompt/{promptId}")(
-    pathParams,
-  );
+  const path = pathToFunc("/prompt/{promptId}/execute")(pathParams);
 
   const headers = new Headers(compactMap({
     "Content-Type": "application/json",

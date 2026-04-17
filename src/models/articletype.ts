@@ -4,26 +4,8 @@
 
 import * as z from "zod";
 import { safeParse } from "../lib/schemas.js";
-import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
-
-/**
- * Indicates the article category name.
- */
-export const TypeName = {
-  General: "General",
-  GuidedHelp: "Guided Help",
-  DataLink: "Data Link",
-  TopicHome: "Topic Home",
-  Suggestion: "Suggestion",
-  VirtualAssistantAction: "Virtual Assistant Action",
-  RichMessage: "Rich Message",
-} as const;
-/**
- * Indicates the article category name.
- */
-export type TypeName = ClosedEnum<typeof TypeName>;
 
 /**
  * The type of the Article and its attributes.
@@ -34,11 +16,11 @@ export type ArticleType = {
    */
   articleCategoryId?: number | undefined;
   /**
-   * Indicates the article category name.
+   * Indicates the article type name.
    */
-  typeName?: TypeName | undefined;
+  typeName?: string | undefined;
   /**
-   * Indicates whether to use Structured Authoring for the Article Type.
+   * Indicates whether structured authoring is enabled for this article type, requiring content to be created using predefined fields
    */
   useStructuredAuthoring?: boolean | undefined;
   /**
@@ -48,32 +30,13 @@ export type ArticleType = {
 };
 
 /** @internal */
-export const TypeName$inboundSchema: z.ZodNativeEnum<typeof TypeName> = z
-  .nativeEnum(TypeName);
-
-/** @internal */
-export const TypeName$outboundSchema: z.ZodNativeEnum<typeof TypeName> =
-  TypeName$inboundSchema;
-
-/**
- * @internal
- * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
- */
-export namespace TypeName$ {
-  /** @deprecated use `TypeName$inboundSchema` instead. */
-  export const inboundSchema = TypeName$inboundSchema;
-  /** @deprecated use `TypeName$outboundSchema` instead. */
-  export const outboundSchema = TypeName$outboundSchema;
-}
-
-/** @internal */
 export const ArticleType$inboundSchema: z.ZodType<
   ArticleType,
   z.ZodTypeDef,
   unknown
 > = z.object({
   articleCategoryId: z.number().int().optional(),
-  typeName: TypeName$inboundSchema.optional(),
+  typeName: z.string().optional(),
   useStructuredAuthoring: z.boolean().optional(),
   articleTypeId: z.string().optional(),
 });
@@ -93,7 +56,7 @@ export const ArticleType$outboundSchema: z.ZodType<
   ArticleType
 > = z.object({
   articleCategoryId: z.number().int().optional(),
-  typeName: TypeName$outboundSchema.optional(),
+  typeName: z.string().optional(),
   useStructuredAuthoring: z.boolean().optional(),
   articleTypeId: z.string().optional(),
 });

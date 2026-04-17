@@ -6,6 +6,7 @@ import { portalArticleAddAsReference } from "../funcs/portalArticleAddAsReferenc
 import { portalArticleAddToReply } from "../funcs/portalArticleAddToReply.js";
 import { portalArticleComplyArticle } from "../funcs/portalArticleComplyArticle.js";
 import { portalArticleGetAcknowledgedComplianceArticles } from "../funcs/portalArticleGetAcknowledgedComplianceArticles.js";
+import { portalArticleGetAllArticleTypes } from "../funcs/portalArticleGetAllArticleTypes.js";
 import { portalArticleGetAnnouncementArticles } from "../funcs/portalArticleGetAnnouncementArticles.js";
 import { portalArticleGetArticleAttachmentById } from "../funcs/portalArticleGetArticleAttachmentById.js";
 import { portalArticleGetArticleById } from "../funcs/portalArticleGetArticleById.js";
@@ -33,8 +34,8 @@ export class Article extends ClientSDK {
    *
    * @remarks
    * ## Overview
-   *   * The Get Article by ID API allows a user to retrieve an Article using its ID.
-   *     * It requires a Portal ID, which a user can retrieve by calling the Get All Portals API.
+   *   * The Get Article by ID API allows a user or client application to retrieve an Article using its ID.
+   *     * It requires a Portal ID, which a user or client application can retrieve through the Administrative Console or by calling Get All Portals API.
    *     * Additional Article attributes and contextual views can be specified in the query parameters.
    *
    *   * This API returns structured authoring attributes of Issue, Environment, Cause and Confidence Level when the following conditions are met:
@@ -98,6 +99,24 @@ export class Article extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.EditionWithContent> {
     return unwrapAsync(portalArticleGetArticleEditionDetails(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Get All Article Types in a Department
+   *
+   * @remarks
+   * ## Overview
+   * The Get All Article Types in a Department API retrieves a list of all Article Types configured for a specific department.
+   */
+  async getAllArticleTypes(
+    request: operations.GetAllArticleTypesRequest,
+    options?: RequestOptions,
+  ): Promise<Array<models.ArticleTypeInfo> | undefined> {
+    return unwrapAsync(portalArticleGetAllArticleTypes(
       this,
       request,
       options,

@@ -18,8 +18,13 @@ let value: ExportContentRequest = {
     dataDestination: {
       destinationType: "AWS S3 bucket",
       path: "s3://amzn-s3-demo-bucket/mydeptfolder",
-      region: "us-west-2",
-      credentials: {
+      sftpDetails: {
+        username: "rtka-user",
+        password: "xyz1234",
+        host: "sftp.yourcompany.com",
+      },
+      s3Details: {
+        region: "us-west-2",
         accessKey: "s3-access-key",
         secretKey: "s3-access-secret",
       },

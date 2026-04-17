@@ -8,6 +8,7 @@
 * [getArticleById](#getarticlebyid) - Get Article by ID
 * [getArticleByIdWithEditions](#getarticlebyidwitheditions) - Get Article By ID with Editions
 * [getArticleEditionDetails](#getarticleeditiondetails) - Get Article Edition Details
+* [getAllArticleTypes](#getallarticletypes) - Get All Article Types in a Department
 * [addToReply](#addtoreply) - Add Article to Reply
 * [addAsReference](#addasreference) - Add as Reference
 * [getArticlesInTopic](#getarticlesintopic) - Get Articles in Topic
@@ -29,8 +30,8 @@
 ## getArticleById
 
 ## Overview
-  * The Get Article by ID API allows a user to retrieve an Article using its ID.
-    * It requires a Portal ID, which a user can retrieve by calling the Get All Portals API.
+  * The Get Article by ID API allows a user or client application to retrieve an Article using its ID.
+    * It requires a Portal ID, which a user or client application can retrieve through the Administrative Console or by calling Get All Portals API.
     * Additional Article attributes and contextual views can be specified in the query parameters.
 
   * This API returns structured authoring attributes of Issue, Environment, Cause and Confidence Level when the following conditions are met:
@@ -298,6 +299,85 @@ run();
 ### Response
 
 **Promise\<[models.EditionWithContent](../../models/editionwithcontent.md)\>**
+
+### Errors
+
+| Error Type               | Status Code              | Content Type             |
+| ------------------------ | ------------------------ | ------------------------ |
+| errors.WSErrorCommon     | 400, 401, 403, 404, 406  | application/json         |
+| errors.WSErrorCommon     | 500                      | application/json         |
+| errors.EgainDefaultError | 4XX, 5XX                 | \*/\*                    |
+
+## getAllArticleTypes
+
+## Overview
+The Get All Article Types in a Department API retrieves a list of all Article Types configured for a specific department.
+
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="getAllArticleTypes" method="get" path="/articletypes" -->
+```typescript
+import { Egain } from "@egain/egain-api-typescript";
+
+const egain = new Egain({
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
+});
+
+async function run() {
+  const result = await egain.portal.article.getAllArticleTypes({
+    acceptLanguage: "en-US",
+    departmentID: "999",
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { EgainCore } from "@egain/egain-api-typescript/core.js";
+import { portalArticleGetAllArticleTypes } from "@egain/egain-api-typescript/funcs/portalArticleGetAllArticleTypes.js";
+
+// Use `EgainCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const egain = new EgainCore({
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
+});
+
+async function run() {
+  const res = await portalArticleGetAllArticleTypes(egain, {
+    acceptLanguage: "en-US",
+    departmentID: "999",
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("portalArticleGetAllArticleTypes failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.GetAllArticleTypesRequest](../../models/operations/getallarticletypesrequest.md)                                                                                   | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[models.ArticleTypeInfo[]](../../models/.md)\>**
 
 ### Errors
 

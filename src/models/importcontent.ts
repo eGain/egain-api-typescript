@@ -49,7 +49,14 @@ export const Operation = {
 export type Operation = ClosedEnum<typeof Operation>;
 
 export type ScheduleTime = {
+  /**
+   * The scheduled start time for the import job.
+   */
   date: Date;
+  /**
+   * The specific date and time when the job must stop processing, regardless of completion status.
+   */
+  stopDate?: Date | undefined;
 };
 
 export type ImportContent = {
@@ -168,11 +175,14 @@ export const ScheduleTime$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   date: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  stopDate: z.string().datetime({ offset: true }).transform(v => new Date(v))
+    .optional(),
 });
 
 /** @internal */
 export type ScheduleTime$Outbound = {
   date: string;
+  stopDate?: string | undefined;
 };
 
 /** @internal */
@@ -182,6 +192,7 @@ export const ScheduleTime$outboundSchema: z.ZodType<
   ScheduleTime
 > = z.object({
   date: z.date().transform(v => v.toISOString()),
+  stopDate: z.date().transform(v => v.toISOString()).optional(),
 });
 
 /**

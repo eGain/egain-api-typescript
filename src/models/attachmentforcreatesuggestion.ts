@@ -12,7 +12,7 @@ import { SDKValidationError } from "./errors/sdkvalidationerror.js";
  */
 export type AttachmentForCreateSuggestion = {
   /**
-   * The alternate Id of the Attachment that was obtained after calling **[Generate signed URL to upload an attachment](https://apidev.egain.com/api-catalog/core-filemgr/api-bundled/operation/generatePreUploadURL/)**.
+   * The alternate Id of the Attachment that was obtained after calling **[Generate signed URL to upload an attachment](../../../../../v3/core/filemgr/api-bundled/storageservice/generatepreuploadurl)**.
    *
    * @remarks
    */

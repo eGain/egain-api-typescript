@@ -11,7 +11,7 @@
 ## exportContent
 
 ## Overview
-   The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket.
+   The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket or SFTP server path.
    It returns a URL with a Job ID to enable tracking the status of this asynchronous operation.  
    Each export job can send multiple JSON files, depending on the total number of items to process. 
    More than one bulk export can take place, as needed, one per portal.
@@ -20,7 +20,7 @@
   * Only a client application can invoke this API.  
   
 ## License
-  * This API requires a site license (SKU: EG-CL-RTKA-PT).  
+  * This API requires a site license (SKU: EG-CL-RTKA-PT).            
 
 
 ### Example Usage
@@ -45,12 +45,12 @@ async function run() {
         "articles",
       ],
       dataDestination: {
-        destinationType: "AWS S3 bucket",
-        path: "s3://amzn-s3-demo-bucket/mydeptfolder",
-        region: "us-west-2",
-        credentials: {
-          accessKey: "s3-access-key",
-          secretKey: "s3-access-secret",
+        destinationType: "SFTP server",
+        path: "exports/mydeptfolder",
+        sftpDetails: {
+          username: "rtka-user",
+          password: "xyz1234",
+          host: "sftp.yourcompany.com",
         },
       },
     },
@@ -88,12 +88,12 @@ async function run() {
         "articles",
       ],
       dataDestination: {
-        destinationType: "AWS S3 bucket",
-        path: "s3://amzn-s3-demo-bucket/mydeptfolder",
-        region: "us-west-2",
-        credentials: {
-          accessKey: "s3-access-key",
-          secretKey: "s3-access-secret",
+        destinationType: "SFTP server",
+        path: "exports/mydeptfolder",
+        sftpDetails: {
+          username: "rtka-user",
+          password: "xyz1234",
+          host: "sftp.yourcompany.com",
         },
       },
     },
@@ -126,7 +126,7 @@ run();
 
 | Error Type               | Status Code              | Content Type             |
 | ------------------------ | ------------------------ | ------------------------ |
-| errors.WSErrorCommon     | 400, 401                 | application/json         |
+| errors.WSErrorCommon     | 400, 401, 403, 404, 406  | application/json         |
 | errors.WSErrorCommon     | 500                      | application/json         |
 | errors.EgainDefaultError | 4XX, 5XX                 | \*/\*                    |
 
@@ -151,7 +151,7 @@ run();
   * Only a client application can invoke this API.  
 
 ## License
-  * This API requires a site license (SKU: EG-CL-RTKA-PT).           
+  * This API requires a site license (SKU: EG-CL-RTKA-PT).         
 
 
 ### Example Usage
@@ -166,6 +166,7 @@ const egain = new Egain({
 
 async function run() {
   const result = await egain.portal.export.exportStatus({
+    acceptLanguage: "en-US",
     jobID: "7A84B875-6F75-4C7B-B137-0632B62DB0BD",
   });
 
@@ -191,6 +192,7 @@ const egain = new EgainCore({
 
 async function run() {
   const res = await portalExportExportStatus(egain, {
+    acceptLanguage: "en-US",
     jobID: "7A84B875-6F75-4C7B-B137-0632B62DB0BD",
   });
   if (res.ok) {

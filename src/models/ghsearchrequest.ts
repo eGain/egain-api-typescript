@@ -29,10 +29,7 @@ export type GHSearchRequest = {
    */
   questions?: Array<StartQuestionAndAnswer> | undefined;
   /**
-   * The ID of the guided help profile.<br>
-   *
-   * @remarks
-   * 1 will always be the **system profile**.
+   * The ID of the guided help profile. 1 will always be the **system profile**.
    */
   profileId?: string | undefined;
   /**

@@ -26,6 +26,7 @@ tags:
       These APIs enable you to:
       - Import content from Data Sources
       - Validate content structure and format before import
+      - Add custom hooks before or after validation
       - Monitor import progress and access detailed logs
       - Schedule imports for optimal timing
       - Cancel ongoing operations when needed
@@ -70,7 +71,7 @@ tags:
   - name: Export
     description: Content Export APIs
 paths:
-  /promptmanager/execute/prompt/{promptId}:
+  /prompt/{promptId}/execute:
     post:
       summary: Execute a predefined prompt
       description: Execute a published and active prompt template from the AI console.
@@ -1743,12 +1744,15 @@ paths:
         - Shared file path
 
         ## Best Practices
-        - **Scheduling**: Use scheduleTime for off-peak imports to minimize system impact.  Please note that jobs can only be scheduled for a maximum of 7 days from the current date and time.
+        - **Scheduling**: Use scheduleTime for off-peak imports to minimize system impact. Please note that jobs can only be scheduled for a maximum of 7 days from the current date and time.
         - **Monitoring**: Regularly check job status and logs for any issues
         - **Error Handling**: Review failed items and retry with corrections
+
+        ## Job Timing Controls
+        - **scheduleTime.stopDate**: Defines a specific date time to cease operations regardless of progress (e.g., "Stop exactly at 5:00 PM").
       summary: Create Import Job
       operationId: createImportJob
-      x-hideTryItPanel: true
+      x-hideReplay: true
       x-speakeasy-group: content.import
       tags:
         - Content Import
@@ -1758,7 +1762,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ImportContent'
             examples:
-              Import content in the Department:
+              Schedule Start and Stop Date to Import S3 content in the Department:
                 summary: Basic S3 import
                 description: Import content from an S3 bucket with scheduled execution
                 value:
@@ -1767,21 +1771,45 @@ paths:
                     path: s3://mybucket/myfolder/
                     region: us-east-1
                     credentials:
-                      accessKey: AKIAIOSFODNN7EXAMPLE
-                      secretKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+                      accessKeyId: AKIAIOSFODNN7EXAMPLE
+                      secretAccessKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
                   operation: import
                   scheduleTime:
                     date: '2024-03-01T10:00:00.000Z'
-              Update existing content:
-                summary: Content update operation from SFTP
+                    stopDate: '2024-03-05T10:00:00.000Z'
+              Schedule Import S3 content in the Department:
+                summary: Basic S3 import
+                description: Import content from an S3 bucket
+                value:
+                  dataSource:
+                    type: AWS S3 bucket
+                    path: s3://mybucket/myfolder/
+                    region: us-east-1
+                    credentials:
+                      accessKeyId: AKIAIOSFODNN7EXAMPLE
+                      secretAccessKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+                  operation: import
+                  scheduleTime:
+                    date: '2024-03-01T10:00:00.000Z'
+              Import S3 content in the Department:
+                summary: Basic S3 import
+                description: Import content from an S3 bucket with scheduled execution
+                value:
+                  dataSource:
+                    type: AWS S3 bucket
+                    path: s3://mybucket/myfolder/
+                    region: us-east-1
+                    credentials:
+                      accessKeyId: AKIAIOSFODNN7EXAMPLE
+                      secretAccessKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+                  operation: import
+              Update existing content in the Department from SFTP:
+                summary: Content update operation
                 description: Update existing content with new information
                 value:
                   dataSource:
                     type: Shared file path
                     path: sftp://server.com/content/updates/
-                    credentials:
-                      username: contentuser
-                      password: securepassword
                   operation: reimport
                   scheduleTime:
                     date: '2024-03-01T02:00:00.000Z'
@@ -1834,6 +1862,247 @@ paths:
       servers:
         - url: https://api.aidev.egain.cloud//knowledge/contentmgr/v4
           description: Production Server
+  /import/config/hooks:
+    get:
+      summary: Get validation hooks
+      x-hideReplay: true
+      operationId: getValidationHooks
+      x-speakeasy-group: content.import
+      tags:
+        - Content Import
+      description: |
+        Retrieve all validation hooks configured for the current environment. Only the current version of each hook is returned.
+      parameters:
+        - $ref: '#/components/parameters/HookTypeParam'
+      responses:
+        '200':
+          description: List of validation hooks.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hooks'
+              example:
+                hooks:
+                  - hookID: 10050
+                    name: Dept-Tag-Validator
+                    type: import_post_validation_hook
+                    fileObject:
+                      fileID: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      createdDate: '2024-03-15T10:30:00.000Z'
+                      createdBy:
+                        id: '500'
+                        userName: jdoe
+                        firstName: John
+                        lastName: Doe
+                      modifiedDate: '2024-03-20T14:15:00.000Z'
+                      modifiedBy:
+                        id: '501'
+                        userName: asmith
+                        firstName: Alice
+                        lastName: Smith
+                      version:
+                        versionID: 2
+                        isCurrent: true
+                      file:
+                        name: check_dept_tags_v2.js
+                        content: dmFyIGl0ZW0gPSBjb250ZXh0Lml0ZW07
+                        contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/config/hooks/10050/version/2
+                  - hookID: 10051
+                    name: Filename-Sanitizer
+                    type: import_pre_validation_hook
+                    fileObject:
+                      fileID: 9b2c3d4e-5717-4562-b3fc-2c963f66afa6
+                      createdDate: '2024-03-10T09:00:00.000Z'
+                      createdBy:
+                        id: '500'
+                        userName: jdoe
+                        firstName: John
+                        lastName: Doe
+                      modifiedDate: '2024-03-10T09:00:00.000Z'
+                      modifiedBy:
+                        id: '500'
+                        userName: jdoe
+                        firstName: John
+                        lastName: Doe
+                      version:
+                        versionID: 1
+                        isCurrent: true
+                      file:
+                        name: clean_filenames.js
+                        content: ZnVuY3Rpb24gdmFsaWRhdGUuLi4=
+                        contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/config/hooks/10051/version/1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - accessToken: []
+      servers:
+        - url: https://api.aidev.egain.cloud//knowledge/contentmgr/v4
+          description: Production Server
+    post:
+      summary: Create validation hook
+      x-hideReplay: true
+      operationId: createValidationHook
+      x-speakeasy-group: content.import
+      tags:
+        - Content Import
+      description: "# Create Validation Hook\n\n## Overview\nThis API allows you to create custom JavaScript-based validation hooks that execute during the bulk content ingestion process. Validation hooks enable organizations to enforce specific business rules, verify metadata compliance, and perform complex data integrity checks that go beyond standard system validation.\n\n## Usage Requirements\nTo ensure successful hook creation and execution, please adhere to the following:\n- **Content Encoding**: The `fileObject.file.content` property must be a **Base64 encoded** string of your JavaScript logic.\n- **File Naming**: The filename should use the `.js` extension.\n- **Logic Return**: Your script must return a `result` object containing a boolean `success` property.\n- **Size Limit**: The encoded content must not exceed 1.5MB.\n\n## Hook Types\n- **Pre-Validation Hooks (`import_pre_validation_hook`)**: These execute **before** the standard system validation. They are ideal for enforcing custom business rules, such as ensuring all articles contain specific metadata.\n- **Post-Validation Hooks (`import_post_validation_hook`)**: These execute **after** the standard system validation. They have access to the `validationResults` from the system check, allowing you to block an import based on the severity of errors found.\n\n## Execution Environment\nHooks run in a secure, sandboxed JavaScript environment (ES5/ES6). \n- **Prohibited**: File system access (`fs`), network access (HTTP requests), and module loading (`require`).\n- **Supported**: Standard JavaScript logic, `console.log()` for debugging, and a specialized `helpers` utility library for safe data access.\n\n## Implementation Examples\n\n### Example: Pre-Validation Logic\nThis example demonstrates checking that every article contains a specific metadata field.\n```javascript\n// Initialize result\nvar result = { success: true };\n\n// Verify data exists\nif (helpers.hasField(data, 'articles') && helpers.isNotEmpty(data.articles)) {\n  \n  var invalidArticles = [];\n  \n  for (var i = 0; i < data.articles.length; i++) {\n    var article = data.articles[i];\n    \n    if (!helpers.hasField(article, 'name')) {\n      invalidArticles.push({ index: i, issue: \"Missing name\" });\n      continue;\n    }\n\n    // Custom Rule: Check if 'description' exists in metadata\n    if (!helpers.hasField(article, 'metadata') || \n        !helpers.hasField(article.metadata, 'description') || \n        helpers.isEmpty(article.metadata.description)) {\n          \n      invalidArticles.push({ \n        name: article.name, \n        issue: \"Missing required description metadata\" \n      });\n    }\n  }\n  \n  if (invalidArticles.length > 0) {\n    result = {\n      success: false,\n      error: 'Articles failed custom metadata validation',\n      details: { count: invalidArticles.length, errors: invalidArticles }\n    };\n  }\n}\nresult;\n```\n\n### Example: Post-Validation Logic\nThis example checks the standard validation results. If there are standard errors, it logs them and fails the job explicitly.\n```javascript\nvar result = { success: true };\n\n// Check if standard validation found errors\nif (helpers.hasField(validationResults, 'errors') && validationResults.errors.length > 0) {\n  \n  var errorCount = validationResults.errors.length;\n  console.log('Standard validation found ' + errorCount + ' errors.');\n\n  var errorTypes = {};\n  validationResults.errors.forEach(function(err) {\n    var type = err.type || 'unknown';\n    errorTypes[type] = (errorTypes[type] || 0) + 1;\n  });\n\n  result = {\n    success: false,\n    error: 'Standard validation failed with ' + errorCount + ' errors.',\n    details: {\n      summary: errorTypes,\n      firstError: validationResults.errors[0].message\n    }\n  };\n}\nresult;\n```\n\n## Further Documentation\nFor more detailed context on available objects (`data`, `metadata`, `helpers`) and best practices, refer to the [Validation Hook Guide](https://apidev.egain.com/developer-portal/guides/ingestion/validation-hook-guide/#example-pre-validation-logic).\n"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Hook'
+            examples:
+              Post-Validation Script:
+                value:
+                  type: import_post_validation_hook
+                  fileObject:
+                    file:
+                      name: check_dept_tags.js
+                      content: dmFyIGl0ZW0gPSBjb250ZXh0Lml0ZW07
+      responses:
+        '201':
+          description: Hook created.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      security:
+        - accessToken: []
+      servers:
+        - url: https://api.aidev.egain.cloud//knowledge/contentmgr/v4
+          description: Production Server
+  /import/config/hooks/{hookID}/version:
+    get:
+      summary: Get all versions for a validation hook
+      operationId: getValidationHookVersions
+      x-hideReplay: true
+      x-speakeasy-group: content.import
+      tags:
+        - Content Import
+      description: Retrieve a history of all versions uploaded for a specific validation hook.
+      parameters:
+        - $ref: '#/components/parameters/hookID'
+      responses:
+        '200':
+          description: List of hook versions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileObjects'
+              example:
+                - fileID: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  createdDate: '2024-03-15T10:30:00.000Z'
+                  createdBy:
+                    id: '500'
+                    userName: jdoe
+                    firstName: John
+                    lastName: Doe
+                  modifiedDate: '2024-03-20T14:15:00.000Z'
+                  modifiedBy:
+                    id: '501'
+                    userName: asmith
+                    firstName: Alice
+                    lastName: Smith
+                  version:
+                    versionID: 2
+                    isCurrent: true
+                  file:
+                    name: check_dept_tags_v2.js
+                    content: dmFyIGl0ZW0gPSBjb250ZXh0Lml0ZW07
+                    contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/config/hooks/10050/version/2
+                - fileID: 1a2b3c4d-5717-4562-b3fc-2c963f66afa6
+                  createdDate: '2024-03-15T10:30:00.000Z'
+                  createdBy:
+                    id: '500'
+                    userName: jdoe
+                    firstName: John
+                    lastName: Doe
+                  modifiedDate: '2024-03-15T10:30:00.000Z'
+                  modifiedBy:
+                    id: '500'
+                    userName: jdoe
+                    firstName: John
+                    lastName: Doe
+                  version:
+                    versionID: 1
+                    isCurrent: false
+                  file:
+                    name: check_dept_tags.js
+                    content: ZnVuY3Rpb24gb2xkLi4u
+                    contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/config/hooks/10050/version/1
+        '404':
+          $ref: '#/components/responses/NotFound'
+      security:
+        - accessToken: []
+      servers:
+        - url: https://api.aidev.egain.cloud//knowledge/contentmgr/v4
+          description: Production Server
+    post:
+      summary: Update validation hook version
+      x-hideReplay: true
+      operationId: createValidationHookVersion
+      x-speakeasy-group: content.import
+      tags:
+        - Content Import
+      description: Upload a new version of the JavaScript logic for an existing hook.
+      parameters:
+        - $ref: '#/components/parameters/hookID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileObject'
+      responses:
+        '201':
+          description: Hook version created.
+        '404':
+          $ref: '#/components/responses/NotFound'
+      security:
+        - accessToken: []
+      servers:
+        - url: https://api.aidev.egain.cloud//knowledge/contentmgr/v4
+          description: Production Server
+  /import/config/hooks/{hookID}/version/{versionID}:
+    get:
+      summary: Get validation hook version details
+      x-hideReplay: true
+      operationId: getValidationHookVersion
+      x-speakeasy-group: content.import
+      tags:
+        - Content Import
+      description: Get details and content URL for a specific version of a hook.
+      parameters:
+        - $ref: '#/components/parameters/hookID'
+        - $ref: '#/components/parameters/versionID'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileObject'
+              example:
+                fileID: 1a2b3c4d-5717-4562-b3fc-2c963f66afa6
+                createdDate: '2024-03-15T10:30:00.000Z'
+                createdBy:
+                  id: '500'
+                  userName: jdoe
+                  firstName: John
+                  lastName: Doe
+                version:
+                  versionID: 1
+                  isCurrent: false
+                file:
+                  name: check_dept_tags.js
+                  content: ZnVuY3Rpb24gb2xkLi4u
+                  contentUrl: https://api.egain.cloud/knowledge/contentmgr/v4/import/config/hooks/10050/version/1
+        '404':
+          $ref: '#/components/responses/NotFound'
+      security:
+        - accessToken: []
+      servers:
+        - url: https://api.aidev.egain.cloud//knowledge/contentmgr/v4
+          description: Production Server
   /import/content/{job_id}/status:
     get:
       description: |
@@ -1863,7 +2132,7 @@ paths:
         - Error details with context
       summary: Get Job Status
       operationId: getImportStatus
-      x-hideTryItPanel: true
+      x-hideReplay: true
       x-speakeasy-group: content.import
       parameters:
         - $ref: '#/components/parameters/jobId'
@@ -1886,6 +2155,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/ImportStatus'
               examples:
+                Scheduled Job in Progress:
+                  summary: Active import job
+                  description: Shows an import job that is currently processing content
+                  value:
+                    status: In Progress
+                    jobType: Import
+                    progress:
+                      processed: 1250
+                      total: 5000
+                      percentage: 25
+                    logFileLocation: s3://mybucket/logs/import-logs-7A84B875-6F75-4C7B-B137-0632B62DB0BD.txt
+                    startTime: '2024-03-01T10:00:00.000Z'
+                    scheduledStopTime: '2024-03-01T14:00:00.000Z'
+                    estimatedCompletion: '2024-03-01T11:30:00.000Z'
+                    currentOperation: Processing content items
                 Job in Progress:
                   summary: Active import job
                   description: Shows an import job that is currently processing content
@@ -1934,6 +2218,19 @@ paths:
                       successful: 4985
                       warnings: 10
                       errors: 5
+                Scheduled Job:
+                  summary: Future scheduled import
+                  description: A job queued to start at a specific future time with a scheduled stop time.
+                  value:
+                    status: Scheduled
+                    jobType: Import
+                    progress:
+                      processed: 0
+                      total: 0
+                      percentage: 0
+                    startTime: '2024-03-02T01:00:00.000Z'
+                    scheduledStopTime: '2024-03-02T05:00:00.000Z'
+                    currentOperation: Queued for execution
                 Failed Job:
                   summary: Job that encountered errors
                   description: Shows a job that failed during processing
@@ -2009,7 +2306,7 @@ paths:
         - **Iterate**: Use validation feedback to improve content quality
       summary: Create Validation Job
       operationId: createImportValidationJob
-      x-hideTryItPanel: true
+      x-hideReplay: true
       x-speakeasy-group: content.import
       tags:
         - Content Import
@@ -2028,8 +2325,8 @@ paths:
                     path: s3://mybucket/myfolder/
                     region: us-east-1
                     credentials:
-                      accessKey: AKIAIOSFODNN7EXAMPLE
-                      secretKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+                      accessKeyId: AKIAIOSFODNN7EXAMPLE
+                      secretAccessKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
               SFTP content validation:
                 summary: Validate SFTP content
                 description: Validate content from an SFTP before import
@@ -2136,7 +2433,7 @@ paths:
         - **Resource Planning**: Consider resource impact before cancelling large jobs
       summary: Cancel Job
       operationId: cancelImport
-      x-hideTryItPanel: true
+      x-hideReplay: true
       x-speakeasy-group: content.import
       parameters:
         - $ref: '#/components/parameters/jobId'
@@ -2151,6 +2448,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '406':
           $ref: '#/components/responses/responses-NotAcceptable'
+        '409':
+          description: Conflict. The job is not in a state that can be cancelled (e.g., it has already completed or failed).
         '500':
           $ref: '#/components/responses/InternalServerError'
       tags:
@@ -2168,8 +2467,8 @@ paths:
         - Article
       description: |
         ## Overview
-          * The Get Article by ID API allows a user to retrieve an Article using its ID.
-            * It requires a Portal ID, which a user can retrieve by calling the Get All Portals API.
+          * The Get Article by ID API allows a user or client application to retrieve an Article using its ID.
+            * It requires a Portal ID, which a user or client application can retrieve through the Administrative Console or by calling Get All Portals API.
             * Additional Article attributes and contextual views can be specified in the query parameters.
 
           * This API returns structured authoring attributes of Issue, Environment, Cause and Confidence Level when the following conditions are met:
@@ -2310,6 +2609,47 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ArticleEditionDetailsResponse'
+        '400':
+          $ref: '#/components/responses/400_common_bad_request'
+        '401':
+          $ref: '#/components/responses/401_invalid_authorization'
+        '403':
+          $ref: '#/components/responses/403_scope_not_assigned'
+        '404':
+          $ref: '#/components/responses/404_common_not_found'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - accessToken: []
+      x-speakeasy-group: portal.article
+  /articletypes:
+    get:
+      summary: Get All Article Types in a Department
+      operationId: getAllArticleTypes
+      tags:
+        - Article
+      description: |
+        ## Overview
+        The Get All Article Types in a Department API retrieves a list of all Article Types configured for a specific department.
+      parameters:
+        - $ref: '#/components/parameters/acceptLanguage'
+        - name: departmentID
+          description: The ID of the department.
+          in: query
+          required: true
+          schema:
+            type: string
+            pattern: ^999$|^[1-9][0-9]{3,8}$
+            minLength: 3
+            maxLength: 8
+            example: '999'
+      responses:
+        '200':
+          $ref: '#/components/responses/ArticleTypesGetByDepartmentResponse'
+        '204':
+          $ref: '#/components/responses/204_common_no_content'
         '400':
           $ref: '#/components/responses/400_common_bad_request'
         '401':
@@ -3557,6 +3897,8 @@ paths:
           $ref: '#/components/responses/404_common_not_found'
         '406':
           $ref: '#/components/responses/NotAcceptable'
+        '412':
+          $ref: '#/components/responses/412_precondition_failed'
         '415':
           $ref: '#/components/responses/415_unsupported_media_type'
         '500':
@@ -3606,6 +3948,8 @@ paths:
           $ref: '#/components/responses/404_common_not_found'
         '406':
           $ref: '#/components/responses/NotAcceptable'
+        '412':
+          $ref: '#/components/responses/412_precondition_failed'
         '415':
           $ref: '#/components/responses/415_unsupported_media_type'
         '500':
@@ -5073,6 +5417,56 @@ paths:
       security:
         - accessToken: []
       x-speakeasy-group: portal.suggestion
+    post:
+      summary: Add a Suggestion Comment
+      operationId: addSuggestionComment
+      tags:
+        - Suggestion
+      description: |
+        ## Overview
+          The Add Suggestion Comment API allows authenticated users and agents to add a new comment to a Suggestion.
+
+        ## Prerequisites
+          * Enable the setting "My Suggestions" for the portal specified in the URL.
+          * If the user is a customer, enable the setting "Allow Customer Access" for the portal.
+          * The Suggestion specified in the URL must belong to the user, or the user must have appropriate administrative permissions to comment on it.
+          * The Suggestion must be in **Suggested** or **Pending** status, otherwise no comments can be added.
+      parameters:
+        - $ref: '#/components/parameters/xEgainActivityId'
+        - $ref: '#/components/parameters/xExtIntegrationId'
+        - $ref: '#/components/parameters/xExtInteractionId'
+        - $ref: '#/components/parameters/contentType'
+        - $ref: '#/components/parameters/acceptLanguage'
+        - $ref: '#/components/parameters/portalReadableId'
+        - $ref: '#/components/parameters/suggestionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateComment'
+            examples:
+              New Comment:
+                value:
+                  content: I have uploaded the requested documents regarding the new phone numbers. Please review.
+      responses:
+        '201':
+          description: Created. The comment was successfully added.
+        '400':
+          $ref: '#/components/responses/400_common_bad_request'
+        '401':
+          $ref: '#/components/responses/401_invalid_authorization'
+        '403':
+          $ref: '#/components/responses/403_scope_not_assigned'
+        '404':
+          $ref: '#/components/responses/404_common_not_found'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - accessToken: []
+      x-speakeasy-group: portal.suggestion
   /portals/{portalID}/suggestions/{suggestionID}/attachments:
     get:
       summary: Get Suggestion Attachments
@@ -5484,7 +5878,7 @@ paths:
       x-speakeasy-group: portal.attachment
   /content/export:
     post:
-      x-hideTryItPanel: true
+      x-hideReplay: true
       summary: Export Knowledge
       x-speakeasy-group: portal.export
       operationId: exportContent
@@ -5492,13 +5886,18 @@ paths:
         - Export
       parameters:
         - $ref: '#/components/parameters/acceptLanguage'
-      description: "## Overview\n   The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket.\n   It returns a URL with a Job ID to enable tracking the status of this asynchronous operation.  \n   Each export job can send multiple JSON files, depending on the total number of items to process. \n   More than one bulk export can take place, as needed, one per portal.\n\n## Permission\n  * Only a client application can invoke this API.  \n  \n## License\n  * This API requires a site license (SKU: EG-CL-RTKA-PT).  \n"
+      description: "## Overview\n   The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket or SFTP server path.\n   It returns a URL with a Job ID to enable tracking the status of this asynchronous operation.  \n   Each export job can send multiple JSON files, depending on the total number of items to process. \n   More than one bulk export can take place, as needed, one per portal.\n\n## Permission\n  * Only a client application can invoke this API.  \n  \n## License\n  * This API requires a site license (SKU: EG-CL-RTKA-PT).            \n"
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/KnowledgeExport'
+            examples:
+              sftpDestination:
+                $ref: '#/components/examples/SftpDestinationExample'
+              s3Destination:
+                $ref: '#/components/examples/S3DestinationExample'
       responses:
         '202':
           description: "## A request was accepted and is being processed.\n\n## Expected Processing Time:\n  - Small jobs (< 1,000 items): 5-15 minutes\n  - Medium jobs (1,000-10,000 items): 15-60 minutes\n  - Large jobs (> 10,000 items): 1-4 hours (depending on content complexity)          \n"
@@ -5513,6 +5912,12 @@ paths:
           $ref: '#/components/responses/400_common_bad_request'
         '401':
           $ref: '#/components/responses/401_invalid_authorization'
+        '403':
+          $ref: '#/components/responses/403_scope_not_assigned'
+        '404':
+          $ref: '#/components/responses/404_common_not_found'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
@@ -5520,11 +5925,14 @@ paths:
   /content/export/{jobID}/status:
     get:
       summary: Get Export Job Status
-      description: "## Overview\n   The Content Export Status API provides real-time status information to monitor job progress and check completion status.\n\n## Status Values\n- **Pending**: Job is pending start of processing\n- **In Progress**: Job is actively processing content        \n- **Completed**: Job finished successfully\n- **Failed**: Job encountered errors and could not complete\n\n## Response Information\n- **Current Status**: Real-time job status\n- **Progress Metrics**: Items processed, total items\n- **Error Details**: Specific errors encountered during processing\n- **Timing Information**: Start time, estimated completion, actual completion           \n\n## Permission\n  * Only a client application can invoke this API.  \n\n## License\n  * This API requires a site license (SKU: EG-CL-RTKA-PT).           \n"
+      x-hideReplay: true
+      description: "## Overview\n   The Content Export Status API provides real-time status information to monitor job progress and check completion status.\n\n## Status Values\n- **Pending**: Job is pending start of processing\n- **In Progress**: Job is actively processing content        \n- **Completed**: Job finished successfully\n- **Failed**: Job encountered errors and could not complete\n\n## Response Information\n- **Current Status**: Real-time job status\n- **Progress Metrics**: Items processed, total items\n- **Error Details**: Specific errors encountered during processing\n- **Timing Information**: Start time, estimated completion, actual completion           \n\n## Permission\n  * Only a client application can invoke this API.  \n\n## License\n  * This API requires a site license (SKU: EG-CL-RTKA-PT).         \n"
+      x-speakeasy-group: portal.export
       operationId: exportStatus
       tags:
         - Export
       parameters:
+        - $ref: '#/components/parameters/acceptLanguage'
         - name: jobID
           in: path
           description: |
@@ -5599,7 +6007,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - accessToken: []
-      x-speakeasy-group: portal.export
 components:
   schemas:
     ExecutePromptResponse:
@@ -5815,19 +6222,19 @@ components:
           maxLength: 255
           description: Unique ID for this specific API call or event.
           pattern: ^[\w\W]*$
-          example: 6154589f-b43f-4471-b2c7-92c6c888a664
+          example: 6154589f-b43f-4471-b2c7-92c6c888a763
+        sessionId:
+          type: string
+          maxLength: 255
+          description: eGain Session ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+          example: 6154589f-b43f-4471-b2c7-92c6c888a643
         clientSessionId:
           type: string
           maxLength: 255
           description: Session ID passed by the client for this specific API call or event.
           pattern: ^[\w\W]*$
           example: 6154589f-b43f-4471-b2c7-92c6c888a643
-        sessionId:
-          type: string
-          maxLength: 255
-          description: eGain Session ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
-          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          example: 6154589f-b43f-4471-b2c7-92c6c888a689
     AnswersRequest:
       type: object
       properties:
@@ -5855,19 +6262,19 @@ components:
           maxLength: 255
           description: Unique ID for this specific API call or event.
           pattern: ^[\w\W]*$
-          example: 6154589f-b43f-4471-b2c7-92c6c888a664
+          example: 6154589f-b43f-4471-b2c7-92c6c888a643
         clientSessionId:
           type: string
           maxLength: 255
           description: Session ID passed by the client for this specific API call or event.
           pattern: ^[\w\W]*$
-          example: 6154589f-b43f-4471-b2c7-92c6c888a643
+          example: 6154589f-b43f-4471-b2c7-92c6c888a678
         sessionId:
           type: string
           maxLength: 255
           description: eGain Session ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
           pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          example: 6154589f-b43f-4471-b2c7-92c6c888a689
+          example: 6154589f-b43f-4471-b2c7-92c6c888a651
     SearchResult:
       type: object
       required:
@@ -6073,12 +6480,6 @@ components:
               description: The channel name.
               pattern: ^[\w\W]+$
               example: Eight Bank Website
-        eventId:
-          type: string
-          maxLength: 255
-          description: Unique ID for this specific API call or event.
-          pattern: ^[\w\W]*$
-          example: 6154589f-b43f-4471-b2c7-92c6c888a664
         clientSessionId:
           type: string
           maxLength: 255
@@ -6090,7 +6491,13 @@ components:
           maxLength: 255
           description: eGain Session ID that ties multiple API calls to the same user session. Will be used as part of to tie events back to a session.
           pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-          example: 6154589f-b43f-4471-b2c7-92c6c888a689
+          example: 6154589f-b43f-4471-b2c7-92c6c888a643
+        eventId:
+          type: string
+          description: Unique ID for this specific API call or event.
+          maxLength: 255
+          pattern: ^[\w\W]*$
+          example: 6154589f-b43f-4471-b2c7-92c6c888a643
     AITopicBreadcrumb:
       title: Topic Breadcrumb
       type: object
@@ -6122,6 +6529,89 @@ components:
           minLength: 1
           maxLength: 255
           example: Banking Regulations
+    Hooks:
+      type: object
+      properties:
+        hooks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Hook'
+    Hook:
+      type: object
+      required:
+        - type
+        - fileObject
+      properties:
+        hookID:
+          type: integer
+          description: ID of hook
+          minimum: 1
+          maximum: 999999999
+        name:
+          description: Name of the hook.
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^[\w\-\s]+$
+        type:
+          type: string
+          enum:
+            - import_pre_validation_hook
+            - import_post_validation_hook
+        fileObject:
+          $ref: '#/components/schemas/FileObject'
+    FileObjects:
+      type: array
+      items:
+        $ref: '#/components/schemas/FileObject'
+      maxItems: 20
+    FileObject:
+      type: object
+      properties:
+        fileID:
+          type: string
+          description: ID of Hook File
+          format: uuid
+        createdDate:
+          $ref: '#/components/schemas/createdDate'
+        createdBy:
+          $ref: '#/components/schemas/createdBy'
+        modifiedDate:
+          $ref: '#/components/schemas/modifiedDate'
+        modifiedBy:
+          $ref: '#/components/schemas/modifiedBy'
+        version:
+          type: object
+          properties:
+            versionID:
+              type: integer
+              description: ID of Hook File version
+              minimum: 1
+              maximum: 999999999
+            isCurrent:
+              type: boolean
+        file:
+          type: object
+          required:
+            - name
+            - content
+          properties:
+            name:
+              type: string
+              description: Filename (e.g., script.js).
+              minLength: 1
+              maxLength: 255
+              pattern: ^[\w\-\.]+\.js$
+            content:
+              type: string
+              description: Base64 encoded JavaScript content.
+              pattern: ^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$
+              maxLength: 1500000
+            contentUrl:
+              type: string
+              format: uri
+              maxLength: 2000
+              pattern: ^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$|^$
     PromptTemplate:
       type: object
       required:
@@ -6321,14 +6811,119 @@ components:
           description: "UI friendly messages are only supported by some APIs.  \n  * The client must explicitly request UI friendly messages by passing the *X-egain-error-message=yes* header.\n"
           type: string
           maxLength: 1024
+    stopDateTime:
+      type: string
+      description: The specific date and time when the job must stop processing, regardless of completion status.
+      format: date-time
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
+      example: '2024-03-01T14:00:00.000Z'
+    ImportStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the job.
+          enum:
+            - Scheduled
+            - In Progress
+            - Successful
+            - Failed
+            - Cancelled
+        jobType:
+          type: string
+          enum:
+            - Import
+            - Validation
+        progress:
+          type: object
+          description: Progress of the job.
+          properties:
+            processed:
+              type: number
+              description: Number of items processed.
+              minimum: 0
+              maximum: 100000
+            total:
+              type: number
+              description: Number of total items to process.
+              minimum: 0
+              maximum: 100000
+            percentage:
+              type: number
+              description: Percentage of total items that have been processed.
+              minimum: 0
+              maximum: 100
+        logFileLocation:
+          type: string
+          description: Location of the job log file.
+          maxLength: 1024
+        startTime:
+          type: string
+          description: Start time of job.
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
+          example: '2024-03-01T10:00:00.000Z'
+        scheduledStopTime:
+          $ref: '#/components/schemas/stopDateTime'
+        estimatedCompletion:
+          type: string
+          description: Estimated completion time of job.
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
+          example: '2024-03-01T10:00:00.000Z'
+        currentOperation:
+          type: string
+          description: Current operation of job being processed.
+          maxLength: 1024
+        completionTime:
+          type: string
+          format: date-time
+          description: Completion time of job.
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
+          example: '2024-03-01T10:00:00.000Z'
+        failureTime:
+          type: string
+          description: Failure time of job.
+          format: date-time
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
+          example: '2024-03-01T10:00:00.000Z'
+        results:
+          type: object
+          description: Result of job.
+          properties:
+            successful:
+              type: number
+              description: Number of item succesfully processed by job.
+              minimum: 0
+              maximum: 100000
+            warnings:
+              type: number
+              description: Number of warnings encountered during job.
+              minimum: 0
+              maximum: 100000
+            errors:
+              description: Number of errors encountered during job.
+              type: number
+              minimum: 0
+              maximum: 100000
+        error:
+          type: string
+          description: Error of job.
+          maxLength: 1024
+        retryable:
+          description: Indicates if job is retryable.
+          type: boolean
+      required:
+        - status
+        - jobType
     DataSourceCredentials:
       type: object
       properties:
-        accessKey:
+        accessKeyId:
           type: string
           maxLength: 1024
           description: Access key for S3 credentials datasource. Provide along with Secret Key.
-        secretKey:
+        secretAccessKey:
           type: string
           maxLength: 1024
           description: Secret key for S3 credentials datasource. Provide along with Access Key.
@@ -6376,9 +6971,12 @@ components:
           properties:
             date:
               type: string
+              description: The scheduled start time for the import job.
               format: date-time
               pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
               example: '2024-03-01T10:00:00.000Z'
+            stopDate:
+              $ref: '#/components/schemas/stopDateTime'
           required:
             - date
       required:
@@ -6428,103 +7026,51 @@ components:
           allOf:
             - type: string
               maxLength: 1024
-    ImportStatus:
+    createdDate:
+      type: string
+      format: DateAndTime
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$
+      minLength: 20
+      maxLength: 25
+      description: The date on which the resource was last modified.
+    modifiedDate:
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$
+      minLength: 20
+      maxLength: 25
+      description: The date on which the resource was last modified.
+    modifiedBy:
       type: object
       properties:
-        status:
+        id:
+          description: The ID of the user that modified this resource.
           type: string
-          description: Status of the job.
-          enum:
-            - Scheduled
-            - In Progress
-            - Successful
-            - Failed
-            - Cancelled
-        jobType:
+          pattern: ^[1-9]\d*$
+          minLength: 1
+          maxLength: 8
+        userName:
           type: string
-          enum:
-            - Import
-            - Validation
-        progress:
-          type: object
-          description: Progress of the job.
-          properties:
-            processed:
-              type: number
-              description: Number of items processed.
-              minimum: 0
-              maximum: 100000
-            total:
-              type: number
-              description: Number of total items to process.
-              minimum: 0
-              maximum: 100000
-            percentage:
-              type: number
-              description: Percentage of total items that have been processed.
-              minimum: 0
-              maximum: 100
-        logFileLocation:
+          description: The resource modifier's username.
+          pattern: ^(?=(.*[a-zA-Z0-9_&@.\-]){2,})[a-zA-Z0-9_&@.\s\-]+$
+          minLength: 2
+          maxLength: 255
+        firstName:
           type: string
-          description: Location of the job log file.
-          maxLength: 1024
-        startTime:
+          description: The resource modifier's first name.
+          pattern: ^(?!\s*$)(?!.*[~`!#$%\^*=\[\];"|<>\/?+\{\}]).*$
+          minLength: 1
+          maxLength: 255
+        middleName:
           type: string
-          description: Start time of job.
-          format: date-time
-          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
-          example: '2024-03-01T10:00:00.000Z'
-        estimatedCompletion:
+          description: The resource modifier's middle name.
+          pattern: ^(?!.*[~`!#$%\^*=\[\];"|<>\/?+\{\}])(\s*\S.*|)$
+          maxLength: 255
+        lastName:
           type: string
-          description: Estimated completion time of job.
-          format: date-time
-          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
-          example: '2024-03-01T10:00:00.000Z'
-        currentOperation:
-          type: string
-          description: Current operation of job being processed.
-          maxLength: 1024
-        completionTime:
-          type: string
-          format: date-time
-          description: Completion time of job.
-          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
-          example: '2024-03-01T10:00:00.000Z'
-        failureTime:
-          type: string
-          description: Failure time of job.
-          format: date-time
-          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$
-          example: '2024-03-01T10:00:00.000Z'
-        results:
-          type: object
-          description: Result of job.
-          properties:
-            succesfull:
-              type: number
-              description: Number of item succesfully processed by job.
-              minimum: 0
-              maximum: 100000
-            warnings:
-              type: number
-              description: Number of warnings encountered during job.
-              minimum: 0
-              maximum: 100000
-            errors:
-              description: Number of errors encountered during job.
-              type: number
-              minimum: 0
-              maximum: 100000
-        error:
-          type: string
-          description: Error of job.
-          maxLength: 1024
-        retryable:
-          description: Indicates if job is retryable.
-          type: boolean
-      required:
-        - status
-        - jobType
+          description: The resource modifier's last name.
+          pattern: ^(?!\s*$)(?!.*[~`!#$%\^*=\[\];"|<>\/?+\{\}]).*$
+          minLength: 1
+          maxLength: 255
     ValidateImportContent:
       type: object
       properties:
@@ -6563,18 +7109,13 @@ components:
           minimum: 0
           maximum: 7
         typeName:
-          description: Indicates the article category name.
+          description: Indicates the article type name.
           type: string
-          enum:
-            - General
-            - Guided Help
-            - Data Link
-            - Topic Home
-            - Suggestion
-            - Virtual Assistant Action
-            - Rich Message
+          minLength: 1
+          maxLength: 255
+          pattern: ^[\w\W]+$
         useStructuredAuthoring:
-          description: Indicates whether to use Structured Authoring for the Article Type.
+          description: Indicates whether structured authoring is enabled for this article type, requiring content to be created using predefined fields
           type: boolean
         articleTypeId:
           description: The ID of the Article Type.
@@ -6676,38 +7217,6 @@ components:
           $ref: '#/components/schemas/Link'
       description: This schema contains information about an article edition.
       title: Edition
-    modifiedBy:
-      type: object
-      properties:
-        id:
-          description: The ID of the user that modified this resource.
-          type: string
-          pattern: ^[1-9]\d*$
-          minLength: 1
-          maxLength: 8
-        userName:
-          type: string
-          description: The resource modifier's username.
-          pattern: ^(?=(.*[a-zA-Z0-9_&@.\-]){2,})[a-zA-Z0-9_&@.\s\-]+$
-          minLength: 2
-          maxLength: 255
-        firstName:
-          type: string
-          description: The resource modifier's first name.
-          pattern: ^(?!\s*$)(?!.*[~`!#$%\^*=\[\];"|<>\/?+\{\}]).*$
-          minLength: 1
-          maxLength: 255
-        middleName:
-          type: string
-          description: The resource modifier's middle name.
-          pattern: ^(?!.*[~`!#$%\^*=\[\];"|<>\/?+\{\}])(\s*\S.*|)$
-          maxLength: 255
-        lastName:
-          type: string
-          description: The resource modifier's last name.
-          pattern: ^(?!\s*$)(?!.*[~`!#$%\^*=\[\];"|<>\/?+\{\}]).*$
-          minLength: 1
-          maxLength: 255
     ownedBy:
       type: object
       properties:
@@ -6873,8 +7382,8 @@ components:
         displayValue:
           type: string
           description: The readable name of the milestone.
-          minLength: 6
-          maxLength: 10
+          minLength: 1
+          maxLength: 35
           pattern: ^[\w\W]*$
     Milestone:
       type: object
@@ -7126,6 +7635,7 @@ components:
         bookmarkID:
           type: integer
           format: int64
+          nullable: true
           description: The ID of the Bookmark, if Article is bookmarked.
         folderBreadcrumb:
           $ref: '#/components/schemas/FolderBreadcrumb'
@@ -7656,6 +8166,64 @@ components:
           $ref: '#/components/schemas/Link'
       description: This schema contains information about article edition.
       title: Edition
+    ArticleTypeInfo:
+      title: Article Type
+      type: object
+      properties:
+        articleCategoryId:
+          description: Specifies the article category ID.
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 7
+        typeName:
+          description: Indicates the article type name.
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^[\w\W]+$
+        useStructuredAuthoring:
+          description: Indicates whether structured authoring is enabled for this article type, requiring content to be created using predefined fields
+          type: boolean
+        articleTypeId:
+          description: The ID of the Article Type.
+          type: string
+          minLength: 15
+          maxLength: 20
+          pattern: ^[0-9]+$
+          example: '932100000002020'
+        imageURL:
+          description: The URL of an image to be associated with the Article Type
+          type: string
+          minLength: 1
+          maxLength: 2000
+          pattern: ^(?:https?:\/\/|\/\/|\/|\.\.?\/|[a-zA-Z0-9])[\w\-\.\/%\?=#&:]*$
+        description:
+          description: Description of Article Type
+          type: string
+          maxLength: 2000
+          pattern: ^[\w\W]*$
+        isSearchable:
+          description: Indicates whether articles of this type are included in portal search results
+          type: boolean
+        isBrowsable:
+          description: Indicates whether articles of this type are displayed in portal browsing areas such as topics and lists
+          type: boolean
+    ArticleTypes:
+      type: array
+      items:
+        $ref: '#/components/schemas/ArticleTypeInfo'
+      maxItems: 250
+    TopicBreadcrumbsList:
+      title: Topic Breadcrumbs List
+      type: object
+      description: This schema contains an array of topic breadcrumbs, allowing clients to distinguish between multiple distinct hierarchical topic paths.
+      properties:
+        topicBreadcrumb:
+          items:
+            $ref: '#/components/schemas/TopicBreadcrumb'
+          description: An array of TopicBreadcrumb instances representing individual paths.
+          type: array
     ArticleActivityLink:
       type: object
       required:
@@ -7686,21 +8254,46 @@ components:
               type: string
               enum:
                 - en-US
-                - en-GB
                 - fr-FR
+                - en-GB
                 - es-ES
                 - it-IT
-                - de-DE
                 - nl-NL
-                - pt-BR
-                - pt-PT
-                - da-DK
+                - da-DA
                 - sv-SE
-                - ru-RU
-                - fr-CA
+                - pt-PT
+                - fi-FI
+                - no-NB
+                - no-NN
+                - ja-JA
+                - de-DE
+                - pt-BR
                 - zh-CN
-                - ja-JP
-                - ko-KR
+                - zh-TW
+                - ko-KO
+                - ru-RU
+                - el-EL
+                - tr-TR
+                - pl-PL
+                - cs-CS
+                - sk-SK
+                - hu-HU
+                - sr-SR
+                - ar-SA
+                - hr-HR
+                - ro-RO
+                - th-TH
+                - de-AT
+                - vi-VN
+                - id-ID
+                - ms-MY
+                - fil-PH
+                - fr-CA
+                - hi-IN
+                - uk-UA
+                - bg-BG
+                - sl-SI
+                - xx-XX
           description: The knowledge base language in which the version is created.
       example:
         editionId: PROD-13015
@@ -8149,7 +8742,6 @@ components:
         subTopicIds:
           type: array
           description: Array with the list of sub-topics. <br><br>Valid IDs are composed of a 2-4 letter prefix, followed by a dash and 4-15 digits.
-          minItems: 1
           maxItems: 2500
           items:
             type: string
@@ -8630,12 +9222,12 @@ components:
           type: integer
           format: int64
           description: lower value of the answer
-          minimum: !!int -100000000000000000000
+          minimum: -999999999999
         upperValue:
           type: integer
           format: int64
           description: upper value of the answer
-          maximum: !!int 100000000000000000000
+          maximum: 999999999999
         enumLowerValue:
           type: string
           description: lower value of enum answer
@@ -9171,9 +9763,7 @@ components:
           pattern: ^1$|^[1-9]\d{9,15}$
           minLength: 1
           maxLength: 15
-          description: |
-            The ID of the guided help profile.<br>
-            1 will always be the **system profile**.
+          description: The ID of the guided help profile. 1 will always be the **system profile**.
         sessionVariable:
           description: Session variables used to give Guided Help additional context.
           items:
@@ -9259,6 +9849,7 @@ components:
       properties:
         case:
           description: Cases
+          type: array
           items:
             $ref: '#/components/schemas/CaseListResult'
         paginationInfo:
@@ -10296,11 +10887,6 @@ components:
           description: Name of ShortURL
         isDefault:
           type: boolean
-    ShortURLs:
-      title: ShortURLs of portal
-      items:
-        $ref: '#/components/schemas/ShortURL'
-      type: array
     AccessiblePortal:
       title: Portals accessible to agent
       type: object
@@ -10325,7 +10911,10 @@ components:
         department:
           $ref: '#/components/schemas/Department'
         shortURL:
-          $ref: '#/components/schemas/ShortURLs'
+          title: ShortURLs
+          items:
+            $ref: '#/components/schemas/ShortURL'
+          type: array
     AllAccessiblePortals:
       title: Portal accessible to agent
       type: object
@@ -10662,7 +11251,7 @@ components:
         name:
           description: The name of the Suggestion.
           type: string
-          pattern: ^[\w\W]+$
+          pattern: ^[\s\S]*\S[\s\S]*$
           minLength: 1
           maxLength: 255
         description:
@@ -10673,7 +11262,8 @@ components:
         content:
           description: The content of the Suggestion.
           type: string
-          pattern: ^[\w\W]*$
+          pattern: ^[\s\S]*\S[\s\S]*$
+          minLength: 1
           maxLength: 4000
         hasRelatedArticles:
           type: boolean
@@ -10752,7 +11342,6 @@ components:
                 - bg-BG
                 - sk-SK
                 - sl-SI
-                - sr-RS
             label:
               title: label
               description: The name of the language.
@@ -10807,7 +11396,7 @@ components:
       properties:
         altId:
           description: |
-            The alternate Id of the Attachment that was obtained after calling **[Generate signed URL to upload an attachment](https://apidev.egain.com/api-catalog/core-filemgr/api-bundled/operation/generatePreUploadURL/)**.
+            The alternate Id of the Attachment that was obtained after calling **[Generate signed URL to upload an attachment](../../../../../v3/core/filemgr/api-bundled/storageservice/generatepreuploadurl)**.
           type: string
           pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
           minLength: 36
@@ -10830,7 +11419,7 @@ components:
         name:
           description: The name of the Suggestion.
           type: string
-          pattern: ^[\w\W]+$
+          pattern: ^[\s\S]*\S[\s\S]*$
           minLength: 1
           maxLength: 255
         description:
@@ -10841,7 +11430,8 @@ components:
         content:
           description: The content of the Suggestion.
           type: string
-          pattern: ^[\w\W]*$
+          pattern: ^[\s\S]*\S[\s\S]*$
+          minLength: 1
           maxLength: 4000
         modifiedDate:
           description: The date on which the Suggestion was last modified.
@@ -10885,21 +11475,20 @@ components:
         name:
           description: The name of the Suggestion.
           type: string
-          pattern: ^[\w\W]+$
+          pattern: ^[\s\S]*\S[\s\S]*$
           minLength: 1
           maxLength: 255
         description:
           description: The description of the Suggestion.
           type: string
           pattern: ^[\w\W]*$
-          minLength: 1
           maxLength: 255
         content:
           description: The content of the Suggestion.
           type: string
-          pattern: ^[\w\W]*$
+          pattern: ^[\s\S]*\S[\s\S]*$
           minLength: 1
-          maxLength: 10000
+          maxLength: 4000
         feedbackArticle:
           title: RelatedArticleForCreateUpdateDeleteSuggestion
           type: object
@@ -10934,22 +11523,36 @@ components:
               type: string
               enum:
                 - en-US
-                - en-GB
                 - fr-FR
+                - en-GB
                 - es-ES
                 - it-IT
-                - de-DE
                 - nl-NL
-                - pt-BR
-                - pt-PT
-                - da-DK
+                - da-DA
                 - sv-SE
-                - ru-RU
+                - pt-PT
+                - fi-FI
+                - no-NB
+                - no-NN
+                - ja-JA
+                - de-DE
+                - pt-BR
                 - zh-CN
-                - ja-JP
-                - ko-KR
-                - de-AT
+                - zh-TW
+                - ko-KO
+                - ru-RU
+                - el-EL
+                - tr-TR
+                - pl-PL
+                - cs-CS
+                - sk-SK
+                - hu-HU
+                - sr-SR
+                - ar-SA
+                - hr-HR
+                - ro-RO
                 - th-TH
+                - de-AT
                 - vi-VN
                 - id-ID
                 - ms-MY
@@ -10958,9 +11561,8 @@ components:
                 - hi-IN
                 - uk-UA
                 - bg-BG
-                - sk-SK
                 - sl-SI
-                - sr-RS
+                - xx-XX
           description: The knowledge base language in which the Suggestion is created.
         customAttributes:
           description: The Custom Attributes of the Suggestion.
@@ -10983,10 +11585,12 @@ components:
         name:
           description: The name of the Suggestion.
           type: string
-          pattern: ^[\w\W]*$
+          pattern: ^[\s\S]*\S[\s\S]*$
+          minLength: 1
           maxLength: 255
         relatedArticles:
           description: Related Articles for the Suggestion.
+          type: array
           items:
             $ref: '#/components/schemas/ArticleResult'
     Comment:
@@ -11003,7 +11607,7 @@ components:
         content:
           description: The content of the comment.
           type: string
-          pattern: ^[\w\W]+$
+          pattern: ^[\s\S]*\S[\s\S]*$
           minLength: 1
           maxLength: 2000
         createdBy:
@@ -11032,6 +11636,17 @@ components:
           minItems: 1
           maxItems: 75
           description: The list of comments.
+    CreateComment:
+      description: This schema contains the definition for comment creation.
+      title: Comment
+      type: object
+      properties:
+        content:
+          description: Content of the Comment
+          type: string
+          pattern: ^[\s\S]*\S[\s\S]*$
+          minLength: 1
+          maxLength: 2000
     AttachmentSummary:
       description: Summary attributes for an Attachment.
       title: attachment
@@ -11258,6 +11873,7 @@ components:
         - name
         - size
       title: AttachmentUpload
+      type: object
       properties:
         name:
           description: The name of the attachment.
@@ -11273,6 +11889,7 @@ components:
           maximum: 26214400
     Attachment:
       title: Attachment
+      type: object
       properties:
         altId:
           description: The ID of the attachment.
@@ -11294,6 +11911,51 @@ components:
           pattern: ^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$
           maxLength: 1000
           example: https://EG5842ain.ezdev.net/knowledge/portalmgr/v4/attachmnet/upload?signature=3552656867434671616F6C51786335674B764E7848586E786B383255555A41574F6B656F542B396258677A334341322F2B32336F434D6D6E47637955714C6A6E4D527476666C534E4C6232520D0A4F6F70637259773043515A6778596949586F3247666B6E624350386336563446624C5446746C546B2F324A734E425939634758507465722B6C584435685747734C4A2B6C626342732F426E640D0A4D7965456452564A6670525069536D2B43423232384A67724F636C4161654F39336F42784942354C6776462F50724D67674A3248527253504C53457551596A7A6D4B347A4F7A63416C7047450D0A39556133495776504A4875336D77757330773D3D
+    SftpConfig:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 128
+          example: rtka-user
+        password:
+          type: string
+          maxLength: 128
+          example: xyz1234
+        host:
+          type: string
+          description: The hostname of the SFTP server
+          pattern: ^(?!:\/\/)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,63}$
+          maxLength: 128
+          example: sftp.yourcompany.com
+        port:
+          type: integer
+          description: The server port number
+          format: int32
+          default: 22
+      required:
+        - username
+        - host
+    S3Config:
+      type: object
+      properties:
+        region:
+          description: Region of the data destination
+          type: string
+          maxLength: 20
+          example: us-west-2
+        accessKey:
+          type: string
+          maxLength: 128
+          example: s3-access-key
+        secretKey:
+          type: string
+          maxLength: 128
+          example: s3-access-secret
+      required:
+        - region
+        - accessKey
+        - secretKey
     KnowledgeExport:
       title: KnowledgeExport
       type: object
@@ -11304,7 +11966,7 @@ components:
         - dataDestination
       properties:
         articleCategories:
-          description: Category of articles to return. All includes browsable and searchable.
+          description: Category of articles to return. If all is selected, it includes both browsable and searchable articles.
           type: string
           enum:
             - searchable
@@ -11329,21 +11991,51 @@ components:
               type: string
               enum:
                 - en-US
-                - es-ES
                 - fr-FR
+                - en-GB
+                - es-ES
                 - it-IT
-                - de-DE
                 - nl-NL
-                - pt-BR
-                - pt-PT
-                - da-DK
-                - ru-RU
-                - fr-CA
-                - zh-CN
-                - ja-JP
-                - ko-KR
+                - da-DA
                 - sv-SE
+                - pt-PT
+                - fi-FI
+                - no-NB
+                - no-NN
+                - ja-JA
+                - de-DE
+                - pt-BR
+                - zh-CN
+                - zh-TW
+                - ko-KO
+                - ru-RU
+                - el-EL
+                - tr-TR
+                - pl-PL
+                - cs-CS
+                - sk-SK
+                - hu-HU
+                - sr-SR
+                - ar-SA
+                - hr-HR
+                - ro-RO
+                - th-TH
+                - de-AT
+                - vi-VN
+                - id-ID
+                - ms-MY
+                - fil-PH
+                - fr-CA
+                - hi-IN
+                - uk-UA
+                - bg-BG
+                - sl-SI
+                - xx-XX
               example: en-US
+        exportUnpublishedOnly:
+          description: Determines which article version to export. If true, the latest unpublished version will be exported for each article where available, and articles that do not have an unpublished version will be omitted from the export. If this property is false or omitted, the latest published version will be exported for each article where available. Each request exports either all published or all unpublished article versions in a portal; never both.
+          type: boolean
+          default: false
         resourceTypes:
           type: array
           items:
@@ -11354,7 +12046,7 @@ components:
               - portals
               - all
             example: articles
-          description: "Types of Knowledge Hub resources to export. Multiple values can be specified using a comma-separated list: {articles, topics, portals, all}.\nDetails of a single portal are exported. \nArticles whose state is Published are returned.\n\nPortal Attribute Name | Description \n------------------------------- | -----------\n| id | The ID of the Portal in Readable format.\n| alternateId | The system-generated ID of the Portal in long format.\n| name  | The name of the Portal.\n| description | The Portal's description.\n| departmentId | ID of the department this Portal belongs to. \n| defaultContentLanguageId | The default ID of the language for the portal content.\n\n| Topic Attribute Name | Description \n| ------------------------------ | -----------\n| id | The ID of the Topic in Readable form.\n| alternateId | The system-generated ID of the Topic in long form.\n| name  | The name of the Topic.\n| departmentId | ID of the department this Topic belongs to.\n| modifiedDate | The date when the Topic was last modified on.\n| topicHomeArticleId | The ID of the Article used as the home page of this Topic.\n| childCount | Total number of children sub-topis below the current Topic.\n| subTopicIds | Array with the list of sub-topics (all levels of the topic hierarchy).\n| parentTopicId | ID of the parent Topic. -1 if it is the root Topic.\n| imageURL | URL of the inline Topic image.\n| customAttributes | One or more comma-separated names for Topic custom attributes defined by the user to be returned.\n\n| Article Attribute Name | Description \n| ---------------------- | -----------\n| id | The ID of the Article in Readable form.\n| alternateId | The system-generated ID of the Article in long form.\n| name  | The name of the Article.\n| additionalInfo | Additional information provided as Article metadata. \n| type | The Article type object and its attributes.\n| keywords | A comma-separated list of keywords associated with this Article, provided as metadata.\n| summary | A brief summary of the Article, provided as metadata.\n| state | The state of the Article. State P (Published).\n| departmentId | ID of the department this Article belongs to. \n| description | The description of the Article.\n| imageURL | The URL of the image that is present in the Article version. It is used as the thumbnail image for the Article.\n| attachements | The Article's uploaded attachments and their IDs.\n| includeInGenAI  | Indicates whether this Article is used for eGain's generative AI features.\n| topicBreadcrumb | Contains a list of topics from the top-level topic to this Article. There may be multiple paths.\n| versionId | The ID of the Article version that is returned.\n| expirationDate | The date that the Article is set to expire.  \n| averageRating | Average rating of the Article.\n| timesRated | Number or times the Article was rated.  \n| availabilityDate | The date the Article is set to be available. \n| modifiedDate | The date that the Article was last modified on.   \n| articleMacro | The macro of the Article.             \n| content | path to the Article content in .html format.\n| customAttributes | One or more comma-separated names for Article custom attributes defined by the user to be returned.\n| personalization | Article personalization details, incuding tag categories.\n| editions | The editions of the Article, including the publish profile (view) associated with each edition.\n"
+          description: "Types of Knowledge Hub resources to export. Use 'all' to specify all resource types at once. \n\nBelow are the attributes that are returned for each resource type specified.\n\n##### Portal Resource Type Attributes\nPortal Attribute Name | Description \n------------------------------- | -----------\n| id | The ID of the Portal in Readable format.\n| alternateId | The system-generated ID of the Portal in long format.\n| name  | The name of the Portal.\n| description | The Portal's description.\n| departmentId | ID of the department this Portal belongs to. \n| defaultContentLanguageId | The default ID of the language for the portal content.\n\n##### Topic Resource Type Attributes\n| Topic Attribute Name | Description \n| ------------------------------ | -----------\n| id | The ID of the Topic in Readable form.\n| alternateId | The system-generated ID of the Topic in long form.\n| name  | The name of the Topic.\n| departmentId | ID of the department this Topic belongs to.\n| modifiedDate | The date when the Topic was last modified on.\n| topicHomeArticleId | The ID of the Article used as the home page of this Topic.\n| childCount | Total number of children sub-topis below the current Topic.\n| subTopicIds | Array with the list of sub-topics (all levels of the topic hierarchy).\n| parentTopicId | ID of the parent Topic. -1 if it is the root Topic.\n| imageURL | URL of the inline Topic image.\n| customAttributes | One or more comma-separated names for Topic custom attributes defined by the user to be returned.\n\n##### Article Resource Type Attributes\nExport article's attributes returned are aligned with the response of the [Get Article By ID with Editions](../article/getarticlebyidwitheditions) API.\n"
         dataDestination:
           type: object
           properties:
@@ -11363,29 +12055,23 @@ components:
               description: Type of data destination
               enum:
                 - AWS S3 bucket
+                - SFTP server
               example: AWS S3 bucket
             path:
               type: string
-              description: Path of the data destination. For S3 bucket, it can be root or a folder.
-              format: uri
+              description: |
+                Path of the data destination. For S3 bucket, it can be root or a folder. For SFTP, it can be target directory on the server.
+
+                **Examples:**
+
+                * **For S3:** `"s3://amzn-s3-demo-bucket/mydeptfolder"`
+                * **For SFTP:** `"exports/mydeptfolder"`
               maxLength: 1024
               example: s3://amzn-s3-demo-bucket/mydeptfolder
-            region:
-              description: Region of the data destination
-              type: string
-              maxLength: 20
-              example: us-west-2
-            credentials:
-              type: object
-              properties:
-                accessKey:
-                  type: string
-                  maxLength: 1024
-                  example: s3-access-key
-                secretKey:
-                  type: string
-                  maxLength: 1024
-                  example: s3-access-secret
+            sftpDetails:
+              $ref: '#/components/schemas/SftpConfig'
+            s3Details:
+              $ref: '#/components/schemas/S3Config'
           required:
             - destinationType
             - path
@@ -11573,6 +12259,33 @@ components:
         PROD-2005:
           - PROD-2007
       x-speakeasy-name-override: filterTags
+    hookID:
+      name: hookID
+      in: path
+      description: Integer ID of the Hook resource.
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 9999999999
+    versionID:
+      name: versionID
+      in: path
+      description: The sequential version number of the hook (e.g., 1, 2, 3).
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 9999999999
+    HookTypeParam:
+      name: type
+      in: query
+      description: Filter by hook type.
+      schema:
+        type: string
+        enum:
+          - import_pre_validation_hook
+          - import_post_validation_hook
     acceptLanguage:
       name: Accept-Language
       in: header
@@ -11631,7 +12344,7 @@ components:
     xExtIntegrationId:
       name: x-ext-integration-id
       in: header
-      description: 'The unique numeric identifier for a tenant, used in self-service functionality as well as third-party integrations.<br><br>*Note: If x-egain-activity-id is not provided, then this must be passed along with x-ext-interaction-id.*'
+      description: 'The unique numeric identifier for a tenant, used in self-service functionality as well as third-party integrations.<br><br>*Note: The x-ext-integration-id and x-ext-interaction-id headers must always be provided together and cannot be supplied independently.<br><br>The x-egain-activity-id may be provided on its own, or it may be provided along with both x-ext-integration-id and x-ext-interaction-id.*'
       required: false
       schema:
         type: string
@@ -11646,7 +12359,7 @@ components:
     xExtInteractionId:
       name: x-ext-interaction-id
       in: header
-      description: 'A unique interaction identifier from other CRM applications.<br><br>*Note: If x-egain-activity-id is not provided, then this must be passed along with x-ext-integration-id.*'
+      description: 'A unique interaction identifier from other CRM applications.<br><br>*Note: The x-ext-integration-id and x-ext-interaction-id headers must always be provided together and cannot be supplied independently.<br><br>The x-egain-activity-id may be provided on its own, or it may be provided along with both x-ext-integration-id and x-ext-interaction-id.*'
       required: false
       schema:
         type: string
@@ -11717,7 +12430,6 @@ components:
           - uk-UA
           - bg-BG
           - sl-SI
-          - sr-RS
           - xx-XX
         example: en-US
       x-speakeasy-name-override: language
@@ -11839,7 +12551,6 @@ components:
           - uk-UA
           - bg-BG
           - sl-SI
-          - sr-RS
           - xx-XX
         example: en-US
       x-speakeasy-name-override: language
@@ -12416,7 +13127,6 @@ components:
           - uk-UA
           - bg-BG
           - sl-SI
-          - sr-RS
           - xx-XX
       x-speakeasy-name-override: language
     articleCustomFields:
@@ -12694,14 +13404,14 @@ components:
             Not Acceptable:
               $ref: '#/components/examples/NotAcceptable'
     412_precondition_failed:
-      description: Preconditions failed
+      description: Precondition Failed
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/schemas-WSErrorCommon'
+            $ref: '#/components/schemas/WSErrorCommon'
           examples:
-            precondition failed:
-              $ref: '#/components/examples/precondition_failed'
+            Precondition Failed:
+              $ref: '#/components/examples/Precondition_Failed'
     ArticleGetByIdResponse:
       description: Success
       content:
@@ -13093,25 +13803,70 @@ components:
             link:
               rel: self
               href: /knowledge/portalmgr/v4/articles/PROD-2996/editions/PROD-3020?%24lang=en-US
+    ArticleTypesGetByDepartmentResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ArticleTypes'
+          example:
+            - articleTypeId: '100100000000001'
+              typeName: General
+              description: Knowledge
+              imageURL: https://hd.egain.com/images/km-for-dummies-24.jpg
+              articleCategoryId: 0
+              useStructuredAuthoring: true
+              isSearchable: true
+              isBrowsable: true
+            - articleTypeId: '100100000000002'
+              typeName: General
+              description: FAQ
+              articleCategoryId: 0
+              useStructuredAuthoring: true
+              isSearchable: true
+              isBrowsable: true
+            - articleTypeId: '100100000000003'
+              typeName: Suggestion
+              description: Suggestions
+              articleCategoryId: 4
+              useStructuredAuthoring: true
+              isSearchable: true
+              isBrowsable: true
     GetTopicBreadCrumb:
       description: Success
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/TopicBreadcrumb'
+            $ref: '#/components/schemas/TopicBreadcrumbsList'
           example:
-            value:
-              topicSummary:
-                - id: PROD-1080
-                  name: Banking Regulations
-                  link:
-                    rel: self
-                    href: /knowledge/portalmgr/v4/portals/202200000001000/topics/PROD-1080
-                - id: PROD-1065
-                  name: Banking Regulations
-                  link:
-                    rel: self
-                    href: /knowledge/portalmgr/v4/portals/202200000001000/topics/PROD-1065
+            topicBreadcrumb:
+              - topicSummary:
+                  - id: PROD-1001
+                    name: Digital Banking
+                    link:
+                      rel: self
+                      href: /knowledge/portalmgr/v4/portals/PROD-1000/topics/PROD-1001
+                  - id: PROD-1072
+                    name: Electronic Payments
+                    link:
+                      rel: self
+                      href: /knowledge/portalmgr/v4/portals/PROD-1000/topics/PROD-1072
+                  - id: PROD-1075
+                    name: Transfer Funds
+                    link:
+                      rel: self
+                      href: /knowledge/portalmgr/v4/portals/PROD-1000/topics/PROD-1075
+              - topicSummary:
+                  - id: PROD-1066
+                    name: Checking and Savings Accounts
+                    link:
+                      rel: self
+                      href: /knowledge/portalmgr/v4/portals/PROD-1000/topics/PROD-1066
+                  - id: PROD-1075
+                    name: Transfer Funds
+                    link:
+                      rel: self
+                      href: /knowledge/portalmgr/v4/portals/PROD-1000/topics/PROD-1075
     415_unsupported_media_type:
       description: Incorrect Content Type Header
     ArticlesInTopicResponse:
@@ -16010,7 +16765,7 @@ components:
           examples:
             Summary Attributes:
               value:
-                name: ''
+                name: Feedback
                 id: PROD-3259
                 relatedArticles:
                   - id: PROD-3002
@@ -16035,7 +16790,7 @@ components:
                     versionId: PROD-2897
             All Attributes:
               value:
-                name: ''
+                name: Feedback
                 id: PROD-3259
                 relatedArticles:
                   - id: PROD-3002
@@ -16438,6 +17193,45 @@ components:
       value:
         code: 429-001
         developerMessage: Too many requests.
+    Precondition_Failed:
+      description: |
+        A prerequisite condition for this request has not been met.
+      value:
+        code: 412-100
+        developerMessage: 'Precondition failed: <prerequisite requirement>.'
+    SftpDestinationExample:
+      summary: Export configuration using an SFTP destination
+      value:
+        articleCategories: searchable
+        portalID: PROD-1000
+        language:
+          code: en-US
+        resourceTypes:
+          - articles
+        dataDestination:
+          destinationType: SFTP server
+          path: exports/mydeptfolder
+          sftpDetails:
+            username: rtka-user
+            password: xyz1234
+            host: sftp.yourcompany.com
+            port: 22
+    S3DestinationExample:
+      summary: Export configuration using an AWS S3 bucket destination
+      value:
+        articleCategories: searchable
+        portalID: PROD-1000
+        language:
+          code: en-US
+        resourceTypes:
+          - articles
+        dataDestination:
+          destinationType: AWS S3 bucket
+          path: s3://amzn-s3-demo-bucket/mydeptfolder
+          s3Details:
+            region: us-west-2
+            accessKey: s3-access-key
+            secretKey: s3-access-secret
 x-internal: false
 x-amazon-apigateway-binary-media-types:
   - multipart/form-data

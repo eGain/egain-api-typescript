@@ -5,7 +5,12 @@
 import { contentImportCancelImport } from "../funcs/contentImportCancelImport.js";
 import { contentImportCreateImportJob } from "../funcs/contentImportCreateImportJob.js";
 import { contentImportCreateImportValidationJob } from "../funcs/contentImportCreateImportValidationJob.js";
+import { contentImportCreateValidationHook } from "../funcs/contentImportCreateValidationHook.js";
+import { contentImportCreateValidationHookVersion } from "../funcs/contentImportCreateValidationHookVersion.js";
 import { contentImportGetImportStatus } from "../funcs/contentImportGetImportStatus.js";
+import { contentImportGetValidationHooks } from "../funcs/contentImportGetValidationHooks.js";
+import { contentImportGetValidationHookVersion } from "../funcs/contentImportGetValidationHookVersion.js";
+import { contentImportGetValidationHookVersions } from "../funcs/contentImportGetValidationHookVersions.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as models from "../models/index.js";
 import * as operations from "../models/operations/index.js";
@@ -41,15 +46,198 @@ export class Import extends ClientSDK {
    * - Shared file path
    *
    * ## Best Practices
-   * - **Scheduling**: Use scheduleTime for off-peak imports to minimize system impact.  Please note that jobs can only be scheduled for a maximum of 7 days from the current date and time.
+   * - **Scheduling**: Use scheduleTime for off-peak imports to minimize system impact. Please note that jobs can only be scheduled for a maximum of 7 days from the current date and time.
    * - **Monitoring**: Regularly check job status and logs for any issues
    * - **Error Handling**: Review failed items and retry with corrections
+   *
+   * ## Job Timing Controls
+   * - **scheduleTime.stopDate**: Defines a specific date time to cease operations regardless of progress (e.g., "Stop exactly at 5:00 PM").
    */
   async createImportJob(
     request: models.ImportContent,
     options?: RequestOptions,
   ): Promise<operations.CreateImportJobResponse | undefined> {
     return unwrapAsync(contentImportCreateImportJob(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Get validation hooks
+   *
+   * @remarks
+   * Retrieve all validation hooks configured for the current environment. Only the current version of each hook is returned.
+   */
+  async getValidationHooks(
+    request?: operations.GetValidationHooksRequest | undefined,
+    options?: RequestOptions,
+  ): Promise<models.Hooks> {
+    return unwrapAsync(contentImportGetValidationHooks(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Create validation hook
+   *
+   * @remarks
+   * # Create Validation Hook
+   *
+   * ## Overview
+   * This API allows you to create custom JavaScript-based validation hooks that execute during the bulk content ingestion process. Validation hooks enable organizations to enforce specific business rules, verify metadata compliance, and perform complex data integrity checks that go beyond standard system validation.
+   *
+   * ## Usage Requirements
+   * To ensure successful hook creation and execution, please adhere to the following:
+   * - **Content Encoding**: The `fileObject.file.content` property must be a **Base64 encoded** string of your JavaScript logic.
+   * - **File Naming**: The filename should use the `.js` extension.
+   * - **Logic Return**: Your script must return a `result` object containing a boolean `success` property.
+   * - **Size Limit**: The encoded content must not exceed 1.5MB.
+   *
+   * ## Hook Types
+   * - **Pre-Validation Hooks (`import_pre_validation_hook`)**: These execute **before** the standard system validation. They are ideal for enforcing custom business rules, such as ensuring all articles contain specific metadata.
+   * - **Post-Validation Hooks (`import_post_validation_hook`)**: These execute **after** the standard system validation. They have access to the `validationResults` from the system check, allowing you to block an import based on the severity of errors found.
+   *
+   * ## Execution Environment
+   * Hooks run in a secure, sandboxed JavaScript environment (ES5/ES6).
+   * - **Prohibited**: File system access (`fs`), network access (HTTP requests), and module loading (`require`).
+   * - **Supported**: Standard JavaScript logic, `console.log()` for debugging, and a specialized `helpers` utility library for safe data access.
+   *
+   * ## Implementation Examples
+   *
+   * ### Example: Pre-Validation Logic
+   * This example demonstrates checking that every article contains a specific metadata field.
+   * ```javascript
+   * // Initialize result
+   * var result = { success: true };
+   *
+   * // Verify data exists
+   * if (helpers.hasField(data, 'articles') && helpers.isNotEmpty(data.articles)) {
+   *
+   *   var invalidArticles = [];
+   *
+   *   for (var i = 0; i < data.articles.length; i++) {
+   *     var article = data.articles[i];
+   *
+   *     if (!helpers.hasField(article, 'name')) {
+   *       invalidArticles.push({ index: i, issue: "Missing name" });
+   *       continue;
+   *     }
+   *
+   *     // Custom Rule: Check if 'description' exists in metadata
+   *     if (!helpers.hasField(article, 'metadata') ||
+   *         !helpers.hasField(article.metadata, 'description') ||
+   *         helpers.isEmpty(article.metadata.description)) {
+   *
+   *       invalidArticles.push({
+   *         name: article.name,
+   *         issue: "Missing required description metadata"
+   *       });
+   *     }
+   *   }
+   *
+   *   if (invalidArticles.length > 0) {
+   *     result = {
+   *       success: false,
+   *       error: 'Articles failed custom metadata validation',
+   *       details: { count: invalidArticles.length, errors: invalidArticles }
+   *     };
+   *   }
+   * }
+   * result;
+   * ```
+   *
+   * ### Example: Post-Validation Logic
+   * This example checks the standard validation results. If there are standard errors, it logs them and fails the job explicitly.
+   * ```javascript
+   * var result = { success: true };
+   *
+   * // Check if standard validation found errors
+   * if (helpers.hasField(validationResults, 'errors') && validationResults.errors.length > 0) {
+   *
+   *   var errorCount = validationResults.errors.length;
+   *   console.log('Standard validation found ' + errorCount + ' errors.');
+   *
+   *   var errorTypes = {};
+   *   validationResults.errors.forEach(function(err) {
+   *     var type = err.type || 'unknown';
+   *     errorTypes[type] = (errorTypes[type] || 0) + 1;
+   *   });
+   *
+   *   result = {
+   *     success: false,
+   *     error: 'Standard validation failed with ' + errorCount + ' errors.',
+   *     details: {
+   *       summary: errorTypes,
+   *       firstError: validationResults.errors[0].message
+   *     }
+   *   };
+   * }
+   * result;
+   * ```
+   *
+   * ## Further Documentation
+   * For more detailed context on available objects (`data`, `metadata`, `helpers`) and best practices, refer to the [Validation Hook Guide](https://apidev.egain.com/developer-portal/guides/ingestion/validation-hook-guide/#example-pre-validation-logic).
+   */
+  async createValidationHook(
+    request: models.Hook,
+    options?: RequestOptions,
+  ): Promise<void> {
+    return unwrapAsync(contentImportCreateValidationHook(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Get all versions for a validation hook
+   *
+   * @remarks
+   * Retrieve a history of all versions uploaded for a specific validation hook.
+   */
+  async getValidationHookVersions(
+    request: operations.GetValidationHookVersionsRequest,
+    options?: RequestOptions,
+  ): Promise<Array<models.FileObject>> {
+    return unwrapAsync(contentImportGetValidationHookVersions(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Update validation hook version
+   *
+   * @remarks
+   * Upload a new version of the JavaScript logic for an existing hook.
+   */
+  async createValidationHookVersion(
+    request: operations.CreateValidationHookVersionRequest,
+    options?: RequestOptions,
+  ): Promise<void> {
+    return unwrapAsync(contentImportCreateValidationHookVersion(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Get validation hook version details
+   *
+   * @remarks
+   * Get details and content URL for a specific version of a hook.
+   */
+  async getValidationHookVersion(
+    request: operations.GetValidationHookVersionRequest,
+    options?: RequestOptions,
+  ): Promise<models.FileObject> {
+    return unwrapAsync(contentImportGetValidationHookVersion(
       this,
       request,
       options,

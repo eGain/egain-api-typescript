@@ -54,7 +54,7 @@ export type ImportStatusResults = {
   /**
    * Number of item succesfully processed by job.
    */
-  succesfull?: number | undefined;
+  successful?: number | undefined;
   /**
    * Number of warnings encountered during job.
    */
@@ -83,6 +83,10 @@ export type ImportStatus = {
    * Start time of job.
    */
   startTime?: Date | undefined;
+  /**
+   * The specific date and time when the job must stop processing, regardless of completion status.
+   */
+  scheduledStopTime?: Date | undefined;
   /**
    * Estimated completion time of job.
    */
@@ -219,14 +223,14 @@ export const ImportStatusResults$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
-  succesfull: z.number().optional(),
+  successful: z.number().optional(),
   warnings: z.number().optional(),
   errors: z.number().optional(),
 });
 
 /** @internal */
 export type ImportStatusResults$Outbound = {
-  succesfull?: number | undefined;
+  successful?: number | undefined;
   warnings?: number | undefined;
   errors?: number | undefined;
 };
@@ -237,7 +241,7 @@ export const ImportStatusResults$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   ImportStatusResults
 > = z.object({
-  succesfull: z.number().optional(),
+  successful: z.number().optional(),
   warnings: z.number().optional(),
   errors: z.number().optional(),
 });
@@ -285,6 +289,9 @@ export const ImportStatus$inboundSchema: z.ZodType<
   logFileLocation: z.string().optional(),
   startTime: z.string().datetime({ offset: true }).transform(v => new Date(v))
     .optional(),
+  scheduledStopTime: z.string().datetime({ offset: true }).transform(v =>
+    new Date(v)
+  ).optional(),
   estimatedCompletion: z.string().datetime({ offset: true }).transform(v =>
     new Date(v)
   ).optional(),
@@ -306,6 +313,7 @@ export type ImportStatus$Outbound = {
   progress?: ImportStatusProgress$Outbound | undefined;
   logFileLocation?: string | undefined;
   startTime?: string | undefined;
+  scheduledStopTime?: string | undefined;
   estimatedCompletion?: string | undefined;
   currentOperation?: string | undefined;
   completionTime?: string | undefined;
@@ -326,6 +334,7 @@ export const ImportStatus$outboundSchema: z.ZodType<
   progress: z.lazy(() => ImportStatusProgress$outboundSchema).optional(),
   logFileLocation: z.string().optional(),
   startTime: z.date().transform(v => v.toISOString()).optional(),
+  scheduledStopTime: z.date().transform(v => v.toISOString()).optional(),
   estimatedCompletion: z.date().transform(v => v.toISOString()).optional(),
   currentOperation: z.string().optional(),
   completionTime: z.date().transform(v => v.toISOString()).optional(),

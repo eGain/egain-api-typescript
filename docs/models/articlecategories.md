@@ -1,6 +1,6 @@
 # ArticleCategories
 
-Category of articles to return. All includes browsable and searchable.
+Category of articles to return. If all is selected, it includes both browsable and searchable articles.
 
 ## Example Usage
 

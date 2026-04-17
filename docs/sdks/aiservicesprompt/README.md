@@ -13,7 +13,7 @@ Execute a published and active prompt template from the AI console.
 
 ### Example Usage
 
-<!-- UsageSnippet language="typescript" operationID="executePrompt" method="post" path="/promptmanager/execute/prompt/{promptId}" -->
+<!-- UsageSnippet language="typescript" operationID="executePrompt" method="post" path="/prompt/{promptId}/execute" -->
 ```typescript
 import { Egain } from "@egain/egain-api-typescript";
 

@@ -154,7 +154,18 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["400", "401", "403", "404", "406", "415", "4XX", "500", "5XX"],
+    errorCodes: [
+      "400",
+      "401",
+      "403",
+      "404",
+      "406",
+      "412",
+      "415",
+      "4XX",
+      "500",
+      "5XX",
+    ],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -180,7 +191,10 @@ async function $do(
     | SDKValidationError
   >(
     M.nil(201, z.void()),
-    M.jsonErr([400, 401, 403, 404, 406], errors.WSErrorCommon$inboundSchema),
+    M.jsonErr(
+      [400, 401, 403, 404, 406, 412],
+      errors.WSErrorCommon$inboundSchema,
+    ),
     M.jsonErr(500, errors.WSErrorCommon$inboundSchema),
     M.fail([415, "4XX"]),
     M.fail("5XX"),

@@ -11,11 +11,11 @@ export type DataSourceCredentials = {
   /**
    * Access key for S3 credentials datasource. Provide along with Secret Key.
    */
-  accessKey?: string | undefined;
+  accessKeyId?: string | undefined;
   /**
    * Secret key for S3 credentials datasource. Provide along with Access Key.
    */
-  secretKey?: string | undefined;
+  secretAccessKey?: string | undefined;
   /**
    * Username for SFTP credentials datasource. Provide along with Password.
    */
@@ -32,16 +32,16 @@ export const DataSourceCredentials$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
-  accessKey: z.string().optional(),
-  secretKey: z.string().optional(),
+  accessKeyId: z.string().optional(),
+  secretAccessKey: z.string().optional(),
   username: z.string().optional(),
   password: z.string().optional(),
 });
 
 /** @internal */
 export type DataSourceCredentials$Outbound = {
-  accessKey?: string | undefined;
-  secretKey?: string | undefined;
+  accessKeyId?: string | undefined;
+  secretAccessKey?: string | undefined;
   username?: string | undefined;
   password?: string | undefined;
 };
@@ -52,8 +52,8 @@ export const DataSourceCredentials$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   DataSourceCredentials
 > = z.object({
-  accessKey: z.string().optional(),
-  secretKey: z.string().optional(),
+  accessKeyId: z.string().optional(),
+  secretAccessKey: z.string().optional(),
   username: z.string().optional(),
   password: z.string().optional(),
 });

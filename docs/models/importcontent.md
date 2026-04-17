@@ -13,6 +13,7 @@ let value: ImportContent = {
   operation: "reimport",
   scheduleTime: {
     date: new Date("2024-03-01T10:00:00.000Z"),
+    stopDate: new Date("2024-03-01T14:00:00.000Z"),
   },
 };
 ```

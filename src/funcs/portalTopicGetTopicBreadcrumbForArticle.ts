@@ -39,7 +39,7 @@ export function portalTopicGetTopicBreadcrumbForArticle(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.TopicBreadcrumb,
+    models.TopicBreadcrumbsList,
     | errors.WSErrorCommon
     | EgainError
     | ResponseValidationError
@@ -65,7 +65,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      models.TopicBreadcrumb,
+      models.TopicBreadcrumbsList,
       | errors.WSErrorCommon
       | EgainError
       | ResponseValidationError
@@ -172,7 +172,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    models.TopicBreadcrumb,
+    models.TopicBreadcrumbsList,
     | errors.WSErrorCommon
     | EgainError
     | ResponseValidationError
@@ -183,7 +183,7 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, models.TopicBreadcrumb$inboundSchema),
+    M.json(200, models.TopicBreadcrumbsList$inboundSchema),
     M.jsonErr([400, 401, 403, 404, 406], errors.WSErrorCommon$inboundSchema),
     M.jsonErr(500, errors.WSErrorCommon$inboundSchema),
     M.fail("4XX"),

@@ -77,7 +77,6 @@ export const SuggestionCode = {
   BGBG: "bg-BG",
   SKSK: "sk-SK",
   SlSI: "sl-SI",
-  SrRS: "sr-RS",
 } as const;
 /**
  * The language that describes the details of the resource. Resources available in different languages may differ from each other.

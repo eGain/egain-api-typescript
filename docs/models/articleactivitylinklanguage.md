@@ -8,7 +8,7 @@ The knowledge base language in which the version is created.
 import { ArticleActivityLinkLanguage } from "@egain/egain-api-typescript/models";
 
 let value: ArticleActivityLinkLanguage = {
-  code: "ko-KR",
+  code: "sl-SI",
 };
 ```
 

@@ -216,6 +216,11 @@ run();
 #### [content.import](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md)
 
 * [createImportJob](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportjob) - Create Import Job
+* [getValidationHooks](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#getvalidationhooks) - Get validation hooks
+* [createValidationHook](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createvalidationhook) - Create validation hook
+* [getValidationHookVersions](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#getvalidationhookversions) - Get all versions for a validation hook
+* [createValidationHookVersion](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createvalidationhookversion) - Update validation hook version
+* [getValidationHookVersion](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#getvalidationhookversion) - Get validation hook version details
 * [getImportStatus](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#getimportstatus) - Get Job Status
 * [createImportValidationJob](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportvalidationjob) - Create Validation Job
 * [cancelImport](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#cancelimport) - Cancel Job
@@ -225,6 +230,7 @@ run();
 * [getArticleById](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#getarticlebyid) - Get Article by ID
 * [getArticleByIdWithEditions](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#getarticlebyidwitheditions) - Get Article By ID with Editions
 * [getArticleEditionDetails](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#getarticleeditiondetails) - Get Article Edition Details
+* [getAllArticleTypes](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#getallarticletypes) - Get All Article Types in a Department
 * [addToReply](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#addtoreply) - Add Article to Reply
 * [addAsReference](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#addasreference) - Add as Reference
 * [getArticlesInTopic](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#getarticlesintopic) - Get Articles in Topic
@@ -312,6 +318,7 @@ run();
 * [deleteSuggestion](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md#deletesuggestion) - Delete a Suggestion
 * [getRelatedArticlesForSuggestion](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md#getrelatedarticlesforsuggestion) - Get Related Articles for Suggestion
 * [getSuggestionComments](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md#getsuggestioncomments) - Get Suggestion Comments
+* [addSuggestionComment](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md#addsuggestioncomment) - Add a Suggestion Comment
 * [getSuggestionAttachments](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md#getsuggestionattachments) - Get Suggestion Attachments
 * [getSuggestionAttachmentById](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md#getsuggestionattachmentbyid) - Get Suggestion Attachment by ID
 
@@ -364,11 +371,17 @@ To read more about standalone functions, check [FUNCTIONS.md](https://github.com
 - [`contentImportCancelImport`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#cancelimport) - Cancel Job
 - [`contentImportCreateImportJob`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportjob) - Create Import Job
 - [`contentImportCreateImportValidationJob`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createimportvalidationjob) - Create Validation Job
+- [`contentImportCreateValidationHook`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createvalidationhook) - Create validation hook
+- [`contentImportCreateValidationHookVersion`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#createvalidationhookversion) - Update validation hook version
 - [`contentImportGetImportStatus`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#getimportstatus) - Get Job Status
+- [`contentImportGetValidationHooks`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#getvalidationhooks) - Get validation hooks
+- [`contentImportGetValidationHookVersion`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#getvalidationhookversion) - Get validation hook version details
+- [`contentImportGetValidationHookVersions`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/import/README.md#getvalidationhookversions) - Get all versions for a validation hook
 - [`portalArticleAddAsReference`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#addasreference) - Add as Reference
 - [`portalArticleAddToReply`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#addtoreply) - Add Article to Reply
 - [`portalArticleComplyArticle`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#complyarticle) - Comply With an Article
 - [`portalArticleGetAcknowledgedComplianceArticles`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#getacknowledgedcompliancearticles) - Get Acknowledged Article Compliances
+- [`portalArticleGetAllArticleTypes`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#getallarticletypes) - Get All Article Types in a Department
 - [`portalArticleGetAnnouncementArticles`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#getannouncementarticles) - Get Announcement Articles
 - [`portalArticleGetArticleAttachmentById`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#getarticleattachmentbyid) - Get Article Attachment By ID
 - [`portalArticleGetArticleById`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/article/README.md#getarticlebyid) - Get Article by ID
@@ -415,6 +428,7 @@ To read more about standalone functions, check [FUNCTIONS.md](https://github.com
 - [`portalGuidedhelpStepGHSearch`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/guidedhelp/README.md#stepghsearch) - Perform a Step in a Guided Help Search
 - [`portalPopulararticlesGetpopulararticles`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/populararticles/README.md#getpopulararticles) - Get Popular Articles
 - [`portalSearchAiSearch`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/search/README.md#aisearch) - Hybrid Search
+- [`portalSuggestionAddSuggestionComment`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md#addsuggestioncomment) - Add a Suggestion Comment
 - [`portalSuggestionDeleteSuggestion`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md#deletesuggestion) - Delete a Suggestion
 - [`portalSuggestionGetRelatedArticlesForSuggestion`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md#getrelatedarticlesforsuggestion) - Get Related Articles for Suggestion
 - [`portalSuggestionGetSuggestion`](https://github.com/eGain/egain-api-typescript/blob/main/docs/sdks/suggestion/README.md#getsuggestion) - Get Suggestion by ID
@@ -589,8 +603,8 @@ run();
 
 
 **Inherit from [`EgainError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/egainerror.ts)**:
-* [`SchemasWSErrorCommon`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/schemaswserrorcommon.ts): Not acceptable. Applicable to 4 of 76 methods.*
-* [`BadRequestError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/badrequesterror.ts): Bad Request. Status code `400`. Applicable to 1 of 76 methods.*
+* [`SchemasWSErrorCommon`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/schemaswserrorcommon.ts): Not acceptable. Status code `406`. Applicable to 4 of 83 methods.*
+* [`BadRequestError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/badrequesterror.ts): Bad Request. Status code `400`. Applicable to 1 of 83 methods.*
 * [`ResponseValidationError`](https://github.com/eGain/egain-api-typescript/blob/main/src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

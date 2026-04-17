@@ -119,6 +119,11 @@ async function $do(
 
   const headers = new Headers(compactMap({
     Accept: "application/json",
+    "Accept-Language": encodeSimple(
+      "Accept-Language",
+      payload["Accept-Language"],
+      { explode: false, charEncoding: "none" },
+    ),
   }));
 
   const secConfig = await extractSecurity(client._options.accessToken);

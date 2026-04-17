@@ -56,9 +56,12 @@ import { Result } from "../types/fp.js";
  * - Shared file path
  *
  * ## Best Practices
- * - **Scheduling**: Use scheduleTime for off-peak imports to minimize system impact.  Please note that jobs can only be scheduled for a maximum of 7 days from the current date and time.
+ * - **Scheduling**: Use scheduleTime for off-peak imports to minimize system impact. Please note that jobs can only be scheduled for a maximum of 7 days from the current date and time.
  * - **Monitoring**: Regularly check job status and logs for any issues
  * - **Error Handling**: Review failed items and retry with corrections
+ *
+ * ## Job Timing Controls
+ * - **scheduleTime.stopDate**: Defines a specific date time to cease operations regardless of progress (e.g., "Stop exactly at 5:00 PM").
  */
 export function contentImportCreateImportJob(
   client: EgainCore,
@@ -67,8 +70,8 @@ export function contentImportCreateImportJob(
 ): APIPromise<
   Result<
     operations.CreateImportJobResponse | undefined,
-    | errors.WSErrorCommon
     | errors.SchemasWSErrorCommon
+    | errors.WSErrorCommon
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -94,8 +97,8 @@ async function $do(
   [
     Result<
       operations.CreateImportJobResponse | undefined,
-      | errors.WSErrorCommon
       | errors.SchemasWSErrorCommon
+      | errors.WSErrorCommon
       | EgainError
       | ResponseValidationError
       | ConnectionError
@@ -180,8 +183,8 @@ async function $do(
 
   const [result] = await M.match<
     operations.CreateImportJobResponse | undefined,
-    | errors.WSErrorCommon
     | errors.SchemasWSErrorCommon
+    | errors.WSErrorCommon
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -194,8 +197,8 @@ async function $do(
     M.nil(202, operations.CreateImportJobResponse$inboundSchema.optional(), {
       hdrs: true,
     }),
-    M.jsonErr([400, 401, 403], errors.WSErrorCommon$inboundSchema),
-    M.jsonErr([406, 412], errors.SchemasWSErrorCommon$inboundSchema),
+    M.jsonErr(406, errors.SchemasWSErrorCommon$inboundSchema),
+    M.jsonErr([400, 401, 403, 412], errors.WSErrorCommon$inboundSchema),
     M.jsonErr(500, errors.WSErrorCommon$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

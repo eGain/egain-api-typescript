@@ -14,6 +14,6 @@ let value: ImportStatusResults = {};
 
 | Field                                        | Type                                         | Required                                     | Description                                  |
 | -------------------------------------------- | -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
-| `succesfull`                                 | *number*                                     | :heavy_minus_sign:                           | Number of item succesfully processed by job. |
+| `successful`                                 | *number*                                     | :heavy_minus_sign:                           | Number of item succesfully processed by job. |
 | `warnings`                                   | *number*                                     | :heavy_minus_sign:                           | Number of warnings encountered during job.   |
 | `errors`                                     | *number*                                     | :heavy_minus_sign:                           | Number of errors encountered during job.     |

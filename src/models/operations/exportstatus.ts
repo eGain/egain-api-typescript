@@ -3,11 +3,17 @@
  */
 
 import * as z from "zod";
+import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
+import * as models from "../index.js";
 
 export type ExportStatusRequest = {
+  /**
+   * The Language locale accepted by the client (used for locale specific fields in resource representation and in error responses).
+   */
+  acceptLanguage: models.AcceptLanguage;
   /**
    * **Example Usage:**
    *
@@ -25,11 +31,17 @@ export const ExportStatusRequest$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
+  "Accept-Language": models.AcceptLanguage$inboundSchema,
   jobID: z.string(),
+}).transform((v) => {
+  return remap$(v, {
+    "Accept-Language": "acceptLanguage",
+  });
 });
 
 /** @internal */
 export type ExportStatusRequest$Outbound = {
+  "Accept-Language": string;
   jobID: string;
 };
 
@@ -39,7 +51,12 @@ export const ExportStatusRequest$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   ExportStatusRequest
 > = z.object({
+  acceptLanguage: models.AcceptLanguage$outboundSchema,
   jobID: z.string(),
+}).transform((v) => {
+  return remap$(v, {
+    acceptLanguage: "Accept-Language",
+  });
 });
 
 /**

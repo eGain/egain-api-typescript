@@ -24,7 +24,7 @@ export type BookmarkStatus = {
   /**
    * The ID of the Bookmark, if Article is bookmarked.
    */
-  bookmarkID?: number | undefined;
+  bookmarkID?: number | null | undefined;
   /**
    * This schema contains one or more FolderSummary instances.
    */
@@ -38,14 +38,14 @@ export const BookmarkStatus$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   isBookmarked: z.boolean(),
-  bookmarkID: z.number().int().optional(),
+  bookmarkID: z.nullable(z.number().int()).optional(),
   folderBreadcrumb: FolderBreadcrumb$inboundSchema.optional(),
 });
 
 /** @internal */
 export type BookmarkStatus$Outbound = {
   isBookmarked: boolean;
-  bookmarkID?: number | undefined;
+  bookmarkID?: number | null | undefined;
   folderBreadcrumb?: FolderBreadcrumb$Outbound | undefined;
 };
 
@@ -56,7 +56,7 @@ export const BookmarkStatus$outboundSchema: z.ZodType<
   BookmarkStatus
 > = z.object({
   isBookmarked: z.boolean(),
-  bookmarkID: z.number().int().optional(),
+  bookmarkID: z.nullable(z.number().int()).optional(),
   folderBreadcrumb: FolderBreadcrumb$outboundSchema.optional(),
 });
 

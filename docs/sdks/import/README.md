@@ -6,6 +6,11 @@
 ### Available Operations
 
 * [createImportJob](#createimportjob) - Create Import Job
+* [getValidationHooks](#getvalidationhooks) - Get validation hooks
+* [createValidationHook](#createvalidationhook) - Create validation hook
+* [getValidationHookVersions](#getvalidationhookversions) - Get all versions for a validation hook
+* [createValidationHookVersion](#createvalidationhookversion) - Update validation hook version
+* [getValidationHookVersion](#getvalidationhookversion) - Get validation hook version details
 * [getImportStatus](#getimportstatus) - Get Job Status
 * [createImportValidationJob](#createimportvalidationjob) - Create Validation Job
 * [cancelImport](#cancelimport) - Cancel Job
@@ -37,9 +42,12 @@ This API initiates a bulk content import operation from Data Sources. It creates
 - Shared file path
 
 ## Best Practices
-- **Scheduling**: Use scheduleTime for off-peak imports to minimize system impact.  Please note that jobs can only be scheduled for a maximum of 7 days from the current date and time.
+- **Scheduling**: Use scheduleTime for off-peak imports to minimize system impact. Please note that jobs can only be scheduled for a maximum of 7 days from the current date and time.
 - **Monitoring**: Regularly check job status and logs for any issues
 - **Error Handling**: Review failed items and retry with corrections
+
+## Job Timing Controls
+- **scheduleTime.stopDate**: Defines a specific date time to cease operations regardless of progress (e.g., "Stop exactly at 5:00 PM").
 
 
 ### Example Usage
@@ -59,13 +67,14 @@ async function run() {
       path: "s3://mybucket/myfolder/",
       region: "us-east-1",
       credentials: {
-        accessKey: "AKIAIOSFODNN7EXAMPLE",
-        secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        accessKeyId: "AKIAIOSFODNN7EXAMPLE",
+        secretAccessKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
       },
     },
     operation: "import",
     scheduleTime: {
       date: new Date("2024-03-01T10:00:00.000Z"),
+      stopDate: new Date("2024-03-05T10:00:00.000Z"),
     },
   });
 
@@ -96,13 +105,14 @@ async function run() {
       path: "s3://mybucket/myfolder/",
       region: "us-east-1",
       credentials: {
-        accessKey: "AKIAIOSFODNN7EXAMPLE",
-        secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        accessKeyId: "AKIAIOSFODNN7EXAMPLE",
+        secretAccessKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
       },
     },
     operation: "import",
     scheduleTime: {
       date: new Date("2024-03-01T10:00:00.000Z"),
+      stopDate: new Date("2024-03-05T10:00:00.000Z"),
     },
   });
   if (res.ok) {
@@ -134,10 +144,494 @@ run();
 
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
-| errors.WSErrorCommon        | 400, 401, 403               | application/json            |
-| errors.SchemasWSErrorCommon | 406, 412                    | application/json            |
+| errors.SchemasWSErrorCommon | 406                         | application/json            |
+| errors.WSErrorCommon        | 400, 401, 403, 412          | application/json            |
 | errors.WSErrorCommon        | 500                         | application/json            |
 | errors.EgainDefaultError    | 4XX, 5XX                    | \*/\*                       |
+
+## getValidationHooks
+
+Retrieve all validation hooks configured for the current environment. Only the current version of each hook is returned.
+
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="getValidationHooks" method="get" path="/import/config/hooks" -->
+```typescript
+import { Egain } from "@egain/egain-api-typescript";
+
+const egain = new Egain({
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
+});
+
+async function run() {
+  const result = await egain.content.import.getValidationHooks();
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { EgainCore } from "@egain/egain-api-typescript/core.js";
+import { contentImportGetValidationHooks } from "@egain/egain-api-typescript/funcs/contentImportGetValidationHooks.js";
+
+// Use `EgainCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const egain = new EgainCore({
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
+});
+
+async function run() {
+  const res = await contentImportGetValidationHooks(egain);
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("contentImportGetValidationHooks failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.GetValidationHooksRequest](../../models/operations/getvalidationhooksrequest.md)                                                                                   | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
+
+### Response
+
+**Promise\<[models.Hooks](../../models/hooks.md)\>**
+
+### Errors
+
+| Error Type               | Status Code              | Content Type             |
+| ------------------------ | ------------------------ | ------------------------ |
+| errors.WSErrorCommon     | 401                      | application/json         |
+| errors.EgainDefaultError | 4XX, 5XX                 | \*/\*                    |
+
+## createValidationHook
+
+# Create Validation Hook
+
+## Overview
+This API allows you to create custom JavaScript-based validation hooks that execute during the bulk content ingestion process. Validation hooks enable organizations to enforce specific business rules, verify metadata compliance, and perform complex data integrity checks that go beyond standard system validation.
+
+## Usage Requirements
+To ensure successful hook creation and execution, please adhere to the following:
+- **Content Encoding**: The `fileObject.file.content` property must be a **Base64 encoded** string of your JavaScript logic.
+- **File Naming**: The filename should use the `.js` extension.
+- **Logic Return**: Your script must return a `result` object containing a boolean `success` property.
+- **Size Limit**: The encoded content must not exceed 1.5MB.
+
+## Hook Types
+- **Pre-Validation Hooks (`import_pre_validation_hook`)**: These execute **before** the standard system validation. They are ideal for enforcing custom business rules, such as ensuring all articles contain specific metadata.
+- **Post-Validation Hooks (`import_post_validation_hook`)**: These execute **after** the standard system validation. They have access to the `validationResults` from the system check, allowing you to block an import based on the severity of errors found.
+
+## Execution Environment
+Hooks run in a secure, sandboxed JavaScript environment (ES5/ES6). 
+- **Prohibited**: File system access (`fs`), network access (HTTP requests), and module loading (`require`).
+- **Supported**: Standard JavaScript logic, `console.log()` for debugging, and a specialized `helpers` utility library for safe data access.
+
+## Implementation Examples
+
+### Example: Pre-Validation Logic
+This example demonstrates checking that every article contains a specific metadata field.
+```javascript
+// Initialize result
+var result = { success: true };
+
+// Verify data exists
+if (helpers.hasField(data, 'articles') && helpers.isNotEmpty(data.articles)) {
+  
+  var invalidArticles = [];
+  
+  for (var i = 0; i < data.articles.length; i++) {
+    var article = data.articles[i];
+    
+    if (!helpers.hasField(article, 'name')) {
+      invalidArticles.push({ index: i, issue: "Missing name" });
+      continue;
+    }
+
+    // Custom Rule: Check if 'description' exists in metadata
+    if (!helpers.hasField(article, 'metadata') || 
+        !helpers.hasField(article.metadata, 'description') || 
+        helpers.isEmpty(article.metadata.description)) {
+          
+      invalidArticles.push({ 
+        name: article.name, 
+        issue: "Missing required description metadata" 
+      });
+    }
+  }
+  
+  if (invalidArticles.length > 0) {
+    result = {
+      success: false,
+      error: 'Articles failed custom metadata validation',
+      details: { count: invalidArticles.length, errors: invalidArticles }
+    };
+  }
+}
+result;
+```
+
+### Example: Post-Validation Logic
+This example checks the standard validation results. If there are standard errors, it logs them and fails the job explicitly.
+```javascript
+var result = { success: true };
+
+// Check if standard validation found errors
+if (helpers.hasField(validationResults, 'errors') && validationResults.errors.length > 0) {
+  
+  var errorCount = validationResults.errors.length;
+  console.log('Standard validation found ' + errorCount + ' errors.');
+
+  var errorTypes = {};
+  validationResults.errors.forEach(function(err) {
+    var type = err.type || 'unknown';
+    errorTypes[type] = (errorTypes[type] || 0) + 1;
+  });
+
+  result = {
+    success: false,
+    error: 'Standard validation failed with ' + errorCount + ' errors.',
+    details: {
+      summary: errorTypes,
+      firstError: validationResults.errors[0].message
+    }
+  };
+}
+result;
+```
+
+## Further Documentation
+For more detailed context on available objects (`data`, `metadata`, `helpers`) and best practices, refer to the [Validation Hook Guide](https://apidev.egain.com/developer-portal/guides/ingestion/validation-hook-guide/#example-pre-validation-logic).
+
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="createValidationHook" method="post" path="/import/config/hooks" -->
+```typescript
+import { Egain } from "@egain/egain-api-typescript";
+
+const egain = new Egain({
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
+});
+
+async function run() {
+  await egain.content.import.createValidationHook({
+    type: "import_post_validation_hook",
+    fileObject: {
+      file: {
+        name: "check_dept_tags.js",
+        content: "dmFyIGl0ZW0gPSBjb250ZXh0Lml0ZW07",
+      },
+    },
+  });
+
+
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { EgainCore } from "@egain/egain-api-typescript/core.js";
+import { contentImportCreateValidationHook } from "@egain/egain-api-typescript/funcs/contentImportCreateValidationHook.js";
+
+// Use `EgainCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const egain = new EgainCore({
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
+});
+
+async function run() {
+  const res = await contentImportCreateValidationHook(egain, {
+    type: "import_post_validation_hook",
+    fileObject: {
+      file: {
+        name: "check_dept_tags.js",
+        content: "dmFyIGl0ZW0gPSBjb250ZXh0Lml0ZW07",
+      },
+    },
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    
+  } else {
+    console.log("contentImportCreateValidationHook failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [models.Hook](../../models/hook.md)                                                                                                                                            | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
+
+### Response
+
+**Promise\<void\>**
+
+### Errors
+
+| Error Type               | Status Code              | Content Type             |
+| ------------------------ | ------------------------ | ------------------------ |
+| errors.WSErrorCommon     | 400                      | application/json         |
+| errors.EgainDefaultError | 4XX, 5XX                 | \*/\*                    |
+
+## getValidationHookVersions
+
+Retrieve a history of all versions uploaded for a specific validation hook.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="getValidationHookVersions" method="get" path="/import/config/hooks/{hookID}/version" -->
+```typescript
+import { Egain } from "@egain/egain-api-typescript";
+
+const egain = new Egain({
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
+});
+
+async function run() {
+  const result = await egain.content.import.getValidationHookVersions({
+    hookID: 923549,
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { EgainCore } from "@egain/egain-api-typescript/core.js";
+import { contentImportGetValidationHookVersions } from "@egain/egain-api-typescript/funcs/contentImportGetValidationHookVersions.js";
+
+// Use `EgainCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const egain = new EgainCore({
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
+});
+
+async function run() {
+  const res = await contentImportGetValidationHookVersions(egain, {
+    hookID: 923549,
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("contentImportGetValidationHookVersions failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.GetValidationHookVersionsRequest](../../models/operations/getvalidationhookversionsrequest.md)                                                                     | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
+
+### Response
+
+**Promise\<[models.FileObject[]](../../models/.md)\>**
+
+### Errors
+
+| Error Type               | Status Code              | Content Type             |
+| ------------------------ | ------------------------ | ------------------------ |
+| errors.WSErrorCommon     | 404                      | application/json         |
+| errors.EgainDefaultError | 4XX, 5XX                 | \*/\*                    |
+
+## createValidationHookVersion
+
+Upload a new version of the JavaScript logic for an existing hook.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="createValidationHookVersion" method="post" path="/import/config/hooks/{hookID}/version" -->
+```typescript
+import { Egain } from "@egain/egain-api-typescript";
+
+const egain = new Egain({
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
+});
+
+async function run() {
+  await egain.content.import.createValidationHookVersion({
+    hookID: 410019,
+    fileObject: {},
+  });
+
+
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { EgainCore } from "@egain/egain-api-typescript/core.js";
+import { contentImportCreateValidationHookVersion } from "@egain/egain-api-typescript/funcs/contentImportCreateValidationHookVersion.js";
+
+// Use `EgainCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const egain = new EgainCore({
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
+});
+
+async function run() {
+  const res = await contentImportCreateValidationHookVersion(egain, {
+    hookID: 410019,
+    fileObject: {},
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    
+  } else {
+    console.log("contentImportCreateValidationHookVersion failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.CreateValidationHookVersionRequest](../../models/operations/createvalidationhookversionrequest.md)                                                                 | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
+
+### Response
+
+**Promise\<void\>**
+
+### Errors
+
+| Error Type               | Status Code              | Content Type             |
+| ------------------------ | ------------------------ | ------------------------ |
+| errors.WSErrorCommon     | 404                      | application/json         |
+| errors.EgainDefaultError | 4XX, 5XX                 | \*/\*                    |
+
+## getValidationHookVersion
+
+Get details and content URL for a specific version of a hook.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="getValidationHookVersion" method="get" path="/import/config/hooks/{hookID}/version/{versionID}" -->
+```typescript
+import { Egain } from "@egain/egain-api-typescript";
+
+const egain = new Egain({
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
+});
+
+async function run() {
+  const result = await egain.content.import.getValidationHookVersion({
+    hookID: 276494,
+    versionID: 148818,
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { EgainCore } from "@egain/egain-api-typescript/core.js";
+import { contentImportGetValidationHookVersion } from "@egain/egain-api-typescript/funcs/contentImportGetValidationHookVersion.js";
+
+// Use `EgainCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const egain = new EgainCore({
+  accessToken: process.env["EGAIN_ACCESS_TOKEN"] ?? "",
+});
+
+async function run() {
+  const res = await contentImportGetValidationHookVersion(egain, {
+    hookID: 276494,
+    versionID: 148818,
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("contentImportGetValidationHookVersion failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.GetValidationHookVersionRequest](../../models/operations/getvalidationhookversionrequest.md)                                                                       | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
+
+### Response
+
+**Promise\<[models.FileObject](../../models/fileobject.md)\>**
+
+### Errors
+
+| Error Type               | Status Code              | Content Type             |
+| ------------------------ | ------------------------ | ------------------------ |
+| errors.WSErrorCommon     | 404                      | application/json         |
+| errors.EgainDefaultError | 4XX, 5XX                 | \*/\*                    |
 
 ## getImportStatus
 
@@ -297,8 +791,8 @@ async function run() {
       path: "s3://mybucket/myfolder/",
       region: "us-east-1",
       credentials: {
-        accessKey: "AKIAIOSFODNN7EXAMPLE",
-        secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        accessKeyId: "AKIAIOSFODNN7EXAMPLE",
+        secretAccessKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
       },
     },
   });
@@ -330,8 +824,8 @@ async function run() {
       path: "s3://mybucket/myfolder/",
       region: "us-east-1",
       credentials: {
-        accessKey: "AKIAIOSFODNN7EXAMPLE",
-        secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        accessKeyId: "AKIAIOSFODNN7EXAMPLE",
+        secretAccessKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
       },
     },
   });
@@ -364,8 +858,8 @@ run();
 
 | Error Type                  | Status Code                 | Content Type                |
 | --------------------------- | --------------------------- | --------------------------- |
-| errors.WSErrorCommon        | 400, 401, 403               | application/json            |
-| errors.SchemasWSErrorCommon | 406, 412                    | application/json            |
+| errors.SchemasWSErrorCommon | 406                         | application/json            |
+| errors.WSErrorCommon        | 400, 401, 403, 412          | application/json            |
 | errors.WSErrorCommon        | 500                         | application/json            |
 | errors.EgainDefaultError    | 4XX, 5XX                    | \*/\*                       |
 

@@ -83,7 +83,7 @@ run();
 
 ### Response
 
-**Promise\<[models.TopicBreadcrumb](../../models/topicbreadcrumb.md)\>**
+**Promise\<[models.TopicBreadcrumbsList](../../models/topicbreadcrumbslist.md)\>**
 
 ### Errors
 

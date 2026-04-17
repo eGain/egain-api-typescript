@@ -7,16 +7,28 @@ import { safeParse } from "../lib/schemas.js";
 import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
+import {
+  S3Config,
+  S3Config$inboundSchema,
+  S3Config$Outbound,
+  S3Config$outboundSchema,
+} from "./s3config.js";
+import {
+  SftpConfig,
+  SftpConfig$inboundSchema,
+  SftpConfig$Outbound,
+  SftpConfig$outboundSchema,
+} from "./sftpconfig.js";
 
 /**
- * Category of articles to return. All includes browsable and searchable.
+ * Category of articles to return. If all is selected, it includes both browsable and searchable articles.
  */
 export const ArticleCategories = {
   Searchable: "searchable",
   All: "all",
 } as const;
 /**
- * Category of articles to return. All includes browsable and searchable.
+ * Category of articles to return. If all is selected, it includes both browsable and searchable articles.
  */
 export type ArticleCategories = ClosedEnum<typeof ArticleCategories>;
 
@@ -25,20 +37,46 @@ export type ArticleCategories = ClosedEnum<typeof ArticleCategories>;
  */
 export const KnowledgeExportCode = {
   EnUS: "en-US",
-  ESES: "es-ES",
   FRFR: "fr-FR",
+  EnGB: "en-GB",
+  ESES: "es-ES",
   ITIT: "it-IT",
-  DEDE: "de-DE",
   NLNL: "nl-NL",
-  PtBR: "pt-BR",
-  PTPT: "pt-PT",
-  DaDK: "da-DK",
-  RURU: "ru-RU",
-  FrCA: "fr-CA",
-  ZhCN: "zh-CN",
-  JaJP: "ja-JP",
-  KoKR: "ko-KR",
+  DADA: "da-DA",
   SvSE: "sv-SE",
+  PTPT: "pt-PT",
+  FIFI: "fi-FI",
+  NoNB: "no-NB",
+  NoNN: "no-NN",
+  JAJA: "ja-JA",
+  DEDE: "de-DE",
+  PtBR: "pt-BR",
+  ZhCN: "zh-CN",
+  ZhTW: "zh-TW",
+  KOKO: "ko-KO",
+  RURU: "ru-RU",
+  ELEL: "el-EL",
+  TRTR: "tr-TR",
+  PLPL: "pl-PL",
+  CSCS: "cs-CS",
+  SKSK: "sk-SK",
+  HUHU: "hu-HU",
+  SRSR: "sr-SR",
+  ArSA: "ar-SA",
+  HRHR: "hr-HR",
+  RORO: "ro-RO",
+  THTH: "th-TH",
+  DeAT: "de-AT",
+  ViVN: "vi-VN",
+  IDID: "id-ID",
+  MsMY: "ms-MY",
+  FilPH: "fil-PH",
+  FrCA: "fr-CA",
+  HiIN: "hi-IN",
+  UkUA: "uk-UA",
+  BGBG: "bg-BG",
+  SlSI: "sl-SI",
+  XXXX: "xx-XX",
 } as const;
 /**
  * The code of the language.
@@ -68,16 +106,12 @@ export type ResourceType = ClosedEnum<typeof ResourceType>;
  */
 export const DestinationType = {
   AWSS3Bucket: "AWS S3 bucket",
+  SFTPServer: "SFTP server",
 } as const;
 /**
  * Type of data destination
  */
 export type DestinationType = ClosedEnum<typeof DestinationType>;
-
-export type Credentials = {
-  accessKey?: string | undefined;
-  secretKey?: string | undefined;
-};
 
 export type DataDestination = {
   /**
@@ -85,19 +119,23 @@ export type DataDestination = {
    */
   destinationType: DestinationType;
   /**
-   * Path of the data destination. For S3 bucket, it can be root or a folder.
+   * Path of the data destination. For S3 bucket, it can be root or a folder. For SFTP, it can be target directory on the server.
+   *
+   * @remarks
+   *
+   * **Examples:**
+   *
+   * * **For S3:** `"s3://amzn-s3-demo-bucket/mydeptfolder"`
+   * * **For SFTP:** `"exports/mydeptfolder"`
    */
   path: string;
-  /**
-   * Region of the data destination
-   */
-  region?: string | undefined;
-  credentials?: Credentials | undefined;
+  sftpDetails?: SftpConfig | undefined;
+  s3Details?: S3Config | undefined;
 };
 
 export type KnowledgeExport = {
   /**
-   * Category of articles to return. All includes browsable and searchable.
+   * Category of articles to return. If all is selected, it includes both browsable and searchable articles.
    */
   articleCategories?: ArticleCategories | undefined;
   /**
@@ -109,12 +147,17 @@ export type KnowledgeExport = {
    */
   language: KnowledgeExportLanguage;
   /**
-   * Types of Knowledge Hub resources to export. Multiple values can be specified using a comma-separated list: {articles, topics, portals, all}.
+   * Determines which article version to export. If true, the latest unpublished version will be exported for each article where available, and articles that do not have an unpublished version will be omitted from the export. If this property is false or omitted, the latest published version will be exported for each article where available. Each request exports either all published or all unpublished article versions in a portal; never both.
+   */
+  exportUnpublishedOnly?: boolean | undefined;
+  /**
+   * Types of Knowledge Hub resources to export. Use 'all' to specify all resource types at once.
    *
    * @remarks
-   * Details of a single portal are exported.
-   * Articles whose state is Published are returned.
    *
+   * Below are the attributes that are returned for each resource type specified.
+   *
+   * ##### Portal Resource Type Attributes
    * Portal Attribute Name | Description
    * ------------------------------- | -----------
    * | id | The ID of the Portal in Readable format.
@@ -124,6 +167,7 @@ export type KnowledgeExport = {
    * | departmentId | ID of the department this Portal belongs to.
    * | defaultContentLanguageId | The default ID of the language for the portal content.
    *
+   * ##### Topic Resource Type Attributes
    * | Topic Attribute Name | Description
    * | ------------------------------ | -----------
    * | id | The ID of the Topic in Readable form.
@@ -138,33 +182,8 @@ export type KnowledgeExport = {
    * | imageURL | URL of the inline Topic image.
    * | customAttributes | One or more comma-separated names for Topic custom attributes defined by the user to be returned.
    *
-   * | Article Attribute Name | Description
-   * | ---------------------- | -----------
-   * | id | The ID of the Article in Readable form.
-   * | alternateId | The system-generated ID of the Article in long form.
-   * | name  | The name of the Article.
-   * | additionalInfo | Additional information provided as Article metadata.
-   * | type | The Article type object and its attributes.
-   * | keywords | A comma-separated list of keywords associated with this Article, provided as metadata.
-   * | summary | A brief summary of the Article, provided as metadata.
-   * | state | The state of the Article. State P (Published).
-   * | departmentId | ID of the department this Article belongs to.
-   * | description | The description of the Article.
-   * | imageURL | The URL of the image that is present in the Article version. It is used as the thumbnail image for the Article.
-   * | attachements | The Article's uploaded attachments and their IDs.
-   * | includeInGenAI  | Indicates whether this Article is used for eGain's generative AI features.
-   * | topicBreadcrumb | Contains a list of topics from the top-level topic to this Article. There may be multiple paths.
-   * | versionId | The ID of the Article version that is returned.
-   * | expirationDate | The date that the Article is set to expire.
-   * | averageRating | Average rating of the Article.
-   * | timesRated | Number or times the Article was rated.
-   * | availabilityDate | The date the Article is set to be available.
-   * | modifiedDate | The date that the Article was last modified on.
-   * | articleMacro | The macro of the Article.
-   * | content | path to the Article content in .html format.
-   * | customAttributes | One or more comma-separated names for Article custom attributes defined by the user to be returned.
-   * | personalization | Article personalization details, incuding tag categories.
-   * | editions | The editions of the Article, including the publish profile (view) associated with each edition.
+   * ##### Article Resource Type Attributes
+   * Export article's attributes returned are aligned with the response of the [Get Article By ID with Editions](../article/getarticlebyidwitheditions) API.
    */
   resourceTypes: Array<ResourceType>;
   dataDestination: DataDestination;
@@ -307,59 +326,6 @@ export namespace DestinationType$ {
 }
 
 /** @internal */
-export const Credentials$inboundSchema: z.ZodType<
-  Credentials,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  accessKey: z.string().optional(),
-  secretKey: z.string().optional(),
-});
-
-/** @internal */
-export type Credentials$Outbound = {
-  accessKey?: string | undefined;
-  secretKey?: string | undefined;
-};
-
-/** @internal */
-export const Credentials$outboundSchema: z.ZodType<
-  Credentials$Outbound,
-  z.ZodTypeDef,
-  Credentials
-> = z.object({
-  accessKey: z.string().optional(),
-  secretKey: z.string().optional(),
-});
-
-/**
- * @internal
- * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
- */
-export namespace Credentials$ {
-  /** @deprecated use `Credentials$inboundSchema` instead. */
-  export const inboundSchema = Credentials$inboundSchema;
-  /** @deprecated use `Credentials$outboundSchema` instead. */
-  export const outboundSchema = Credentials$outboundSchema;
-  /** @deprecated use `Credentials$Outbound` instead. */
-  export type Outbound = Credentials$Outbound;
-}
-
-export function credentialsToJSON(credentials: Credentials): string {
-  return JSON.stringify(Credentials$outboundSchema.parse(credentials));
-}
-
-export function credentialsFromJSON(
-  jsonString: string,
-): SafeParseResult<Credentials, SDKValidationError> {
-  return safeParse(
-    jsonString,
-    (x) => Credentials$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'Credentials' from JSON`,
-  );
-}
-
-/** @internal */
 export const DataDestination$inboundSchema: z.ZodType<
   DataDestination,
   z.ZodTypeDef,
@@ -367,16 +333,16 @@ export const DataDestination$inboundSchema: z.ZodType<
 > = z.object({
   destinationType: DestinationType$inboundSchema,
   path: z.string(),
-  region: z.string().optional(),
-  credentials: z.lazy(() => Credentials$inboundSchema).optional(),
+  sftpDetails: SftpConfig$inboundSchema.optional(),
+  s3Details: S3Config$inboundSchema.optional(),
 });
 
 /** @internal */
 export type DataDestination$Outbound = {
   destinationType: string;
   path: string;
-  region?: string | undefined;
-  credentials?: Credentials$Outbound | undefined;
+  sftpDetails?: SftpConfig$Outbound | undefined;
+  s3Details?: S3Config$Outbound | undefined;
 };
 
 /** @internal */
@@ -387,8 +353,8 @@ export const DataDestination$outboundSchema: z.ZodType<
 > = z.object({
   destinationType: DestinationType$outboundSchema,
   path: z.string(),
-  region: z.string().optional(),
-  credentials: z.lazy(() => Credentials$outboundSchema).optional(),
+  sftpDetails: SftpConfig$outboundSchema.optional(),
+  s3Details: S3Config$outboundSchema.optional(),
 });
 
 /**
@@ -429,6 +395,7 @@ export const KnowledgeExport$inboundSchema: z.ZodType<
   articleCategories: ArticleCategories$inboundSchema.default("searchable"),
   portalID: z.string(),
   language: z.lazy(() => KnowledgeExportLanguage$inboundSchema),
+  exportUnpublishedOnly: z.boolean().default(false),
   resourceTypes: z.array(ResourceType$inboundSchema),
   dataDestination: z.lazy(() => DataDestination$inboundSchema),
 });
@@ -438,6 +405,7 @@ export type KnowledgeExport$Outbound = {
   articleCategories: string;
   portalID: string;
   language: KnowledgeExportLanguage$Outbound;
+  exportUnpublishedOnly: boolean;
   resourceTypes: Array<string>;
   dataDestination: DataDestination$Outbound;
 };
@@ -451,6 +419,7 @@ export const KnowledgeExport$outboundSchema: z.ZodType<
   articleCategories: ArticleCategories$outboundSchema.default("searchable"),
   portalID: z.string(),
   language: z.lazy(() => KnowledgeExportLanguage$outboundSchema),
+  exportUnpublishedOnly: z.boolean().default(false),
   resourceTypes: z.array(ResourceType$outboundSchema),
   dataDestination: z.lazy(() => DataDestination$outboundSchema),
 });

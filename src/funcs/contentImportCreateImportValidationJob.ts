@@ -75,8 +75,8 @@ export function contentImportCreateImportValidationJob(
 ): APIPromise<
   Result<
     operations.CreateImportValidationJobResponse | undefined,
-    | errors.WSErrorCommon
     | errors.SchemasWSErrorCommon
+    | errors.WSErrorCommon
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -102,8 +102,8 @@ async function $do(
   [
     Result<
       operations.CreateImportValidationJobResponse | undefined,
-      | errors.WSErrorCommon
       | errors.SchemasWSErrorCommon
+      | errors.WSErrorCommon
       | EgainError
       | ResponseValidationError
       | ConnectionError
@@ -190,8 +190,8 @@ async function $do(
 
   const [result] = await M.match<
     operations.CreateImportValidationJobResponse | undefined,
-    | errors.WSErrorCommon
     | errors.SchemasWSErrorCommon
+    | errors.WSErrorCommon
     | EgainError
     | ResponseValidationError
     | ConnectionError
@@ -206,8 +206,8 @@ async function $do(
       operations.CreateImportValidationJobResponse$inboundSchema.optional(),
       { hdrs: true },
     ),
-    M.jsonErr([400, 401, 403], errors.WSErrorCommon$inboundSchema),
-    M.jsonErr([406, 412], errors.SchemasWSErrorCommon$inboundSchema),
+    M.jsonErr(406, errors.SchemasWSErrorCommon$inboundSchema),
+    M.jsonErr([400, 401, 403, 412], errors.WSErrorCommon$inboundSchema),
     M.jsonErr(500, errors.WSErrorCommon$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

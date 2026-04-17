@@ -22,7 +22,7 @@ export class Topic extends ClientSDK {
   async getTopicBreadcrumbForArticle(
     request: operations.GetTopicBreadcrumbForArticleRequest,
     options?: RequestOptions,
-  ): Promise<models.TopicBreadcrumb> {
+  ): Promise<models.TopicBreadcrumbsList> {
     return unwrapAsync(portalTopicGetTopicBreadcrumbForArticle(
       this,
       request,

@@ -866,11 +866,11 @@ run();
 
 ### Errors
 
-| Error Type               | Status Code              | Content Type             |
-| ------------------------ | ------------------------ | ------------------------ |
-| errors.WSErrorCommon     | 400, 401, 403, 404, 406  | application/json         |
-| errors.WSErrorCommon     | 500                      | application/json         |
-| errors.EgainDefaultError | 4XX, 5XX                 | \*/\*                    |
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.WSErrorCommon         | 400, 401, 403, 404, 406, 412 | application/json             |
+| errors.WSErrorCommon         | 500                          | application/json             |
+| errors.EgainDefaultError     | 4XX, 5XX                     | \*/\*                        |
 
 ## rejectGHSolution
 
@@ -960,11 +960,11 @@ run();
 
 ### Errors
 
-| Error Type               | Status Code              | Content Type             |
-| ------------------------ | ------------------------ | ------------------------ |
-| errors.WSErrorCommon     | 400, 401, 403, 404, 406  | application/json         |
-| errors.WSErrorCommon     | 500                      | application/json         |
-| errors.EgainDefaultError | 4XX, 5XX                 | \*/\*                    |
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.WSErrorCommon         | 400, 401, 403, 404, 406, 412 | application/json             |
+| errors.WSErrorCommon         | 500                          | application/json             |
+| errors.EgainDefaultError     | 4XX, 5XX                     | \*/\*                        |
 
 ## createQuickpick
 

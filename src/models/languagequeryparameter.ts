@@ -46,7 +46,6 @@ export const LanguageQueryParameter = {
   UkUA: "uk-UA",
   BGBG: "bg-BG",
   SlSI: "sl-SI",
-  SrRS: "sr-RS",
   XXXX: "xx-XX",
 } as const;
 export type LanguageQueryParameter = ClosedEnum<typeof LanguageQueryParameter>;

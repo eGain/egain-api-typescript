@@ -15,7 +15,7 @@ export class Export extends ClientSDK {
    *
    * @remarks
    * ## Overview
-   *    The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket.
+   *    The Content Export API initiates a bulk export of the Knowledge Hub to a client-provided Amazon S3 bucket or SFTP server path.
    *    It returns a URL with a Job ID to enable tracking the status of this asynchronous operation.
    *    Each export job can send multiple JSON files, depending on the total number of items to process.
    *    More than one bulk export can take place, as needed, one per portal.

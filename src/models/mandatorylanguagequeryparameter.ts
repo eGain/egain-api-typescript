@@ -46,7 +46,6 @@ export const MandatoryLanguageQueryParameter = {
   UkUA: "uk-UA",
   BGBG: "bg-BG",
   SlSI: "sl-SI",
-  SrRS: "sr-RS",
   XXXX: "xx-XX",
 } as const;
 export type MandatoryLanguageQueryParameter = ClosedEnum<
